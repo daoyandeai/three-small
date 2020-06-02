@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IUserRoleDao">
+	
+	<insert id="save" parameterType="UserRole">
+		<![CDATA[
+   			insert into ts_userrole (user_code,role_code) values(#{user_code},#{role_code})
+   		]]>
+	</insert>
+	
+	<sql id="whereColumns">			
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code = #{user_code}
+			]]>
+		</if>	
+		<if test="role_code != null and role_code != ''">
+			<![CDATA[
+				and role_code = #{role_code}
+			]]>
+		</if>
+	</sql>
+	
+	<delete id="delete" parameterType="UserRole">
+		<![CDATA[
+			delete from ts_userrole
+		]]>		
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</delete>
+	
+	<select id="findByList" parameterType="UserRole" resultType="UserRole">
+		<![CDATA[
+			select * from ts_userrole
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="UserRole" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_userrole
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="UserRole" resultType="UserRole">
+		<![CDATA[
+		 	select * from ts_userrole
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit 1
+		]]>
+	</select>
+	
+</mapper>

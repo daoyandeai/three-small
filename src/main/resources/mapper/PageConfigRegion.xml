@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPageConfigRegionDao">
+
+	<sql id="codeColumns">
+    <![CDATA[
+   			page_config_region_code=#{page_config_region_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="PageConfigRegion">
+    <![CDATA[
+      		insert into ts_page_config_region 
+      			(page_config_region_code,page_config_code,page_config_name,province,city,area,town,vill,level,calc_period,user_name_add,user_code_add)
+      		values 
+      			(#{page_config_region_code},#{page_config_code},#{page_config_name},#{province},#{city},#{area},#{town},#{vill},#{level},#{calc_period},#{user_name_add},#{user_code_add})
+      ]]>
+	</insert>
+
+	<update id="update" parameterType="PageConfigRegion">
+	    <![CDATA[
+	   			update ts_page_config_region
+	    ]]>
+		<set>
+			<if test="province != null and province != ''">
+	             <![CDATA[
+	                 province=#{province},
+	             ]]>
+			</if>
+			<if test="city != null and city != ''">
+	             <![CDATA[
+	                 city=#{city},
+	             ]]>
+			</if>
+			<if test="area != null and area != ''">
+	             <![CDATA[
+	                 area=#{area},
+	             ]]>
+			</if>
+			<if test="town != null and town != ''">
+	             <![CDATA[
+	                 town=#{town},
+	             ]]>
+			</if>
+			<if test="vill != null and vill != ''">
+	             <![CDATA[
+	                 vill=#{vill},
+	             ]]>
+			</if>
+			<if test="level != null and level != ''">
+	             <![CDATA[
+	                 level=#{level},
+	             ]]>
+			</if>
+			<if test="state != null and state != ''">
+	          	 <![CDATA[
+	                   state=#{state},
+	             ]]>
+			</if>
+			<if test="calc_period != null and calc_period != ''">
+	          	 <![CDATA[
+	                   calc_period=#{calc_period},
+	             ]]>
+			</if>
+			<if test="page_config_code != null and page_config_code != ''">
+	          	 <![CDATA[
+	                   page_config_code=#{page_config_code},
+	             ]]>
+			</if>
+			<if test="page_config_name != null and page_config_name != ''">
+	          	 <![CDATA[
+	                   page_config_name=#{page_config_name},
+	             ]]>
+			</if>
+			<if test="page_region_content != null and page_region_content != ''">
+	          	 <![CDATA[
+	                   page_region_content=#{page_region_content},
+	             ]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+	
+	<update id="updateBatch"  parameterType="java.util.List">
+	      <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update ts_page_config_region 
+				<set>
+					<if test="item.user_name_update != null and item.user_name_update != ''">
+						<![CDATA[
+							user_name_update=#{item.user_name_update},
+						]]>
+					</if>
+					<if test="item.user_code_update != null and item.user_code_update != ''">
+						<![CDATA[
+							user_code_update=#{item.user_code_update},
+						]]>
+					</if>
+					<if test="item.page_region_content != null and item.page_region_content != ''">
+						<![CDATA[
+							page_region_content=#{item.page_region_content},
+						]]>
+					</if>
+					<if test="item.calc_period != null and item.calc_period != ''">
+						<![CDATA[
+							calc_period=#{item.calc_period},
+						]]>
+					</if>
+				</set>
+				where page_config_region_code = #{item.page_config_region_code} 
+		 </foreach>
+    </update>
+    
+	<sql id="whereColumns">
+		<if test="page_config_name != null and page_config_name != ''">
+            <![CDATA[
+                    and page_config_name like concat('%',#{page_config_name},'%')
+            ]]>
+		</if>
+		<if test="province != null and province != ''">
+			<![CDATA[
+				and (
+					province=#{province}
+			]]>
+		</if>
+		<if test="city != null and city != ''">
+			<![CDATA[
+				and city=#{city}
+			]]>
+		</if>
+		<if test="area != null and area != ''">
+			<![CDATA[
+				and area=#{area}
+			]]>
+		</if>
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and town=#{town}
+			]]>
+		</if>
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and vill=#{vill}
+			]]>
+		</if>
+		<![CDATA[
+		 	 	 or LOCATE( CONCAT(ifnull(province,""), ifnull(city,""), ifnull(area,""), ifnull(town,""), ifnull(vill,"")) ,#{addr_info})
+		 	  )
+		]]>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and state=#{state}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="PageConfigRegion" resultType="PageConfigRegionReturn">
+      <![CDATA[
+			select * from ts_page_config_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="PageConfigRegion" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_page_config_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByAll_app" parameterType="PageConfigRegion" resultType="PageConfigRegionReturn">
+      <![CDATA[
+			select * from ts_page_config_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode_app" parameterType="PageConfigRegion" resultType="PageConfigRegionReturn">
+        <![CDATA[
+		 	select * from ts_page_config_region
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+	
+	<select id="findByExist" parameterType="PageConfigRegion" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_page_config_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="page_config_region_code != null and page_config_region_code != ''">
+				<![CDATA[
+					and page_config_region_code<>#{page_config_region_code}
+				]]>
+			</if>
+			<if test="page_config_code != null and page_config_code != ''">
+				<![CDATA[
+					and page_config_code=#{page_config_code}
+				]]>
+			</if>
+			<if test="province != null and province != ''">
+				<![CDATA[
+					and province=#{province}
+				]]>
+			</if>
+			<if test="city != null and city != ''">
+				<![CDATA[
+					and city=#{city}
+				]]>
+			</if>
+			<if test="area != null and area != ''">
+				<![CDATA[
+					and area=#{area}
+				]]>
+			</if>
+			<if test="town != null and town != ''">
+				<![CDATA[
+					and town=#{town}
+				]]>
+			</if>
+			<if test="vill != null and vill != ''">
+				<![CDATA[
+					and vill=#{vill}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	
+	<sql id="whereJoin">
+		<if test="province != null and province != ''">
+            <![CDATA[
+                    and p_c_r.province=#{province}
+            ]]>
+		</if>
+		<if test="city != null and city != ''">
+            <![CDATA[
+                    and p_c_r.city=#{city}
+            ]]>
+		</if>
+		<if test="city != null and city != ''">
+            <![CDATA[
+                    and p_c_r.city=#{city}
+            ]]>
+		</if>
+		<if test="area != null and area != ''">
+            <![CDATA[
+                    and p_c_r.area=#{area}
+            ]]>
+		</if>
+		<if test="town != null and town != ''">
+            <![CDATA[
+                    and p_c_r.town=#{town}
+            ]]>
+		</if>
+		<if test="vill != null and vill != ''">
+            <![CDATA[
+                    and p_c_r.vill=#{vill}
+            ]]>
+		</if>
+		<if test="page_module != null and page_module != ''">
+            <![CDATA[
+                    and p_c.page_module=#{page_module}
+            ]]>
+		</if>
+		<if test="companytype_code != null and companytype_code != ''">
+            <![CDATA[
+                    and p_c.companytype_code=#{companytype_code}
+            ]]>
+		</if>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and p_c_r.state=#{state}
+            ]]>
+		</if>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and p_c.state=#{state}
+            ]]>
+		</if>
+		<if test="page_config_region_codes != null and page_config_region_codes != ''">
+            <![CDATA[
+                    and p_c_r.page_config_region_code not in (${page_config_region_codes})
+            ]]>
+		</if>
+	</sql>
+	
+	<select id="findJoin" parameterType="PageConfigRegion" resultType="PageConfigRegionReturn">
+		<![CDATA[
+				select
+					p_c_r.*, p_c.page_config_content,p_c.companytype_code
+				from
+					ts_page_config_region p_c_r
+				inner join ts_page_config p_c on p_c.page_config_code = p_c_r.page_config_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereJoin" />
+		</trim>
+	</select>
+	
+	<update id="updateJoin" parameterType="PageConfigRegion">
+	    <![CDATA[
+	   			update ts_page_config_region
+	    ]]>
+		<set>
+			 <![CDATA[
+                 calc_period=#{calc_period},
+             ]]>
+             <![CDATA[
+                 page_region_content=#{page_region_content},
+             ]]>
+		</set>
+	    <![CDATA[
+			where page_config_region_code in (
+				select * from (
+				select
+					p_c_r.page_config_region_code
+				from
+					ts_page_config_region p_c_r
+				inner join ts_page_config p_c on p_c.page_config_code = p_c_r.page_config_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereJoin" />
+		</trim>
+		 <![CDATA[
+				) t
+			)
+		]]>
+	</update>
+	
+</mapper>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyTagDao">
+    <sql id="codeColumns">
+        <![CDATA[
+   			companytag_code=#{companytag_code}
+   		]]>
+    </sql>
+	
+	<insert id="save" parameterType="CompanyTag">
+    <![CDATA[
+      		insert into ts_company_tag 
+      			(companytag_code,companytag_name,companytype_code,user_code_add,user_name_add)
+      		values 
+      			(#{companytag_code},#{companytag_name},#{companytype_code},#{user_code_add},#{user_name_add})
+      ]]>
+	</insert>
+
+	<update id="update" parameterType="CompanyTag">
+	    <![CDATA[
+	   			update ts_company_tag
+	    ]]>
+		<set>
+			<if test="companytag_name != null and companytag_name != ''">
+	             <![CDATA[
+	                 companytag_name=#{companytag_name},
+	             ]]>
+			</if>
+			<if test="state != null and state != ''">
+	          	 <![CDATA[
+	                 state=#{state},
+	             ]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					 user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					 user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+	
+    <sql id="whereColumns">
+        <if test="companytag_name != null and companytag_name != ''">
+            <![CDATA[
+				and companytag_name like concat ('%',#{companytag_name},'%')
+			]]>
+        </if>
+        <if test="companytype_code != null and companytype_code != ''">
+            <![CDATA[
+            	and companytype_code=#{companytype_code}
+            ]]>
+        </if>
+        <if test="state != null and state != ''">
+            <![CDATA[
+            	and state=#{state}
+            ]]>
+        </if>
+    </sql>
+
+	<select id="findByAll" parameterType="CompanyTag" resultType="CompanyTag">
+		<![CDATA[
+			select * from ts_company_tag
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+	        <include refid="whereColumns"/>
+	    </trim>
+	    <![CDATA[
+			order by add_time asc
+		]]>
+	</select>
+
+	<select id="findByList" parameterType="CompanyTag" resultType="CompanyTag">
+    	<![CDATA[
+			select * from ts_company_tag
+		]]>
+	    <trim prefix="where" prefixOverrides="and|or">
+	        <include refid="whereColumns"/>
+	    </trim>
+      	<![CDATA[
+			order by add_time asc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="CompanyTag" resultType="int">
+    	<![CDATA[
+			select count(1) from ts_company_tag
+		]]>
+	    <trim prefix="where" prefixOverrides="and|or">
+	        <include refid="whereColumns"/>
+	    </trim>
+  </select>
+
+   <select id="findByCode" parameterType="CompanyTag" resultType="CompanyTag">
+		<![CDATA[
+		 	select * from ts_company_tag
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+  </select>
+
+  <select id="findByExist" parameterType="CompanyTag" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_company_tag
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="companytag_code != null and companytag_code != ''">
+				<![CDATA[
+					and companytag_code<>#{companytag_code}
+				]]>
+			</if>
+			<if test="companytag_name != null and companytag_name != ''">
+				<![CDATA[
+					and companytag_name=#{companytag_name}
+				]]>
+			</if>
+			<if test="companytype_code != null and companytype_code != ''">
+				<![CDATA[
+					and companytype_code=#{companytype_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

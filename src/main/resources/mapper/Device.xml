@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IDeviceDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			device_code=#{device_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Device">
+		<![CDATA[
+   			insert into ts_device (device_code,device_id,device_name,device_number,device_serial,company_code,company_name,company_area_code,company_area_name,play_video_url,device_desc,device_type,user_code_add,user_name_add) 
+   			values(#{device_code},#{device_id},#{device_name},#{device_number},#{device_serial},#{company_code},#{company_name},#{company_area_code},#{company_area_name},#{play_video_url},#{device_desc},#{device_type},#{user_code_add},#{user_name_add})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="Device">
+		<![CDATA[
+			update ts_device
+		]]>
+		<set>
+			<if test="device_id != null and device_id != ''">
+				<![CDATA[
+					device_id=#{device_id},
+				]]>
+			</if>
+			<if test="device_name != null and device_name != ''">
+				<![CDATA[
+					device_name=#{device_name},
+				]]>
+			</if>
+			<if test="device_number != null and device_number != ''">
+				<![CDATA[
+					device_number=#{device_number},
+				]]>
+			</if>
+			<if test="company_code != null and company_code != ''">
+				<![CDATA[
+					company_code=#{company_code},
+				]]>
+			</if>
+			<if test="company_name != null and company_name != ''">
+				<![CDATA[
+					company_name=#{company_name},
+				]]>
+			</if>
+			<if test="company_area_code != null and company_area_code != ''">
+				<![CDATA[
+					company_area_code=#{company_area_code},
+				]]>
+			</if>
+			<if test="company_area_name != null and company_area_name != ''">
+				<![CDATA[
+					company_area_name=#{company_area_name},
+				]]>
+			</if>
+			<if test="device_state != null and device_state != ''">
+				<![CDATA[
+					device_state=#{device_state},
+				]]>
+			</if>
+			<if test="play_video_url != null and play_video_url != ''">
+				<![CDATA[
+					play_video_url=#{play_video_url},
+				]]>
+			</if>
+			<if test="device_desc != null and device_desc != ''">
+				<![CDATA[
+					device_desc=#{device_desc},
+				]]>
+			</if>
+			<if test="device_type != null and device_type != ''">
+				<![CDATA[
+					device_type=#{device_type},
+				]]>
+			</if>
+			<if test="device_serial != null and device_serial != ''">
+				<![CDATA[
+					device_serial=#{device_serial},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="Device">
+		<![CDATA[
+			delete from ts_device
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="device_state != null and device_state != ''">
+			<![CDATA[
+				and device_state = #{device_state}
+			]]>
+		</if>
+		<if test="device_name != null and device_name != ''">
+			<![CDATA[
+				and device_name like concat('%',#{device_name},'%')
+			]]>
+		</if>
+		<if test="device_number != null and device_number != ''">
+			<![CDATA[
+				and device_number like concat('%',#{device_number},'%')
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and company_name like concat('%',#{company_name},'%')
+			]]>
+		</if>	
+		<if test="company_area_name != null and company_area_name != ''">
+			<![CDATA[
+				and company_area_name like concat('%',#{company_area_name},'%')
+			]]>
+		</if>			
+		<if test="device_type != null and device_type != ''">
+			<![CDATA[
+				and device_type = #{device_type}
+			]]>
+		</if>
+		<if test="device_state != null and device_state != ''">
+			<![CDATA[
+				and device_state = #{device_state}
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_area_code != null and company_area_code != ''">
+			<![CDATA[
+				and company_area_code = #{company_area_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Device" resultType="Device">
+		<![CDATA[
+			select * from ts_device
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Device" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_device
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Device" resultType="Device">
+		<![CDATA[
+		 	select * from ts_device
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="Device" resultType="Device">
+		<![CDATA[
+		 	select * from ts_device
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="Device" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_device
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="device_number != null and device_number != ''">
+				<![CDATA[
+					and device_number=#{device_number}
+				]]>
+			</if>
+			<if test="company_area_code != null and company_area_code != ''">
+				<![CDATA[
+					or company_area_code=#{company_area_code}
+				]]>
+			</if>
+			<if test="device_code!=null and device_code!=''">
+				<![CDATA[
+				 and device_code<>#{device_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<update id="updateStatus" parameterType="Device">
+		<![CDATA[
+			update ts_device set device_state = #{device_state} where device_code = #{device_code}
+		]]>
+	</update>
+	
+	
+	<select id="findByArea" parameterType="String" resultType="DeviceReturn">
+		<![CDATA[
+		 	select * from ts_device where company_area_code =#{company_area_code} limit 1
+		]]>
+	</select>
+	
+	<select id="findByNumber" parameterType="String" resultType="Device">
+		<![CDATA[
+		 	select * from qy_device where device_number=#{device_number} limit 1;
+		]]>
+	</select>
+	
+	<select id="findByQyCode" parameterType="String" resultType="Device">
+		<![CDATA[
+		 	select * from qy_device where device_code=#{device_code} limit 1;
+		]]>
+	</select>
+	
+</mapper>

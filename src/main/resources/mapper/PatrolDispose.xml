@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPatrolDisposeDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			dispose_code=#{dispose_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="PatrolDispose">
+		<![CDATA[
+   			insert into ts_patrol_dispose (dispose_code,dispose_name,user_code_add,user_name_add) 
+   			values(#{dispose_code},#{dispose_name},#{user_code_add},#{user_name_add})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="PatrolDispose">
+		<![CDATA[
+			update ts_patrol_dispose
+		]]>
+		<set>
+			<if test="dispose_name != null and dispose_name != ''">
+				<![CDATA[
+					dispose_name=#{dispose_name},
+				]]>
+			</if>
+			<if test="state != null and state != ''">
+				<![CDATA[
+					state=#{state},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="PatrolDispose">
+		<![CDATA[
+			delete from ts_patrol_dispose
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="state != null and state != ''">
+			<![CDATA[
+				and state = #{state}
+			]]>
+		</if>
+		<if test="user_code_add != null and user_code_add != ''">
+			<![CDATA[
+				and user_code_add = #{user_code_add}
+			]]>
+		</if>
+		<if test="user_name_add != null and user_name_add != ''">
+			<![CDATA[
+				and user_name_add like concat('%',#{user_name_add},'%')
+			]]>
+		</if>
+		<if test="user_code_update != null and user_code_update != ''">
+			<![CDATA[
+				and user_code_update = #{user_code_update}
+			]]>
+		</if>
+		<if test="user_name_update != null and user_name_update != ''">
+			<![CDATA[
+				and user_name_update like concat('%',#{user_name_update},'%')
+			]]>
+		</if>
+		<if test="dispose_name != null and dispose_name != ''">
+			<![CDATA[
+				and dispose_name like concat('%',#{dispose_name},'%')
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findByList" parameterType="PatrolDispose" resultType="PatrolDispose">
+		<![CDATA[
+			select * from ts_patrol_dispose
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="PatrolDispose" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_patrol_dispose
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="PatrolDispose" resultType="PatrolDispose">
+		<![CDATA[
+		 	select * from ts_patrol_dispose
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="PatrolDispose" resultType="PatrolDispose">
+		<![CDATA[
+		 	select * from ts_patrol_dispose
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="PatrolDispose" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_patrol_dispose
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="dispose_name != null and dispose_name != ''">
+				<![CDATA[
+					and dispose_name=#{dispose_name}
+				]]>
+			</if>
+			<if test="dispose_code != null and dispose_code != ''">
+				<![CDATA[
+				 and dispose_code<>#{dispose_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

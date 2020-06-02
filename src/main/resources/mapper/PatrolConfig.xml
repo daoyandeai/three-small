@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPatrolConfigDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			config_code=#{config_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="PatrolConfig">
+		<![CDATA[
+   			insert into ts_patrol_config (config_code,companytag_code,config_content) 
+   			values(#{config_code},#{companytag_code},#{config_content})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="PatrolConfig">
+		<![CDATA[
+			update ts_patrol_config
+		]]>
+		<set>
+			<if test="companytag_code != null and companytag_code != ''">
+				<![CDATA[
+					companytag_code=#{companytag_code},
+				]]>
+			</if>
+			<if test="config_content != null and config_content != ''">
+				<![CDATA[
+					config_content=#{config_content},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="PatrolConfig">
+		<![CDATA[
+			delete from ts_patrol_config
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="companytag_code != null and companytag_code != ''">
+			<![CDATA[
+				and pc.companytag_code = #{companytag_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="PatrolConfig" resultType="PatrolConfig">
+		<![CDATA[
+			select pc.*,ct.companytag_name from ts_patrol_config pc left join ts_company_tag ct on pc.companytag_code=ct.companytag_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by pc.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="PatrolConfig" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_patrol_config pc left join ts_company_tag ct on pc.companytag_code=ct.companytag_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="PatrolConfig" resultType="PatrolConfig">
+		<![CDATA[
+		 	select * from ts_patrol_config
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="PatrolConfig" resultType="PatrolConfig">
+		<![CDATA[
+		 	select pc.*,ct.companytag_name from ts_patrol_config pc left join ts_company_tag ct on pc.companytag_code=ct.companytag_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by pc.add_time desc
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="PatrolConfig" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_patrol_config
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="companytag_code != null and companytag_code != ''">
+				<![CDATA[
+					and companytag_code=#{companytag_code}
+				]]>
+				<if test="config_code!=null and config_code!=''">
+					<![CDATA[
+					 and config_code<>#{config_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	
+	<select id="findByCompanyCodeToPatrolConfig" parameterType="String" resultType="PatrolConfig" >
+		<![CDATA[
+			SELECT tpc.config_content 
+			FROM ts_company as tsc 
+			LEFT JOIN ts_patrol_config as tpc 
+			ON tsc.companytag_code = tpc.companytag_code 
+			WHERE company_code = #{company_code}
+		]]>	
+	</select>
+	
+	<select id="findByObj" parameterType="PatrolConfig" resultType="PatrolConfig">
+		<![CDATA[
+		 	select * from ts_patrol_config pc
+		]]>
+		<where>
+			<include refid="whereColumns"/>
+		</where>
+		<![CDATA[
+		 	limit 1
+		]]>
+	</select>
+	
+</mapper>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IFoodSourceAccessoryDao">
+
+	<insert id="save" parameterType="FoodSourceAccessory">
+      <![CDATA[
+     		insert into ts_foodsource_accessory
+     			(accessory_code, accessory_url, company_code, foodsource_code, foodsourcedetail_code) 
+     		values
+      			(#{accessory_code}, #{accessory_url}, #{company_code}, #{foodsource_code}, #{foodsourcedetail_code})
+			]]>
+	</insert>
+
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+			insert into ts_foodsource_accessory (accessory_code, accessory_url, company_code, foodsource_code, foodsourcedetail_code)
+   			values
+   		]]>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.accessory_code},#{item.accessory_url},#{item.company_code},#{item.foodsource_code},#{item.foodsourcedetail_code}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="findByAll_app" parameterType="String" resultType="FoodSourceAccessoryReturn">
+      <![CDATA[
+			select * from ts_foodsource_accessory where foodsourcedetail_code = #{foodsourcedetail_code}
+		]]>
+	</select>
+	
+	<delete id="deleteByFoodSource" parameterType="String">
+		<![CDATA[
+			delete from ts_foodsource_accessory foodsource_code=#{foodsource_code}
+		]]>		
+	</delete>
+	
+	<select id="findByFoodSource" parameterType="String" resultType="FoodSourceAccessoryReturn">
+      <![CDATA[
+			select * from ts_foodsource_accessory where foodsource_code = #{foodsource_code}
+		]]>
+	</select>
+	
+</mapper>

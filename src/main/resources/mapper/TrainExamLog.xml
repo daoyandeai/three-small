@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ITrainExamLogDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			train_exam_log_code=#{train_exam_log_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="TrainExamLog">
+		<![CDATA[
+   			insert into ts_train_exam_log 
+   				(train_exam_log_code,train_exam_title,train_exam_code,train_exam_standard,train_code,user_code_chef,user_name_chef) 
+   			values
+   				(#{train_exam_log_code},#{train_exam_title},#{train_exam_code},#{train_exam_standard},#{train_code},#{user_code_chef},#{user_name_chef})
+   		]]>
+	</insert>
+   
+	<update id="update" parameterType="TrainExamLog">
+		<![CDATA[
+			update ts_train_exam_log
+		]]>
+		<set>
+			<if test="train_exam_code != null and train_exam_code != ''">
+				<![CDATA[
+					train_exam_code=#{train_exam_code},
+				]]>
+			</if>
+			<if test="train_exam_standard != null and train_exam_standard != ''">
+				<![CDATA[
+					train_exam_standard=#{train_exam_standard},
+				]]>
+			</if>
+			<if test="train_code != null and train_code != ''">
+				<![CDATA[
+					train_code=#{train_code},
+				]]>
+			</if>
+			<if test="user_code_chef != null and user_code_chef != ''">
+				<![CDATA[
+					user_code_chef=#{user_code_chef},
+				]]>
+			</if>
+			<if test="user_name_chef != null and user_name_chef != ''">
+				<![CDATA[
+					user_name_chef=#{user_name_chef},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	
+	<sql id="whereColumns">			
+		<if test="train_code != null and train_code != ''">
+			<![CDATA[
+				and train_code = #{train_code}
+			]]>
+		</if>	
+		<if test="user_code_chef != null and user_code_chef != ''">
+			<![CDATA[
+				and user_code_chef = #{user_code_chef}
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findByList" parameterType="TrainExamLog" resultType="TrainExamLog">
+		<![CDATA[
+			select * from ts_train_exam_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="TrainExamLog" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_train_exam_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="TrainExamLog" resultType="TrainExamLog">
+		<![CDATA[
+		 	select * from ts_train_exam_log
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="TrainExamLog" resultType="TrainExamLog">
+		<![CDATA[
+		 	select * from ts_train_exam_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="TrainExamLog" resultType="TrainExamLog">
+		<![CDATA[
+			select * from ts_train_exam_log
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+					and user_loginname=#{user_loginname}
+				]]>
+				<if test="user_code!=null and user_code!=''">
+					<![CDATA[
+					 	and user_code<>#{user_code}
+					]]>
+				</if>
+			</if>
+			<if test="user_loginpass != null and user_loginpass != ''">
+				<![CDATA[
+					and user_loginpass=#{user_loginpass}
+				]]>
+				<if test="user_code!=null and user_code!=''">
+					<![CDATA[
+						and user_code=#{user_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findIsPass" parameterType="TrainExamLog" resultType="Integer">
+		<![CDATA[
+			select count(*) from ts_train_exam_log 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="train_exam_standard > 0">
+				<![CDATA[
+					and train_exam_standard=#{train_exam_standard}
+				]]>
+			</if>
+			  <if test="user_code_chef != null and user_code_chef != ''">
+				<![CDATA[
+					and user_code_chef=#{user_code_chef}
+				]]>
+			</if>
+			<if test="train_code !=null and train_code != ''">
+				<![CDATA[
+					and train_code=#{train_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findExamCount" parameterType="TrainExamLog" resultType="TrainExamLog">
+		<![CDATA[
+			select count(*) from ts_train_exam_log 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<![CDATA[
+					and train_exam_standard = 2
+				]]>
+			  <if test="user_code_chef != null and user_code_chef != ''">
+				<![CDATA[
+					and user_code_chef=#{user_code_chef}
+				]]>
+				<if test="train_code !=null and train_code''">
+					<![CDATA[
+						and train_code=#{train_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findUnPassCount" parameterType="TrainExamLog" resultType="Integer">
+		<![CDATA[
+			select count(1) from (
+				select count(1) from ts_train_exam_log where user_code_chef in (
+				select user_code from qy_user where company_code in (
+				select company_code from ts_company 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <if test="param_filed = 'user_code_manage' ">
+				<![CDATA[
+					and user_code_manage
+				]]>
+				 <if test="param_filed = 'user_code_info' ">
+					<![CDATA[
+						and user_code_info
+					]]>
+				</if>
+			</if>
+		</trim>
+		<![CDATA[
+			 in 
+				(
+				select user_code_info from ts_company where company_code in(
+					select company_code from qy_user where user_code = #{user_code_chef}
+					)
+				)
+				)) and train_exam_standard=1 and addtime>=#{addtime} and addtime<=#{end_time}
+			) t
+		]]>
+	</select>
+	
+	<select id="findExamUserCount" parameterType="TrainExamLog" resultType="Integer">
+		<![CDATA[
+			select count(1) from (
+					select t_e_l.train_exam_log_code from ts_train_exam_log t_e_l
+					inner join qy_user u on u.user_code = t_e_l.user_code_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <if test="user_province != null and user_province != ''">
+				<![CDATA[
+					and u.user_province=#{user_province}
+				]]>
+			</if>
+			<if test="user_city !=null and user_city != ''">
+				<![CDATA[
+					and u.user_city=#{user_city}
+				]]>
+			</if>
+			<if test="user_area !=null and user_area != ''">
+				<![CDATA[
+					and u.user_area=#{user_area}
+				]]>
+			</if>
+			<if test="user_town !=null and user_town != ''">
+				<![CDATA[
+					and u.user_town=#{user_town}
+				]]>
+			</if>
+			<if test="user_vill !=null and user_vill != ''">
+				<![CDATA[
+					and u.user_vill=#{user_vill}
+				]]>
+			</if>
+			<if test="train_exam_standard !=null and train_exam_standard != ''">
+				<![CDATA[
+					and t_e_l.train_exam_standard=#{train_exam_standard}
+				]]>
+			</if>
+			<if test="addtime !=null and addtime != ''">
+				<![CDATA[
+					and DATE_FORMAT(t_e_l.addtime,'%Y-%m')=#{addtime}
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+				group by user_code_chef
+			) t
+		]]>
+	</select>
+	
+	<!-- ============================================================其它方法开始============================================================ -->
+	
+</mapper>

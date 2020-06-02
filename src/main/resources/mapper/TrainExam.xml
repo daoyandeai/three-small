@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ITrainExamDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			train_exam_code=#{train_exam_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="TrainExam">
+		<![CDATA[
+   			insert into ts_train_exam
+   				(user_code,user_name,train_exam_code,train_exam_title,train_exam_standard,train_code) 
+   			values
+   				(#{user_code},#{user_name},#{train_exam_code},#{train_exam_title},#{train_exam_standard},#{train_code})
+   		]]>
+	</insert>
+   
+	<update id="update" parameterType="TrainExam">
+		<![CDATA[
+			update ts_train_exam
+		]]>
+		<set>
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+					user_code=#{user_code},
+				]]>
+			</if>
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					user_name=#{user_name},
+				]]>
+			</if>
+			<if test="train_exam_title != null and train_exam_title != ''">
+				<![CDATA[
+					train_exam_title=#{train_exam_title},
+				]]>
+			</if>
+			<if test="train_exam_standard != null and train_exam_standard != ''">
+				<![CDATA[
+					train_exam_standard=#{train_exam_standard},
+				]]>
+			</if>
+			<if test="train_code != null and train_code != ''">
+				<![CDATA[
+					train_code=#{train_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="TrainExam">
+		<![CDATA[
+			delete from ts_train_exam
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<sql id="whereColumns">
+		<if test="train_code != null and train_code != ''">
+			<![CDATA[
+				and train_code=#{train_code}
+			]]>
+		</if>
+		<if test="train_exam_code != null and train_exam_code != ''">
+			<![CDATA[
+				and train_exam_code=#{train_exam_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="TrainExam" resultType="TrainExam">
+		<![CDATA[
+			select * from ts_train_exam
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc 
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="TrainExam" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_train_exam
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="TrainExam" resultType="TrainExam">
+		<![CDATA[
+		 	select * from ts_train_exam
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<sql id="trainCodeColumns">
+   		<![CDATA[
+   			train_code=#{train_code}
+   		]]>
+	</sql>
+	
+	<select id="findByAll" parameterType="TrainExam" resultType="TrainExam">
+		<![CDATA[
+		 	select * from ts_train_exam
+		]]>
+		<where>
+			<include refid="trainCodeColumns"/>
+		</where>
+		<![CDATA[
+			order by addtime desc
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="TrainExam" resultType="TrainExam">
+		<![CDATA[
+			select * from ts_train_exam
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="train_code != null and train_code != ''">
+				<![CDATA[
+					and train_code=#{train_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- ============================================================其它方法开始============================================================ -->
+	
+</mapper>

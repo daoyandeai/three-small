@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyCCLJDao">
+
+	<sql id="codeColumns">
+    <![CDATA[
+   			cclj_code=#{cclj_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="CompanyCCLJ">
+    <![CDATA[
+      		insert into ts_company_cclj 
+      			(cclj_code,dictionary_code,dictionary_module,cclj_count,cclj_handler,cclj_time, company_code)
+      		values 
+      			(#{cclj_code},#{dictionary_code},#{dictionary_module},#{cclj_count},#{cclj_handler},#{cclj_time}, #{company_code})
+      ]]>
+	</insert>
+
+
+	<sql id="whereColumns">
+		<if test="company_code != null and company_code != ''">
+            <![CDATA[
+                    and company_code = #{company_code}
+            ]]>
+		</if>
+		<if test="dictionary_code != null and dictionary_code != ''">
+            <![CDATA[
+                    and dictionary_code=#{dictionary_code}
+            ]]>
+		</if>
+		<if test="cclj_time != null and cclj_time != ''">
+            <![CDATA[
+                   and cclj_time >= #{cclj_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and cclj_time <= #{end_time}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="CompanyCCLJ" resultType="CompanyCCLJReturn">
+      <![CDATA[
+			select * from ts_company_cclj
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="CompanyCCLJ" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_company_cclj
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+
+	<select id="findByCode_app" parameterType="CompanyCCLJ" resultType="CompanyCCLJReturn">
+        <![CDATA[
+		 	select * from ts_company_cclj
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+
+	
+</mapper>

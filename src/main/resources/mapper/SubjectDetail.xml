@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ISubjectDetailDao">
+
+  <select id="findByCode" parameterType="SubjectDetail" resultType="SubjectDetail">
+    <![CDATA[
+    select *
+    from ts_subjectdetail
+    where subjectdetail_code = #{subjectdetail_code}
+			]]>
+  </select>
+
+  <select id="findByAll" resultType="SubjectDetail">
+    <![CDATA[
+    select *
+    from ts_subjectdetail
+			]]>
+  </select>
+
+  <select id="findByList" resultType="SubjectDetail">
+    <![CDATA[
+    select *
+    from ts_subjectdetail where state = 1 and  subjectdetail_group = #{subjectdetail_group}
+			]]>
+  </select>
+
+  <insert id="insert" parameterType="SubjectDetail">
+    <![CDATA[
+    insert into ts_subjectdetail (subjectdetail_code, subjectdetail_group,
+      subjectdetail_name, state, update_time,
+      add_time)
+    values (#{subjectdetailCode}, #{subjectdetailGroup},
+      #{subjectdetailName}, #{state}, #{updateTime},
+      #{addTime})
+			]]>
+  </insert>
+
+  <update id="update" parameterType="SubjectDetail">
+    <![CDATA[
+    update ts_subjectdetail
+			]]>
+    <set>
+      <if test="subjectdetail_group != null">
+        <![CDATA[
+        subjectdetail_group = #{subjectdetail_group},
+			]]>
+      </if>
+      <if test="subjectdetail_name != null">
+        <![CDATA[
+        subjectdetail_name = #{subjectdetail_name},
+			]]>
+      </if>
+      <if test="state != null">
+        <![CDATA[
+        state = #{state},
+			]]>
+      </if>
+      <if test="update_time != null">
+        <![CDATA[
+        update_time = #{update_time},
+			]]>
+      </if>
+      <if test="add_time != null">
+        <![CDATA[
+        add_time = #{add_time},
+			]]>
+      </if>
+    </set>
+    <![CDATA[
+    where subjectdetail_code = #{subjectdetail_code}
+			]]>
+  </update>
+
+</mapper>

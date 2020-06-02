@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IDepartmentUserDao">
+	
+	<insert id="save" parameterType="DepartmentUser">
+		<![CDATA[
+   			insert into ts_department_user (department_code,user_code) values(#{department_code},#{user_code})
+   		]]>
+	</insert>
+	
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+			insert into ts_department_user (department_code,user_code)
+   			values
+   		]]>
+   		 <foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.department_code},#{item.user_code}
+     		)
+    	</foreach>  
+	</insert>
+	
+	<sql id="whereColumns">			
+		<if test="department_code != null and department_code != ''">
+			<![CDATA[
+				and department_code = #{department_code}
+			]]>
+		</if>	
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code = #{user_code}
+			]]>
+		</if>
+	</sql>
+	
+	
+	<delete id="delete" parameterType="DepartmentUser">
+		<![CDATA[
+			delete from ts_department_user
+		]]>		
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</delete>
+	
+	<update id="update" parameterType="DepartmentUser">
+		<![CDATA[
+			update ts_department_user
+		]]>
+		<set>
+			<if test="state != null and state != ''">
+				<![CDATA[
+					state=#{state},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</update>
+	
+	<select id="findByList" parameterType="DepartmentUser" resultType="DepartmentUser">
+		<![CDATA[
+			select * from ts_department_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="DepartmentUser" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_department_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="DepartmentUser" resultType="DepartmentUser">
+		<![CDATA[
+		 	select * from ts_department_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByAll" parameterType="DepartmentUser" resultType="DepartmentUser">
+		<![CDATA[
+		 	select * from ts_department_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="DepartmentUser" resultType="DepartmentUser">
+		<![CDATA[
+			select * from ts_department_user
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	
+	<sql id="whereColumnsJoin">				
+		<if test="department_code != null and department_code != ''">
+			<![CDATA[
+				and d_u.department_code = #{department_code}
+			]]>
+		</if>
+		<if test="user_name != null and user_name != ''">
+			<![CDATA[
+				and (u.user_name like concat('%',#{user_name},'%') or  u.user_mobilephone like concat('%',#{user_name},'%') )
+			]]>
+		</if>
+		<if test="state != null and state != ''">
+			<![CDATA[
+				and d_u.state = #{state}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByUserCode" parameterType="String" resultType="String">
+		<![CDATA[
+		 	select group_concat(d.department_name,'') department_code from ts_department_user du 
+		 	left join ts_department d on du.department_code=d.department_code
+			where du.user_code=#{user_code}
+		]]>
+	</select>
+	
+	<select id="findListByDeptAndUser" parameterType="DepartmentUser" resultType="UserReturn">
+		<![CDATA[
+		 	select
+				u.user_code,
+				u.user_name,
+				u.user_mobilephone,
+				u.user_town,
+				d_u.state user_state
+			from
+				ts_department_user d_u
+			inner join qy_user u on u.user_code = d_u.user_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+		<![CDATA[
+			order by u.addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+			
+	<select id="findCountByDeptAndUser" parameterType="DepartmentUser" resultType="Integer">
+		<![CDATA[
+		 	select
+				count(1)
+			from
+				ts_department_user d_u
+			inner join qy_user u on u.user_code = d_u.user_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+	</select>
+	
+	<select id="findListByDeptAllUser" parameterType="DepartmentUser" resultType="UserReturn">
+		<![CDATA[
+		 	select u.user_code,u.user_name,u.user_mobilephone from qy_user u 
+			inner join (
+				select * from ts_info_region i_r where i_r.region_code in (
+					select distinct r.region_code from ts_department_region d_r 
+					inner join qy_region r on r.region_code = d_r.region_code 
+					where d_r.department_code = #{department_code}
+				)
+			) t on u.user_code = t.user_code where u.user_state=1 
+			union 
+			select u.user_code,u.user_name,u.user_mobilephone from qy_user u 
+			inner join ts_department_user d_u on u.user_code = d_u.user_code 
+			where d_u.department_code = #{department_code} and u.user_state=1
+		]]>
+	</select>
+
+</mapper>

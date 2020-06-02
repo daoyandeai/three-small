@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ISensorLogDao">
+
+	<select id="findBySensorNumber" parameterType="String" resultType="SensorLogReturn">
+		<![CDATA[
+		 	select
+				*
+			from
+				ts_sensor_log
+			where
+				sensor_number = #{sensor_number}
+			order by
+				add_time desc
+			limit 1
+		]]>
+	</select>
+	
+	<sql id="whereColumns">				
+		<if test="sensor_numbers != null and sensor_numbers != ''">
+			<![CDATA[
+				and sensor_number in(${sensor_numbers})
+			]]>
+		</if>
+		<if test="add_time != null and add_time != ''">
+            <![CDATA[
+                   and add_time >= #{add_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and add_time <= #{end_time}
+            ]]>
+		</if>
+	</sql>
+	
+	<select id="findWarnItemBySensorNumber" parameterType="SensorLog" resultType="Integer">
+		<![CDATA[
+		 	select count(1) from(
+			select sensor_number,${item},add_time  from (
+			select sensor_number,${item},add_time from ts_sensor_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+				order by add_time desc
+			) t1 group by sensor_number
+			) t2
+		]]>
+		<where>
+			<if test="temp_state != null and temp_state != ''">
+				<![CDATA[
+					and t2.temp_state = #{temp_state}
+				]]>
+			</if>
+			<if test="mq2_state != null and mq2_state != ''">
+				<![CDATA[
+					and t2.mq2_state = #{mq2_state}
+				]]>
+			</if>
+			<if test="mq4_state != null and mq4_state != ''">
+				<![CDATA[
+					and t2.mq4_state = #{mq4_state}
+				]]>
+			</if>
+			<if test="mq5_state != null and mq5_state != ''">
+				<![CDATA[
+					and t2.mq5_state = #{mq5_state}
+				]]>
+			</if>
+			<if test="mq9_state != null and mq9_state != ''">
+				<![CDATA[
+					and t2.mq9_state = #{mq9_state}
+				]]>
+			</if>
+			<if test="tds_state != null and tds_state != ''">
+				<![CDATA[
+					and t2.tds_state = #{tds_state}
+				]]>
+			</if>
+			<if test="ph_state != null and ph_state != ''">
+				<![CDATA[
+					and t2.ph_state = #{ph_state}
+				]]>
+			</if>
+			<if test="humidity_state != null and humidity_state != ''">
+				<![CDATA[
+					and t2.humidity_state = #{humidity_state}
+				]]>
+			</if>
+		</where>
+	</select>
+	
+</mapper>

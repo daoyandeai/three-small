@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICaseCenterDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			casecenter_code=#{casecenter_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="CaseCenter">
+		<![CDATA[
+   			insert into ts_case_center (casecenter_code,casecenter_title,casecenter_content,user_code_main,user_name_main,user_codes_secondary,user_names_secondary,user_code_add,user_name_add,province,city,area,town,vill,work_order,department_code_main,department_code_secondary) 
+   			values(#{casecenter_code},#{casecenter_title},#{casecenter_content},#{user_code_main},#{user_name_main},#{user_codes_secondary},#{user_names_secondary},#{user_code_add},#{user_name_add},#{province},#{city},#{area},#{town},#{vill},#{work_order},#{department_code_main},#{department_code_secondary})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="CaseCenter">
+		<![CDATA[
+			update ts_case_center
+		]]>
+		<set>
+			<if test="casecenter_title != null and casecenter_title != ''">
+				<![CDATA[
+					casecenter_title=#{casecenter_title},
+				]]>
+			</if>
+			<if test="casecenter_content != null and casecenter_content != ''">
+				<![CDATA[
+					casecenter_content=#{casecenter_content},
+				]]>
+			</if>
+			<if test="user_code_main != null and user_code_main != ''">
+				<![CDATA[
+					user_code_main=#{user_code_main},
+				]]>
+			</if>
+			<if test="user_name_main != null and user_name_main != ''">
+				<![CDATA[
+					user_name_main=#{user_name_main},
+				]]>
+			</if>
+			<if test="user_codes_secondary != null and user_codes_secondary != ''">
+				<![CDATA[
+					user_codes_secondary=#{user_codes_secondary},
+				]]>
+			</if>
+			<if test="user_names_secondary != null and user_names_secondary != ''">
+				<![CDATA[
+					user_names_secondary=#{user_names_secondary},
+				]]>
+			</if>
+			<if test="casecenter_audit_state != null and casecenter_audit_state != ''">
+				<![CDATA[
+					casecenter_audit_state=#{casecenter_audit_state},
+				]]>
+			</if>
+			<if test="casecenter_audit_time != null and casecenter_audit_time != ''">
+				<![CDATA[
+					casecenter_audit_time=#{casecenter_audit_time},
+				]]>
+			</if>
+			<if test="casecenter_audit_note != null and casecenter_audit_note != ''">
+				<![CDATA[
+					casecenter_audit_note=#{casecenter_audit_note},
+				]]>
+			</if>
+			<if test="user_code_audit != null and user_code_audit != ''">
+				<![CDATA[
+					user_code_audit=#{user_code_audit},
+				]]>
+			</if>
+			<if test="user_name_audit != null and user_name_audit != ''">
+				<![CDATA[
+					user_name_audit=#{user_name_audit},
+				]]>
+			</if>
+			<if test="casecenter_result != null and casecenter_result != ''">
+				<![CDATA[
+					casecenter_result=#{casecenter_result},
+				]]>
+			</if>
+			<if test="result_state != null and result_state != ''">
+				<![CDATA[
+					result_state=#{result_state},
+				]]>
+			</if>
+			<if test="department_code_main != null and department_code_main != ''">
+				<![CDATA[
+					department_code_main=#{department_code_main},
+				]]>
+			</if>
+			<if test="department_code_secondary != null and department_code_secondary != ''">
+				<![CDATA[
+					department_code_secondary=#{department_code_secondary},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="CaseCenter">
+		<![CDATA[
+			delete from ts_case_center
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="casecenter_audit_state != null and casecenter_audit_state != ''">
+			<![CDATA[
+				and casecenter_audit_state = #{casecenter_audit_state}
+			]]>
+		</if>
+		<if test="user_code_audit != null and user_code_audit != ''">
+			<![CDATA[
+				and user_code_audit = #{user_code_audit}
+			]]>
+		</if>
+		<if test="user_code_main != null and user_code_main != ''">
+			<![CDATA[
+				and user_code_main = #{user_code_main}
+			]]>
+		</if>
+		<if test="user_code_add != null and user_code_add != ''">
+			<![CDATA[
+				and user_code_add = #{user_code_add}
+			]]>
+		</if>
+		<if test="casecenter_title != null and casecenter_title != ''">
+			<![CDATA[
+				and (casecenter_title like concat('%',#{casecenter_title},'%') or user_name_main like concat('%',#{casecenter_title},'%') or user_names_secondary like concat('%',#{casecenter_title},'%'))
+			]]>
+		</if>
+		<if test="province != null and province != '' ">
+	      	<![CDATA[
+	        	and province = #{province}
+	        ]]>
+		</if>
+		<if test="city != null and city != '' ">
+	      	<![CDATA[
+	        	and city = #{city}
+	        ]]>
+		</if>
+		<if test="area != null and area != '' ">
+	      	<![CDATA[
+	        	and area = #{area}
+	        ]]>
+		</if>
+		<if test="town != null and town != '' ">
+	      	<![CDATA[
+	        	and town = #{town}
+	        ]]>
+		</if>
+		<if test="vill != null and vill != '' ">
+	      	<![CDATA[
+	        	and vill = #{vill}
+	        ]]>
+		</if>
+		<if test="add_time != null and add_time != '' ">
+	      	<![CDATA[
+	        	and to_days(add_time) >= to_days(#{add_time})
+	        ]]>
+		</if>
+		<if test="end_time != null and end_time != '' ">
+	      	<![CDATA[
+	        	and to_days(add_time) <= to_days(#{end_time})
+	        ]]>
+		</if>
+		<if test="result_state != null and result_state != '' ">
+	      	<![CDATA[
+	        	and result_state = #{result_state}
+	        ]]>
+		</if>
+		<if test="department_code_main != null and department_code_main != '' ">
+	      	<![CDATA[
+	        	and department_code_main = #{department_code_main}
+	        ]]>
+		</if>
+		<if test="department_code_secondary != null and department_code_secondary != '' ">
+	      	<![CDATA[
+	        	and department_code_secondary = #{department_code_secondary}
+	        ]]>
+		</if>
+		<if test="work_order != null and work_order != '' ">
+	      	<![CDATA[
+	        	and work_order like concat('%',#{work_order},'%')
+	        ]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="CaseCenter" resultType="CaseCenter">
+		<![CDATA[
+			select * from ts_case_center
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="CaseCenter" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_case_center
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="CaseCenter" resultType="CaseCenter">
+		<![CDATA[
+		 	select * from ts_case_center
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="CaseCenter" resultType="CaseCenter">
+		<![CDATA[
+		 	select * from ts_case_center
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+	
+	<select id="findByUser" resultType="User">
+		<![CDATA[
+		 	select * from qy_user where user_code in (${user_codes_secondary})
+		]]>
+	</select>
+	
+</mapper>

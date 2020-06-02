@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPatrolDao">
+	
+	<sql id="codeColumns">
+   		<![CDATA[
+   			patrol_code=#{patrol_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="Patrol">
+      <![CDATA[
+	    insert into ts_patrol (patrol_code, patrol_user_code, patrol_user_name, patrol_result, patrol_time, patrol_imgs,
+		    dispose_code, dispose_name, punish_code, punish_name, note, company_code, company_name, user_code, user_name,
+		    record_proof,food_inspection,food_inspection_count,related_credentials,production_operation,waste_disposal,
+		    requirements,ban_food,food_label_content,risk_assessment,ban_production_operation,work_order,patrol_type,
+	    	longitude,latitude,location,config_content
+	    ) 	
+	    values(
+		    #{patrol_code}, #{patrol_user_code}, #{patrol_user_name}, #{patrol_result}, #{patrol_time}, #{patrol_imgs},
+		    #{dispose_code}, #{dispose_name}, #{punish_code}, #{punish_name}, #{note}, #{company_code}, #{company_name}, #{user_code}, #{user_name},
+		    #{record_proof},#{food_inspection},#{food_inspection_count},#{related_credentials},#{production_operation},#{waste_disposal},
+		    #{requirements},#{ban_food},#{food_label_content},#{risk_assessment},#{ban_production_operation},#{work_order},#{patrol_type},
+	    	#{longitude},#{latitude},#{location},#{config_content}
+	    )
+        ]]>
+	</insert>
+	
+	<update id="update" parameterType="Patrol">
+    	<![CDATA[
+    		update ts_patrol
+    	]]>
+    <set>
+		<if test="patrol_user_code != null and patrol_user_code != '' ">
+	      	<![CDATA[
+	        	patrol_user_code = #{patrol_user_code},
+	        ]]>
+		</if>
+		<if test="patrol_user_name != null and patrol_user_name != '' ">
+	      	<![CDATA[
+	        	patrol_user_name = #{patrol_user_name},
+	        ]]>
+		</if>
+		<if test="patrol_result != null and patrol_result != '' ">
+	      	<![CDATA[
+	        	patrol_result = #{patrol_result},
+	        ]]>
+		</if>
+		<if test="patrol_time != null and patrol_time != '' ">
+	      	<![CDATA[
+	        	patrol_time = #{patrol_time},
+	        ]]>
+		</if>
+		<if test="patrol_imgs != null and patrol_imgs != '' ">
+	      	<![CDATA[
+	        	patrol_imgs = #{patrol_imgs},
+	        ]]>
+		</if>
+		<if test="dispose_code != null and dispose_code != '' ">
+	      	<![CDATA[
+	        	dispose_code = #{dispose_code},
+	        ]]>
+		</if>
+		<if test="dispose_name != null and dispose_name != '' ">
+	      	<![CDATA[
+	        	dispose_name = #{dispose_name},
+	        ]]>
+		</if>
+		<if test="punish_code != null and punish_code != '' ">
+	      	<![CDATA[
+	        	punish_code = #{punish_code},
+	        ]]>
+		</if>
+		<if test="punish_name != null and punish_name != '' ">
+	      	<![CDATA[
+	        	punish_name = #{punish_name},
+	        ]]>
+		</if>
+		<if test="note != null and note != '' ">
+	      	<![CDATA[
+	        	note = #{note},
+	        ]]>
+		</if>
+		<if test="record_proof != null and record_proof != '' ">
+	      	<![CDATA[
+	        	record_proof = #{record_proof},
+	        ]]>
+		</if>
+		<if test="food_inspection != null and food_inspection != '' ">
+	      	<![CDATA[
+	        	food_inspection = #{food_inspection},
+	        ]]>
+		</if>
+		<if test="food_inspection_count != null and food_inspection_count != '' ">
+	      	<![CDATA[
+	        	food_inspection_count = #{food_inspection_count},
+	        ]]>
+		</if>
+		<if test="related_credentials != null and related_credentials != '' ">
+	      	<![CDATA[
+	        	related_credentials = #{related_credentials},
+	        ]]>
+		</if>
+		<if test="ban_production_operation != null and ban_production_operation != '' ">
+	      	<![CDATA[
+	        	ban_production_operation = #{ban_production_operation},
+	        ]]>
+		</if>
+		<if test="production_operation != null and production_operation != '' ">
+	      	<![CDATA[
+	        	production_operation = #{production_operation},
+	        ]]>
+		</if>
+		<if test="waste_disposal != null and waste_disposal != '' ">
+	      	<![CDATA[
+	        	waste_disposal = #{waste_disposal},
+	        ]]>
+		</if>
+		<if test="requirements != null and requirements != '' ">
+	      	<![CDATA[
+	        	requirements = #{requirements},
+	        ]]>
+		</if>
+		<if test="ban_food != null and ban_food != '' ">
+	      	<![CDATA[
+	        	ban_food = #{ban_food},
+	        ]]>
+		</if>
+		<if test="food_label_content != null and food_label_content != '' ">
+	      	<![CDATA[
+	        	food_label_content = #{food_label_content},
+	        ]]>
+		</if>
+		<if test="risk_assessment != null and risk_assessment != '' ">
+	      	<![CDATA[
+	        	risk_assessment = #{risk_assessment},
+	        ]]>
+		</if>
+		<if test="patrol_type != null and patrol_type != '' ">
+	      	<![CDATA[
+	        	patrol_type = #{patrol_type},
+	        ]]>
+		</if>
+		<if test="patrol_state != null and patrol_state != '' ">
+	      	<![CDATA[
+	        	patrol_state = #{patrol_state},
+	        ]]>
+		</if>
+		<if test="longitude != null and longitude != '' ">
+	      	<![CDATA[
+	        	longitude = #{longitude},
+	        ]]>
+		</if>
+		<if test="latitude != null and latitude != '' ">
+	      	<![CDATA[
+	        	latitude = #{latitude},
+	        ]]>
+		</if>
+		<if test="location != null and location != '' ">
+	      	<![CDATA[
+	        	location = #{location},
+	        ]]>
+		</if>
+		<if test="config_content != null and config_content != '' ">
+	      	<![CDATA[
+	        	config_content = #{config_content},
+	        ]]>
+		</if>
+	</set>
+	<where>
+		<include refid="codeColumns"/>
+	</where>
+	</update>
+	
+	<sql id="whereColumns">
+		<if test="patrol_user_name != null and patrol_user_name != ''">
+			<![CDATA[
+				and (p.patrol_user_name like concat('%',#{patrol_user_name},'%') or
+				p.company_name like concat('%',#{patrol_user_name},'%') or
+				p.user_name like concat('%',#{patrol_user_name},'%')
+				)
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (p.patrol_user_name like concat('%',#{company_name},'%') or
+				p.company_name like concat('%',#{company_name},'%') or
+				p.user_name like concat('%',#{company_name},'%')
+				)
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and p.company_code = #{company_code}
+			]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and p.user_code = #{user_code}
+			]]>
+		</if>
+		<if test="patrol_user_code != null and patrol_user_code != ''">
+			<![CDATA[
+				and p.patrol_user_code = #{patrol_user_code}
+			]]>
+		</if>
+		<if test="companytag_code != null and companytag_code != ''">
+            <![CDATA[
+		      	and c.companytag_code = #{companytag_code}
+			]]>
+        </if>
+        <if test="business_type != null and business_type != ''">
+            <![CDATA[
+		      	and c.business_type = #{business_type}
+			]]>
+        </if>
+        <if test="search_time_bigen != null and search_time_bigen != ''">
+            <![CDATA[
+               	and date_format(p.patrol_time,'%Y-%m-%d %H:%i:%S') >= date_format(#{search_time_bigen},'%Y-%m-%d %H:%i:%S')
+			]]>
+        </if>
+        <if test="search_time_end != null and search_time_end != ''">
+            <![CDATA[
+               	and date_format(p.patrol_time,'%Y-%m-%d %H:%i:%S') <= date_format(#{search_time_end},'%Y-%m-%d %H:%i:%S')
+			]]>
+        </if>
+		<if test="patrol_result != null and patrol_result != '' ">
+	      	<![CDATA[
+	        	and p.patrol_result = #{patrol_result}
+	        ]]>
+		</if>
+		<if test="search_code != null and search_code != '' ">
+	      	<![CDATA[
+	        	and (p.user_code = #{search_code} or p.patrol_user_code = #{search_code})
+	        ]]>
+		</if>
+        <if test="province != null and province != '' ">
+	      	<![CDATA[
+	        	and c.province = #{province}
+	        ]]>
+		</if>
+		<if test="city != null and city != '' ">
+	      	<![CDATA[
+	        	and c.city = #{city}
+	        ]]>
+		</if>
+		<if test="area != null and area != '' ">
+	      	<![CDATA[
+	        	c.area = #{area},
+	        ]]>
+		</if>
+		<if test="town != null and town != '' ">
+	      	<![CDATA[
+	        	and c.town = #{town}
+	        ]]>
+		</if>
+		<if test="vill != null and vill != '' ">
+	      	<![CDATA[
+	        	and c.vill = #{vill}
+	        ]]>
+		</if>
+		<if test="business_form != null and business_form != '' ">
+	      	<![CDATA[
+	        	and c.business_form = #{business_form}
+	        ]]>
+		</if>
+		<if test="department_code != null and department_code != '' ">
+	      	<![CDATA[
+	        	and c.department_code = #{department_code}
+	        ]]>
+		</if>
+		<if test="examine != null and examine != '' ">
+	      	<![CDATA[
+	        	and c.examine = #{examine}
+	        ]]>
+		</if>
+		<if test="patrol_type != null and patrol_type != '' ">
+	      	<![CDATA[
+	        	and p.patrol_type = #{patrol_type}
+	        ]]>
+		</if>
+		<if test="patrol_state != null and patrol_state != '' ">
+	      	<![CDATA[
+	        	and p.patrol_state = #{patrol_state}
+	        ]]>
+		</if>
+		<if test="timesearch != null and timesearch == 'today' ">
+	      	<![CDATA[
+	        	and to_days(patrol_time) = to_days(now())
+	        ]]>
+		</if>
+		<if test="monthstr !=null and monthstr != ''">
+			<![CDATA[
+				and DATE_FORMAT(p.add_time,'%Y-%m')=#{monthstr}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Patrol" resultType="Patrol">
+		<![CDATA[
+			select * from ts_patrol p
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by p.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Patrol" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_patrol p
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+
+    <select id="findByCode" parameterType="Patrol" resultType="Patrol">
+        <![CDATA[
+            select * from ts_patrol  where patrol_code = #{patrol_code}
+        ]]>
+    </select>
+
+    <select id="findLeftJoinCompanyList" parameterType="Patrol" resultType="Patrol">
+        <![CDATA[
+            select p.*,c.business_form,d.department_name from ts_patrol p 
+            left join ts_company c on p.company_code=c.company_code
+            left join ts_department d on c.department_code=d.department_code
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+        <![CDATA[
+            order by p.add_time desc limit ${pager_offset},${pager_openset}
+        ]]>
+    </select>
+
+    <select id="findLeftJoinCompanyCount" parameterType="Patrol" resultType="Integer">
+        <![CDATA[
+            select count(1) from ts_patrol p 
+            left join ts_company c on p.company_code=c.company_code 
+            left join ts_department d on c.department_code=d.department_code
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+    </select>
+
+
+
+	<sql id="whereColumnsApp">
+		<if test="patrol_user_code != null and patrol_user_code != ''">
+			<![CDATA[
+				and patrol_user_code = #{patrol_user_code}
+			]]>
+		</if>
+		<if test="patrol_state != null and patrol_state != ''">
+			<![CDATA[
+				and patrol_state = #{patrol_state}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and company_name like concat('%',#{company_name},'%')
+			]]>
+		</if>
+	</sql>
+    <select id="findLeftJoinCompanyListApp" parameterType="Patrol" resultType="Patrol">
+        <![CDATA[
+			SELECT * FROM ts_patrol
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumnsApp"/>
+		</trim>
+        <![CDATA[
+            order by add_time desc limit ${pager_offset},${pager_openset}
+        ]]>
+    </select>
+    
+    
+    <select id="findLeftJoinCompanyCountApp" parameterType="Patrol" resultType="Integer">
+        <![CDATA[
+			SELECT count(*) FROM ts_patrol
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumnsApp"/>
+		</trim>
+    </select>
+
+
+	<select id="findTodayUserPatrolSum" parameterType="String" resultType="Integer">
+        <![CDATA[
+			select sum(case patrol_state when 2 then 0 else 1 end) patrol_state 
+			from ts_patrol where to_days(patrol_time) = to_days(now()) 
+			and patrol_user_code=#{patrol_user_code}
+        ]]>
+    </select>
+    
+    <select id="findLeftJoinCompanyAll" parameterType="Patrol" resultType="Patrol">
+        <![CDATA[
+            select p.*,c.province,c.city,c.area,c.town,c.vill,c.address from ts_patrol p 
+            left join ts_company c on p.company_code=c.company_code
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+        <![CDATA[
+            order by p.add_time desc
+        ]]>
+    </select>
+</mapper>

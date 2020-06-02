@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IRoleMenuDao">
+	
+	<insert id="save" parameterType="RoleMenu">
+		<![CDATA[
+   			insert into ts_rolemenu (menu_code,role_code,menu_btns) values(#{menu_code},#{role_code},#{menu_btns})
+   		]]>
+	</insert>
+	
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+   			insert into ts_rolemenu (menu_code,role_code,menu_btns) 
+   			values
+   		]]>
+   		 <foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.menu_code},#{item.role_code},#{item.menu_btns}
+     		)
+    	</foreach>  
+	</insert>
+	
+	<sql id="whereColumns">			
+		<if test="menu_code != null and menu_code != ''">
+			<![CDATA[
+				and menu_code = #{menu_code}
+			]]>
+		</if>	
+		<if test="role_code != null and role_code != ''">
+			<![CDATA[
+				and role_code = #{role_code}
+			]]>
+		</if>
+	</sql>
+	
+	<delete id="delete" parameterType="RoleMenu">
+		<![CDATA[
+			delete from ts_rolemenu
+		]]>		
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</delete>
+	
+	<select id="findByList" parameterType="RoleMenu" resultType="RoleMenu">
+		<![CDATA[
+			select * from ts_rolemenu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="RoleMenu" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_rolemenu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="RoleMenu" resultType="RoleMenu">
+		<![CDATA[
+		 	select * from ts_rolemenu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit 1
+		]]>
+	</select>
+	
+	<select id="findButtonByTwoCode" parameterType="RoleMenu" resultType="String">
+		<![CDATA[
+		 	select menu_btns from ts_rolemenu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit 1
+		]]>
+	</select>
+	
+</mapper>

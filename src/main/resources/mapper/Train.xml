@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ITrainDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			train_code=#{train_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Train">
+		<![CDATA[
+   			insert into ts_train 
+   				(user_code,user_name,train_code,train_title,train_province,train_city,train_area,train_town,train_vill,train_year,train_quarter) 
+   			values
+   				(#{user_code},#{user_name},#{train_code},#{train_title},#{train_province},#{train_city},#{train_area},#{train_town},#{train_vill},#{train_year},#{train_quarter})
+   		]]>
+	</insert>
+   
+	<update id="update" parameterType="Train">
+		<![CDATA[
+			update ts_train
+		]]>
+		<set>
+			<if test="train_state != null and train_state != ''">
+				<![CDATA[
+					train_state=#{train_state},
+				]]>
+			</if>
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+					user_code=#{user_code},
+				]]>
+			</if>
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					user_name=#{user_name},
+				]]>
+			</if>
+			<if test="train_title != null and train_title != ''">
+				<![CDATA[
+					train_title=#{train_title},
+				]]>
+			</if>
+			<if test="train_province != null and train_province != ''">
+				<![CDATA[
+					train_province=#{train_province},
+				]]>
+			</if>
+			<![CDATA[
+				train_city=#{train_city},
+			]]>
+			<![CDATA[
+				train_area=#{train_area},
+			]]>
+			<![CDATA[
+				train_town=#{train_town},
+			]]>
+			<![CDATA[
+				train_vill=#{train_vill},
+			]]>
+			<if test="train_year != null and train_year != ''">
+				<![CDATA[
+					train_year=#{train_year},
+				]]>
+			</if>
+			<if test="train_quarter != null and train_quarter != ''">
+				<![CDATA[
+					train_quarter=#{train_quarter},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<update id="updateStatus" parameterType="Train">
+		<![CDATA[
+			update ts_train set train_state = #{train_state} where train_code = #{train_code}
+		]]>
+	</update>
+	
+	<delete id="delete" parameterType="Train">
+		<![CDATA[
+			delete from ts_train
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<sql id="whereColumns">
+		<if test="train_state != null and train_state != ''">
+			<![CDATA[
+				and train_state = #{train_state}
+			]]>
+		</if>				
+		<if test="train_province != null and train_province != ''">
+			<![CDATA[
+			    and train_province = #{train_province}
+			]]>
+		</if>
+		<if test="train_city != null and train_city != ''">
+			<![CDATA[
+			    and train_city = #{train_city}
+			]]>
+		</if>
+		<if test="train_area != null and train_area != ''">
+			<![CDATA[
+			    and train_area = #{train_area}
+			]]>
+		</if>
+		<if test="train_town != null and train_town != ''">
+			<![CDATA[
+			    and train_town = #{train_town}
+			]]>
+		</if>
+		<if test="train_vill != null and train_vill != ''">
+			<![CDATA[
+			    and train_vill = #{train_vill}
+			]]>
+		</if>
+		<if test="train_year != null and train_year != ''">
+			<![CDATA[
+			    and train_year = #{train_year}
+			]]>
+		</if>
+		<if test="train_title != null and train_title != ''">
+			<![CDATA[
+				and train_title like concat('%',#{train_title},'%')
+			]]>
+		</if>
+		<if test="train_quarter != null and train_quarter != ''">
+			<![CDATA[
+				and train_quarter like concat('%',#{train_quarter},'%')
+			]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+			    and user_code = #{user_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Train" resultType="Train">
+		<![CDATA[
+			select * from ts_train
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by train_year desc,addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Train" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_train
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Train" resultType="Train">
+		<![CDATA[
+		 	select * from ts_train
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll"  parameterType="Train" resultType="Train">
+		<![CDATA[
+		 	select * from ts_train
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="Train" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_train
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="train_code != null and train_code != ''">
+				<![CDATA[
+					and train_code<>#{train_code}
+				]]>
+				<![CDATA[
+					and train_province=#{train_province}
+				]]>
+				<![CDATA[
+					and train_city=#{train_city}
+				]]>
+				<![CDATA[
+					and train_area=#{train_area}
+				]]>
+				<![CDATA[
+					and train_town=#{train_town}
+				]]>
+				<![CDATA[
+					and train_vill=#{train_vill}
+				]]>
+			</if>
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+					and user_code=#{user_code}
+				]]>
+			</if>
+			<if test="train_quarter != null and train_quarter != ''">
+				<![CDATA[
+					and train_quarter=#{train_quarter}
+				]]>
+			</if>
+			<if test="train_year != null and train_year != ''">
+				<![CDATA[
+					and train_year=#{train_year}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- ============================================================其它方法开始============================================================ -->
+	<select id="findByState" resultType="Train">
+		<![CDATA[
+		 	select * from ts_train 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by train_year desc,addtime desc
+		]]>
+	</select>
+	
+	<select id="findAllGroupByYear" resultType="Train">
+		<![CDATA[
+		 	select train_year from ts_train 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+		 	group by train_year order by train_year desc
+		]]>
+	</select>
+	
+	<sql id="whereAuthColumns">
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code=#{user_code}
+			]]>
+		</if>
+		<if test="train_year != null and train_year != ''">
+			<![CDATA[
+				and train_year=#{train_year}
+			]]>
+		</if>
+		<if test="train_title != null and train_title != ''">
+			<![CDATA[
+				and train_title like concat('%',#{train_title},'%')
+			]]>
+		</if>
+		<if test="train_quarter != null and train_quarter != ''">
+			<![CDATA[
+				and train_quarter like concat('%',#{train_quarter},'%')
+			]]>
+		</if>
+		<if test="train_state != null and train_state != ''">
+			<![CDATA[
+				and train_state=#{train_state}
+			]]>
+		</if>
+		<if test="train_province != null and train_province != ''">
+			<![CDATA[
+				and (
+					train_province=#{train_province}
+			]]>
+		</if>
+		<if test="train_city != null and train_city != ''">
+			<![CDATA[
+				and train_city=#{train_city}
+			]]>
+		</if>
+		<if test="train_area != null and train_area != ''">
+			<![CDATA[
+				and train_area=#{train_area}
+			]]>
+		</if>
+		<if test="train_town != null and train_town != ''">
+			<![CDATA[
+				and train_town=#{train_town}
+			]]>
+		</if>
+		<if test="train_vill != null and train_vill != ''">
+			<![CDATA[
+				and train_vill=#{train_vill}
+			]]>
+		</if>
+		<![CDATA[
+		 	 	 or LOCATE( CONCAT(ifnull(train_province,""), ifnull(train_city,""), ifnull(train_area,""), ifnull(train_town,""), ifnull(train_vill,"")) ,#{addr_info})
+		 	  )
+		]]>
+	</sql>
+	
+	<select id="findCountByAuth" parameterType="Train" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_train 
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereAuthColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findListByAuth" parameterType="Train" resultType="Train">
+		<![CDATA[
+			select * from ts_train 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereAuthColumns"/>
+		</trim>
+		<![CDATA[
+		 	order by train_year desc,addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findAllByAuth" parameterType="Train" resultType="Train">
+		<![CDATA[
+			select * from ts_train 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereAuthColumns"/>
+		</trim>
+		<![CDATA[
+		 	order by train_year desc,addtime desc
+		]]>
+	</select>
+	
+</mapper>

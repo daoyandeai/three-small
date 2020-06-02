@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IDictionaryDao">
+	<sql id="codeColumns">
+    	<![CDATA[
+   			dictionary_code=#{dictionary_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Dictionary">
+	    <![CDATA[
+			insert into ts_dictionary (dictionary_code,companytag_code,dictionary_module,dictionary_name,dictionary_field,dictionary_group,companytype_codes,companytype_names,dictionary_logo_url,user_name_add,user_code_add)
+		    values (#{dictionary_code},#{companytag_code},#{dictionary_module},#{dictionary_name},#{dictionary_field},#{dictionary_group},#{companytype_codes},#{companytype_names},#{dictionary_logo_url},#{user_name_add},#{user_code_add})
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="Dictionary">
+	    <![CDATA[
+	   			update ts_dictionary
+	    ]]>
+		<set>
+			<if test="companytype_codes != null and companytype_codes != ''">
+	             <![CDATA[
+	                 companytype_codes=#{companytype_codes},
+	             ]]>
+			</if>
+			<if test="companytype_names != null and companytype_names != ''">
+				<![CDATA[
+					companytype_names=#{companytype_names},
+				]]>
+			</if>
+			<if test="dictionary_logo_url != null and dictionary_logo_url != ''">
+				<![CDATA[
+					dictionary_logo_url=#{dictionary_logo_url},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+	
+	<sql id="whereColumns">
+		<if test="dictionary_group != null and dictionary_group != ''">
+		        <![CDATA[
+					and dictionary_group = #{dictionary_group}
+		        ]]>
+	      	</if>
+		<if test="dictionary_module != null and dictionary_module != ''">
+            <![CDATA[
+                and dictionary_module like concat('%',#{dictionary_module},'%')
+            ]]>
+		</if>
+		<if test="companytype_codes != null and companytype_codes != ''">
+            <![CDATA[
+                    and companytype_codes  regexp #{companytype_codes}
+            ]]>
+		</if>
+		<if test="add_time != null and add_time != ''">
+            <![CDATA[
+                   and add_time >= #{add_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and add_time <= #{end_time}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="Dictionary" resultType="DictionaryReturn">
+      <![CDATA[
+			select
+				dictionary_code,
+				dictionary_module,
+				companytype_codes,
+				companytype_names,
+				dictionary_logo_url,
+				user_name_add,
+				user_code_add,
+				add_time,
+				user_name_update,
+				user_name_update,
+				update_time,
+				dictionary_group
+			from
+				ts_dictionary
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="Dictionary" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_dictionary
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+	
+	<select id="findByCode_app" parameterType="Dictionary" resultType="DictionaryReturn">
+        <![CDATA[
+		 	select
+				dictionary_code,
+				dictionary_module,
+				companytype_codes,
+				companytype_names,
+				dictionary_logo_url,
+				user_name_add,
+				user_code_add,
+				add_time,
+				user_name_update,
+				user_name_update,
+				update_time
+			from
+				ts_dictionary
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+	
+	<delete id="delete" parameterType="Dictionary">
+		<![CDATA[
+			delete from ts_dictionary
+		]]>		
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="codeColumns"/>
+		</trim>
+	</delete>
+	
+	<select id="findBySearch" parameterType="Dictionary" resultType="Dictionary">
+	    <![CDATA[
+	      select * from ts_dictionary
+	    ]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="companytag_code != null">
+		        <![CDATA[
+					and companytag_code like concat('%',#{companytag_code},'%')
+		        ]]>
+			</if>
+			<if test="dictionary_module != null">
+		        <![CDATA[
+					and dictionary_module = #{dictionary_module}
+		        ]]>
+			</if>
+			<if test="dictionary_group != null and dictionary_group != ''">
+		        <![CDATA[
+					and dictionary_group = #{dictionary_group}
+		        ]]>
+	      	</if>
+			<if test="dictionary_codes != null and dictionary_codes != ''">
+		        <![CDATA[
+					and dictionary_code in (${dictionary_codes})
+		        ]]>
+	      	</if>
+    	</trim>
+	</select>
+</mapper>

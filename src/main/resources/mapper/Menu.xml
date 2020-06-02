@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IMenuDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			menu_code=#{menu_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Menu">
+		<![CDATA[
+   			insert into ts_menu (menu_code,menu_parentcode,menu_title,menu_img,menu_url,menu_type,menu_order) 
+   			values(#{menu_code},#{menu_parentcode},#{menu_title},#{menu_img},#{menu_url},#{menu_type},#{menu_order})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="Menu">
+		<![CDATA[
+			update ts_menu
+		]]>
+		<set>
+			<if test="menu_code != null and menu_code != ''">
+				<![CDATA[
+					menu_code=#{menu_code},
+				]]>
+			</if>
+			<if test="menu_parentcode != null and menu_parentcode != ''">
+				<![CDATA[
+					menu_parentcode=#{menu_parentcode},
+				]]>
+			</if>
+			<if test="menu_title != null and menu_title != ''">
+				<![CDATA[
+					menu_title=#{menu_title},
+				]]>
+			</if>
+			<if test="menu_img != null and menu_img != ''">
+				<![CDATA[
+					menu_img=#{menu_img},
+				]]>
+			</if>
+			<if test="menu_url != null and menu_url != ''">
+				<![CDATA[
+					menu_url=#{menu_url},
+				]]>
+			</if>
+			<if test="menu_type != null and menu_type != ''">
+				<![CDATA[
+					menu_type=#{menu_type},
+				]]>
+			</if>
+			<if test="menu_order != null and menu_order != ''">
+				<![CDATA[
+					menu_order=#{menu_order},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="Menu">
+		<![CDATA[
+			delete from ts_menu
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<sql id="whereColumns">			
+		<if test="menu_parentcode != null and menu_parentcode != ''">
+			<![CDATA[
+				and menu_parentcode = #{menu_parentcode}
+			]]>
+		</if>	
+		<if test="menu_title != null and menu_title != ''">
+			<![CDATA[
+				and menu_title like concat('%',#{menu_title},'%')
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findByList" parameterType="Menu" resultType="Menu">
+		<![CDATA[
+			select * from ts_menu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by menu_order asc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Menu" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_menu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Menu" resultType="Menu">
+		<![CDATA[
+		 	select * from ts_menu
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="Menu" resultType="Menu">
+		<![CDATA[
+		 	select * from ts_menu
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by menu_order asc
+		]]>
+	</select>
+	
+	<select id="findMenuByRole" parameterType="String" resultType="Menu">
+		<![CDATA[
+		 	select distinct m.* from ts_rolemenu rm 
+			left join ts_menu m on rm.menu_code=m.menu_code
+			where rm.role_code=#{role_code} order by m.menu_order asc
+		]]>
+	</select>
+	
+</mapper>

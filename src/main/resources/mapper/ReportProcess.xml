@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IReportProcessDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			report_process_code=#{report_process_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="ReportProcess">
+		<![CDATA[
+   			insert into qy_report_process 
+   				(report_process_code,water_source,tablewater_disinfect,reservedsample_state,narcotics_state,cleancontainer_count,refrigerator_count,disinfectioncabinet_count,reservedsample_count,garbage_count,ratproof_count,washvegetable_count,report_code) 
+   			values
+   				(#{report_process_code},#{water_source},#{tablewater_disinfect},#{reservedsample_state},#{narcotics_state},#{cleancontainer_count},#{refrigerator_count},#{disinfectioncabinet_count},#{reservedsample_count},#{garbage_count},#{ratproof_count},#{washvegetable_count},#{report_code})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="ReportProcess">
+		<![CDATA[
+			update qy_report_process
+		]]>
+		<set>
+			<if test="water_source !=null and water_source !=''">
+				<![CDATA[
+					water_source=#{water_source},
+				]]>
+			</if>
+			<if test="tablewater_disinfect !=null and tablewater_disinfect !=''">
+				<![CDATA[
+					tablewater_disinfect=#{tablewater_disinfect},
+				]]>
+			</if>
+			<if test="reservedsample_state !=null and reservedsample_state !=''">
+				<![CDATA[
+					reservedsample_state=#{reservedsample_state},
+				]]>
+			</if>
+			<if test="narcotics_state !=null and narcotics_state !=''">
+				<![CDATA[
+					narcotics_state=#{narcotics_state},
+				]]>
+			</if>
+			<if test="cleancontainer_count !=null and cleancontainer_count !=''">
+				<![CDATA[
+					cleancontainer_count=#{cleancontainer_count},
+				]]>
+			</if>
+			<if test="refrigerator_count !=null and refrigerator_count !=''">
+				<![CDATA[
+					refrigerator_count=#{refrigerator_count},
+				]]>
+			</if>
+			<if test="disinfectioncabinet_count !=null and disinfectioncabinet_count !=''">
+				<![CDATA[
+					disinfectioncabinet_count=#{disinfectioncabinet_count},
+				]]>
+			</if>
+			<if test="reservedsample_count !=null and reservedsample_count !=''">
+				<![CDATA[
+					reservedsample_count=#{reservedsample_count},
+				]]>
+			</if>
+			<if test="garbage_count !=null and garbage_count !=''">
+				<![CDATA[
+					garbage_count=#{garbage_count},
+				]]>
+			</if>
+			<if test="ratproof_count !=null and ratproof_count !=''">
+				<![CDATA[
+					ratproof_count=#{ratproof_count},
+				]]>
+			</if>
+			<if test="washvegetable_count !=null and washvegetable_count !=''">
+				<![CDATA[
+					washvegetable_count=#{washvegetable_count},
+				]]>
+			</if>
+			<if test="report_code !=null and report_code !=''">
+				<![CDATA[
+					report_code=#{report_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="ReportProcess">
+		<![CDATA[
+			delete from qy_report_process
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="report_process_code !=null and report_process_code !=''">
+			<![CDATA[
+				 and report_process_code=#{report_process_code}
+			]]>
+		</if>
+		<if test="water_source !=null and water_source !=''">
+			<![CDATA[
+				 and water_source=#{water_source}
+			]]>
+		</if>
+		<if test="tablewater_disinfect !=null and tablewater_disinfect !=''">
+			<![CDATA[
+				 and tablewater_disinfect=#{tablewater_disinfect}
+			]]>
+		</if>
+		<if test="reservedsample_state !=null and reservedsample_state !=''">
+			<![CDATA[
+				 and reservedsample_state=#{reservedsample_state}
+			]]>
+		</if>
+		<if test="narcotics_state !=null and narcotics_state !=''">
+			<![CDATA[
+				 and narcotics_state=#{narcotics_state}
+			]]>
+		</if>
+		<if test="cleancontainer_count !=null and cleancontainer_count !=''">
+			<![CDATA[
+				 and cleancontainer_count=#{cleancontainer_count}
+			]]>
+		</if>
+		<if test="refrigerator_count !=null and refrigerator_count !=''">
+			<![CDATA[
+				 and refrigerator_count=#{refrigerator_count}
+			]]>
+		</if>
+		<if test="disinfectioncabinet_count !=null and disinfectioncabinet_count !=''">
+			<![CDATA[
+				 and disinfectioncabinet_count=#{disinfectioncabinet_count}
+			]]>
+		</if>
+		<if test="reservedsample_count !=null and reservedsample_count !=''">
+			<![CDATA[
+				 and reservedsample_count=#{reservedsample_count}
+			]]>
+		</if>
+		<if test="garbage_count !=null and garbage_count !=''">
+			<![CDATA[
+				 and garbage_count=#{garbage_count}
+			]]>
+		</if>
+		<if test="ratproof_count !=null and ratproof_count !=''">
+			<![CDATA[
+				 and ratproof_count=#{ratproof_count}
+			]]>
+		</if>
+		<if test="washvegetable_count !=null and washvegetable_count !=''">
+			<![CDATA[
+				 and washvegetable_count=#{washvegetable_count}
+			]]>
+		</if>
+		<if test="report_code !=null and report_code !=''">
+			<![CDATA[
+				 and report_code=#{report_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="ReportProcess" resultType="ReportProcess">
+		<![CDATA[
+			select * from qy_report_process
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="ReportProcess" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_process
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="ReportProcess" resultType="ReportProcess">
+		<![CDATA[
+		 	select * from qy_report_process
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="ReportProcess" resultType="ReportProcess">
+		<![CDATA[
+		 	select * from qy_report_process
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="ReportProcess" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_process
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="report_code != null and report_code != ''">
+				<![CDATA[
+					and report_code=#{report_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findByReportCode" parameterType="String" resultType="ReportProcess">
+		<![CDATA[
+		 	select * from qy_report_process where report_code=#{report_code} limit 1
+		]]>
+	</select>
+	
+	<select id="findByReportCode_app" parameterType="String" resultType="ReportProcessReturn">
+		<![CDATA[
+		 	select * from qy_report_process where report_code=#{report_code} limit 1
+		]]>
+	</select>
+	
+</mapper>

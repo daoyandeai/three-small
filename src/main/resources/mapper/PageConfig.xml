@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPageConfigDao">
+
+	<sql id="codeColumns">
+    <![CDATA[
+   			page_config_code=#{page_config_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="PageConfig">
+    <![CDATA[
+      		insert into ts_page_config 
+      			(page_config_code,companytype_code,companytag_code,page_config_name,page_module,page_config_content,user_name_add,user_code_add)
+      		values 
+      			(#{page_config_code},#{companytype_code},#{companytag_code},#{page_config_name},#{page_module},#{page_config_content},#{user_name_add},#{user_code_add})
+      ]]>
+	</insert>
+
+	<update id="update" parameterType="PageConfig">
+	    <![CDATA[
+	   			update ts_page_config
+	    ]]>
+		<set>
+			<if test="companytype_code != null and companytype_code != ''">
+	             <![CDATA[
+	                 companytype_code=#{companytype_code},
+	             ]]>
+			</if>
+			<if test="companytag_code != null and companytag_code != ''">
+	             <![CDATA[
+	                 companytag_code=#{companytag_code},
+	             ]]>
+			</if>
+			<if test="page_config_name != null and page_config_name != ''">
+	             <![CDATA[
+	                 page_config_name=#{page_config_name},
+	             ]]>
+			</if>
+			<if test="page_module != null and page_module != ''">
+	             <![CDATA[
+	                 page_module=#{page_module},
+	             ]]>
+			</if>
+			<if test="page_config_content != null and page_config_content != ''">
+	             <![CDATA[
+	                 page_config_content=#{page_config_content},
+	             ]]>
+			</if>
+			<if test="state != null and state != ''">
+	          	 <![CDATA[
+	                   state=#{state},
+	             ]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+
+	<sql id="whereColumns">
+		<if test="companytype_code != null and companytype_code != ''">
+            <![CDATA[
+                    and companytype_code=#{companytype_code}
+            ]]>
+		</if>
+		<if test="companytag_code != null and companytag_code != ''">
+            <![CDATA[
+                    and companytag_code=#{companytag_code}
+            ]]>
+		</if>
+		<if test="page_config_name != null and page_config_name != ''">
+            <![CDATA[
+                    and page_config_name like concat('%',#{page_config_name},'%')
+            ]]>
+		</if>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and state=#{state}
+            ]]>
+		</if>
+		<if test="user_code_add != null and user_code_add != ''">
+            <![CDATA[
+                    and user_code_add=#{user_code_add}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="PageConfig" resultType="PageConfigReturn">
+      <![CDATA[
+			select * from ts_page_config
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="PageConfig" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_page_config
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByAll_app" parameterType="PageConfig" resultType="PageConfigReturn">
+      <![CDATA[
+			select * from ts_page_config
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode_app" parameterType="PageConfig" resultType="PageConfigReturn">
+        <![CDATA[
+		 	select * from ts_page_config
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+
+	<select id="findByExist" parameterType="PageConfig" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_page_config
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="page_config_code != null and page_config_code != ''">
+				<![CDATA[
+					and page_config_code<>#{page_config_code}
+				]]>
+			</if>
+			<if test="page_config_name != null and page_config_name != ''">
+				<![CDATA[
+					and page_config_name=#{page_config_name}
+				]]>
+			</if>
+			<if test="companytype_code != null and companytype_code != ''">
+				<![CDATA[
+					and companytype_code=#{companytype_code}
+				]]>
+			</if>
+			<if test="companytag_code != null and companytag_code != ''">
+				<![CDATA[
+					and companytag_code=#{companytag_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

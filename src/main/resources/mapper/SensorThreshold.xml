@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ISensorThresholdDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			sensor_threshold_code=#{sensor_threshold_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="SensorThreshold">
+		<![CDATA[
+   			insert into ts_sensor_threshold (sensor_threshold_code,sensor_name,sensor_enname,max_value,min_value,sync_interval,user_code_add,user_name_add) 
+   			values(#{sensor_threshold_code},#{sensor_name},#{sensor_enname},#{max_value},#{min_value},#{sync_interval},#{user_code_add},#{user_name_add})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="SensorThreshold">
+		<![CDATA[
+			update ts_sensor_threshold
+		]]>
+		<set>
+			<if test="sensor_name != null and sensor_name != ''">
+				<![CDATA[
+					sensor_name=#{sensor_name},
+				]]>
+			</if>
+			<if test="sensor_enname != null and sensor_enname != ''">
+				<![CDATA[
+					sensor_enname=#{sensor_enname},
+				]]>
+			</if>
+			<if test="max_value != null and max_value != ''">
+				<![CDATA[
+					max_value=#{max_value},
+				]]>
+			</if>
+			<if test="min_value != null and min_value != ''">
+				<![CDATA[
+					min_value=#{min_value},
+				]]>
+			</if>
+			<if test="sync_interval != null and sync_interval != ''">
+				<![CDATA[
+					sync_interval=#{sync_interval},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="SensorThreshold">
+		<![CDATA[
+			delete from ts_sensor_threshold
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="sensor_name != null and sensor_name != ''">
+			<![CDATA[
+				and sensor_name like concat('%',#{sensor_name},'%')
+			]]>
+		</if>
+		<if test="sensor_enname != null and sensor_enname != ''">
+			<![CDATA[
+				and sensor_enname like concat('%',#{sensor_enname},'%')
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="SensorThreshold" resultType="SensorThreshold">
+		<![CDATA[
+			select * from ts_sensor_threshold
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="SensorThreshold" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_sensor_threshold
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="SensorThreshold" resultType="SensorThreshold">
+		<![CDATA[
+		 	select * from ts_sensor_threshold
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="SensorThreshold" resultType="SensorThreshold">
+		<![CDATA[
+		 	select * from ts_sensor_threshold
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="SensorThreshold" resultType="int">
+		<![CDATA[
+			select count(1) from ts_sensor_threshold
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="sensor_enname != null and sensor_enname != ''">
+				<![CDATA[
+					and sensor_enname=#{sensor_enname}
+				]]>
+				<if test="sensor_threshold_code!=null and sensor_threshold_code!=''">
+					<![CDATA[
+					 and sensor_threshold_code<>#{sensor_threshold_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

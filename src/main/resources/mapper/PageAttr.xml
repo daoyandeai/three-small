@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IPageAttrDao">
+
+	<sql id="codeColumns">
+    <![CDATA[
+   			page_attr_code=#{page_attr_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="PageAttr">
+    <![CDATA[
+      		insert into ts_page_attr 
+      			(page_attr_code,attr_en,attr_ch,page_module,user_name_add,user_code_add)
+      		values 
+      			(#{page_attr_code},#{attr_en},#{attr_ch},#{page_module},#{user_name_add},#{user_code_add})
+      ]]>
+	</insert>
+
+	<update id="update" parameterType="PageAttr">
+	    <![CDATA[
+	   			update ts_page_attr
+	    ]]>
+		<set>
+			<if test="attr_en != null and attr_en != ''">
+	             <![CDATA[
+	                 attr_en=#{attr_en},
+	             ]]>
+			</if>
+			<if test="attr_ch != null and attr_ch != ''">
+	             <![CDATA[
+	                 attr_ch=#{attr_ch},
+	             ]]>
+			</if>
+			<if test="page_module != null and page_module != ''">
+	             <![CDATA[
+	                 page_module=#{page_module},
+	             ]]>
+			</if>
+			<if test="state != null and state != ''">
+	          	 <![CDATA[
+	                   state=#{state},
+	             ]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+
+	<sql id="whereColumns">
+		<if test="attr_en != null and attr_en != ''">
+            <![CDATA[
+                    and attr_en like concat('%',#{attr_en},'%')
+            ]]>
+		</if>
+		<if test="attr_ch != null and attr_ch != ''">
+            <![CDATA[
+                    and attr_ch like concat('%',#{attr_ch},'%')
+            ]]>
+		</if>
+		<if test="page_module != null and page_module != ''">
+            <![CDATA[
+                    and page_module=#{page_module}
+            ]]>
+		</if>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and state=#{state}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="PageAttr" resultType="PageAttrReturn">
+      <![CDATA[
+			select * from ts_page_attr
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="PageAttr" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_page_attr
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByAll_app" parameterType="PageAttr" resultType="PageAttrReturn">
+      <![CDATA[
+			select * from ts_page_attr
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode_app" parameterType="PageAttr" resultType="PageAttrReturn">
+        <![CDATA[
+		 	select * from ts_page_attr
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+
+	<select id="findByExist" parameterType="PageAttr" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_page_attr
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="page_attr_code != null and page_attr_code != ''">
+				<![CDATA[
+					and page_attr_code<>#{page_attr_code}
+				]]>
+			</if>
+			<if test="attr_en != null and attr_en != ''">
+				<![CDATA[
+					and attr_en=#{attr_en}
+				]]>
+			</if>
+			<if test="page_module != null and page_module != ''">
+				<![CDATA[
+					and page_module=#{page_module}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

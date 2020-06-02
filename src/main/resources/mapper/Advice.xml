@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IAdviceDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			device_code=#{device_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Advice">
+		<![CDATA[
+   			insert into ts_advice 
+   				(advice_code,device_code,company_code,type,openid,imgs_url,advice_rate,advice_type,advice_remark) 
+   			values
+   				(#{advice_code},#{device_code},#{company_code},#{type},#{openid},#{imgs_url},#{advice_rate},#{advice_type},#{advice_remark})
+   		]]>
+	</insert>
+   
+	
+	<delete id="delete" parameterType="Advice">
+		<![CDATA[
+			delete from ts_advice
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<sql id="whereColumns">
+		<if test="device_code != null and device_code != ''">
+			<![CDATA[
+				and device_code = #{device_code}
+			]]>
+		</if>	
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>	
+		<if test="advice_type != null and advice_type != ''">
+			<![CDATA[
+				and advice_type = #{advice_type}
+			]]>
+		</if>	
+		<if test="advice_rate != null and advice_rate != ''">
+			<![CDATA[
+				and advice_rate = #{advice_rate}
+			]]>
+		</if>	
+		<if test="type != null and type != ''">
+			<![CDATA[
+				and type = #{type}
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findByCode" parameterType="Advice" resultType="Advice">
+		<![CDATA[
+		 	select * from ts_advice
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll"  parameterType="Advice" resultType="Advice">
+		<![CDATA[
+		 	select * from ts_advice
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByList" parameterType="Advice" resultType="Advice">
+		<![CDATA[
+			select * from ts_advice
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Advice" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_advice
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findLastByCompany"  parameterType="String" resultType="Advice">
+		<![CDATA[
+		 	select * from ts_advice where company_code = #{company_code} order by add_time desc limit 1
+		]]>
+	</select>
+	
+</mapper>

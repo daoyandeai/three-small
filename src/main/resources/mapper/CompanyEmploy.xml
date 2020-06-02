@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyEmployDao">
+	
+	<sql id="codeColumns">
+		<![CDATA[
+			employ_code=#{employ_code}
+		]]>
+	</sql>
+
+	<insert id="save" parameterType="CompanyEmploy">
+		<![CDATA[
+	    	insert into ts_company_employ (employ_code,employ_name, employ_idcard,employ_ishealth,employ_health,remark,company_code,user_health_datedue,employ_health_url)
+		    values (#{employ_code}, #{employ_name}, #{employ_idcard},#{employ_ishealth},#{employ_health},#{remark},#{company_code},#{user_health_datedue},#{employ_health_url})
+	    ]]>
+	</insert>
+	
+	<update id="update" parameterType="CompanyEmploy">
+		<![CDATA[
+			update ts_company_employ
+		]]>
+		<set>
+			<if test="employ_name != null">
+				<![CDATA[
+					employ_name = #{employ_name},
+				]]>
+			</if>
+			<if test="employ_idcard != null">
+				<![CDATA[
+					employ_idcard = #{employ_idcard},
+				]]>
+			</if>
+			<if test="employ_ishealth != null">
+				<![CDATA[
+        			employ_ishealth = #{employ_ishealth},
+        		]]>
+      		</if>
+			<if test="employ_health != null">
+				<![CDATA[
+		        	employ_health = #{employ_health},
+		        ]]>
+			</if>
+			<if test="remark != null">
+				<![CDATA[
+					remark = #{remark},
+				]]>
+			</if>
+			<if test="company_code != null">
+				<![CDATA[
+        			company_code = #{company_code},
+        		]]>
+			</if>
+			<if test="user_health_datedue != null">
+				<![CDATA[
+        			user_health_datedue = #{user_health_datedue},
+        		]]>
+			</if>
+			<if test="employ_health_url != null">
+				<![CDATA[
+        			employ_health_url = #{employ_health_url},
+        		]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+  
+	<delete id="delete" parameterType="CompanyEmploy">
+		<![CDATA[
+	        delete from ts_company_employ
+	    ]]>
+	    <where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<sql id="whereColumns">			
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (ce.employ_name like concat('%',#{company_name},'%') or c.company_name like concat('%',#{company_name},'%'))
+			]]>
+		</if>	
+		<if test="employ_ishealth != null and employ_ishealth != ''">
+			<![CDATA[
+				and employ_ishealth = #{employ_ishealth}
+			]]>
+		</if>
+		<if test="user_health_datedue != null and user_health_datedue != ''">
+			<![CDATA[
+				and user_health_datedue = #{user_health_datedue}
+			]]>
+		</if>
+		<if test="e_state != null and e_state != ''">
+	        <if test="e_state == 1 ">
+	          <![CDATA[
+				    and datediff(ce.user_health_datedue, now()) > 0
+				]]>
+	        </if>
+	        <if test="e_state == 2 ">
+	          <![CDATA[
+				    and datediff(ce.user_health_datedue, now()) < 0
+				]]>
+	        </if>
+	        <if test="e_state == 4 ">
+	          <![CDATA[
+				   and datediff(ce.user_health_datedue, now()) > 0 and datediff(ce.user_health_datedue, now()) < 30
+				]]>
+	        </if>
+      	</if>
+		<if test="c_state != null and c_state != ''">
+	        <if test="c_state == 1 ">
+	          <![CDATA[
+				    and datediff(c.unuseful_time, now()) >= 1
+				]]>
+	        </if>
+	        <if test="c_state == 2 ">
+	          <![CDATA[
+				   and (datediff(c.unuseful_time, now()) <1 and c.state<>3)
+				]]>
+	        </if>
+	        <if test="c_state == 3 ">
+	          <![CDATA[
+				    and c.state=3
+				]]>
+	        </if>
+      	</if>
+      	<if test="c_is_manage_or_info != null">
+        <if test="c_is_manage_or_info == 1">
+          <![CDATA[
+			    and c.region_code in(select ir.region_code from ts_info_region ir where ir.user_code = #{c_user_code_info})
+			]]>
+        </if>
+        <if test="c_is_manage_or_info == 2 ">
+          <![CDATA[
+			    and c.region_code in(
+				    select dr.region_code from ts_department_user du
+					left join ts_department_region dr on du.department_code=dr.department_code 
+					where du.user_code=#{c_user_code_manage}
+				)
+			]]>
+        </if>
+      </if>
+
+ 		<if test="c_business_forms != null and c_business_forms != ''">
+        <![CDATA[
+			    and c.business_form in (${c_business_forms})
+			]]>
+      	</if>
+		<if test="c_companytype_codes != null and c_companytype_codes != ''">
+        <![CDATA[
+			    and c.companytype_code in (${c_companytype_codes})
+			]]>
+      	</if>
+      	<if test="c_companytag_codes != null and c_companytag_codes != ''">
+        <![CDATA[
+			    and c.companytag_code in (${c_companytag_codes})
+			]]>
+      	</if>
+		<if test="c_province != null and c_province != ''">
+			<![CDATA[
+				and c.province = #{c_province}
+			]]>
+		</if>	
+		<if test="c_city != null and c_city != ''">
+			<![CDATA[
+				and c.city = #{c_city}
+			]]>
+		</if>	
+		<if test="c_area != null and c_area != ''">
+			<![CDATA[
+				and c.area = #{c_area}
+			]]>
+		</if>	
+		<if test="c_town != null and c_town != ''">
+			<![CDATA[
+				and c.town = #{c_town}
+			]]>
+		</if>	
+		<if test="c_vill != null and c_vill != ''">
+			<![CDATA[
+				and c.vill = #{c_vill}
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findBySearchList" parameterType="CompanyEmploy" resultType="CompanyEmploy">
+        <![CDATA[
+			select ce.*,c.company_name,case when datediff(c.unuseful_time, now()) >= 1 then 1 
+			when c.state=3 then 3 else 2 end c_state from ts_company_employ ce 
+			left join ts_company c on ce.company_code=c.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by ce.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findBySearchCount" parameterType="CompanyEmploy" resultType="int">
+		<![CDATA[
+			select count(1) from (select ce.* from ts_company_employ ce 
+			left join ts_company c on ce.company_code=c.company_code 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			) t
+		]]>
+	</select>
+	
+	<select id="findByAll" parameterType="CompanyEmploy" resultType="CompanyEmploy">
+	    <![CDATA[
+	        select  * from ts_company_employ
+	    ]]>
+	    <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+	     	order by add_time
+	    ]]>
+	</select>
+	
+	<delete id="deleteByCompany" parameterType="String">
+	    <![CDATA[
+	      delete from ts_company_employ where company_code = #{company_code}
+	    ]]>
+	</delete>
+</mapper>

@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ITodayDataDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			TodayData_code=#{TodayData_code}
+   		]]>
+	</sql>
+	
+	<sql id="whereColumns">		
+		<if test="province_conduct !=null and province_conduct !=''">
+			<![CDATA[
+				 and province_conduct=#{province_conduct}
+			]]>
+		</if>
+		<if test="city_conduct !=null and city_conduct !=''">
+			<![CDATA[
+				 and city_conduct=#{city_conduct}
+			]]>
+		</if>
+		<if test="area_conduct !=null and area_conduct !=''">
+			<![CDATA[
+				 and area_conduct=#{area_conduct}
+			]]>
+		</if>
+		<if test="town_conduct !=null and town_conduct !=''">
+			<![CDATA[
+				 and town_conduct=#{town_conduct}
+			]]>
+		</if>
+		<if test="vill_conduct !=null and vill_conduct !=''">
+			<![CDATA[
+				 and vill_conduct=#{vill_conduct}
+			]]>
+		</if>
+	</sql>
+	
+	
+	<sql id="userwhereColumns">		
+		<if test="province_conduct !=null and province_conduct !=''">
+			<![CDATA[
+				 and u.user_province=#{province_conduct}
+			]]>
+		</if>
+		<if test="city_conduct !=null and city_conduct !=''">
+			<![CDATA[
+				 and u.user_city=#{city_conduct}
+			]]>
+		</if>
+		<if test="area_conduct !=null and area_conduct !=''">
+			<![CDATA[
+				 and u.user_area=#{area_conduct}
+			]]>
+		</if>
+		<if test="town_conduct !=null and town_conduct !=''">
+			<![CDATA[
+				 and u.user_town=#{town_conduct}
+			]]>
+		</if>
+		<if test="vill_conduct !=null and vill_conduct !=''">
+			<![CDATA[
+				 and u.user_vill=#{vill_conduct}
+			]]>
+		</if>
+	</sql>
+	
+	
+	<select id="findReportList" parameterType="TodayData" resultType="TodayData">
+			SELECT
+				user_name_conduct,
+				<if test="user_level==1">
+					CONCAT(city_conduct, area_conduct,town_conduct) address_conduct,
+				</if>
+				<if test="user_level==2">
+					CONCAT(area_conduct,town_conduct,vill_conduct) address_conduct,
+				</if>
+				<if test="user_level==3">
+					CONCAT(town_conduct,vill_conduct,address_conduct) address_conduct,
+				</if>
+				<if test="user_level==4">
+					CONCAT(vill_conduct, address_conduct) address_conduct,
+				</if>
+				<if test="user_level==5">
+					CONCAT(address_conduct) address_conduct,
+				</if>
+		<![CDATA[
+				report_state
+			FROM
+			qy_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			and date_format(addtime, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+			and report_state<>2
+			order by addtime  DESC
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findReportListNoPass" parameterType="TodayData" resultType="TodayData">
+			SELECT
+				user_name_conduct,
+				<if test="user_level==1">
+					CONCAT(city_conduct, area_conduct,town_conduct) address_conduct,
+				</if>
+				<if test="user_level==2">
+					CONCAT(area_conduct,town_conduct,vill_conduct) address_conduct,
+				</if>
+				<if test="user_level==3">
+					CONCAT(town_conduct,vill_conduct,address_conduct) address_conduct,
+				</if>
+				<if test="user_level==4">
+					CONCAT(vill_conduct, address_conduct) address_conduct,
+				</if>
+				<if test="user_level==5">
+					CONCAT(address_conduct) address_conduct,
+				</if>
+		<![CDATA[
+				report_state
+			FROM
+			qy_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			and date_format(addtime, '%Y-%m-%d') = date_format(now(), '%Y-%m-%d')
+			and report_state=2
+			order by addtime  DESC
+		]]>
+	</select>
+	
+	<select id="findCheckList" parameterType="TodayData" resultType="TodayData">
+			SELECT
+				user_name_conduct,report_state,user_name_check,
+				<if test="user_level==1">
+					CONCAT(city_conduct, area_conduct,town_conduct) address_conduct
+				</if>
+				<if test="user_level==2">
+					CONCAT(area_conduct,town_conduct,vill_conduct) address_conduct
+				</if>
+				<if test="user_level==3">
+					CONCAT(town_conduct,vill_conduct,address_conduct) address_conduct
+				</if>
+				<if test="user_level==4">
+					CONCAT(vill_conduct, address_conduct) address_conduct
+				</if>
+				<if test="user_level==5">
+					CONCAT(address_conduct) address_conduct
+				</if>
+		<![CDATA[
+				FROM qy_report 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<if test="address_conduct != null and address_conduct !='' ">
+			and area_conduct =#{address_conduct}
+		</if>
+		<![CDATA[
+			and banquet_time=date_format(now(), '%Y-%m-%d')
+			and report_state>=3
+			and report_state<>5
+			order by addtime  DESC
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findOutCheckList" parameterType="TodayData" resultType="TodayData">
+			SELECT
+				user_name_conduct,report_state,user_name_check,
+				<if test="user_level==1">
+					CONCAT(city_conduct, area_conduct,town_conduct) address_conduct
+				</if>
+				<if test="user_level==2">
+					CONCAT(area_conduct,town_conduct,vill_conduct) address_conduct
+				</if>
+				<if test="user_level==3">
+					CONCAT(town_conduct,vill_conduct,address_conduct) address_conduct
+				</if>
+				<if test="user_level==4">
+					CONCAT(vill_conduct, address_conduct) address_conduct
+				</if>
+				<if test="user_level==5">
+					CONCAT(address_conduct) address_conduct
+				</if>
+		<![CDATA[
+				FROM qy_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<if test="address_conduct != null and address_conduct !='' ">
+			and area_conduct =#{address_conduct}
+		</if>
+		<![CDATA[
+			and banquet_time=date_format(now(), '%Y-%m-%d')
+			and report_state=5
+			order by addtime  DESC
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	
+	<select id="findBanquetMapByAjax" parameterType="TodayData" resultType="TodayData">
+			SELECT
+				rc.user_name,rc.user_mobilephone,r.user_name_conduct,report_state,banquet_people,
+				province_conduct,city_conduct,area_conduct,town_conduct,vill_conduct,address_conduct
+		<![CDATA[
+				FROM qy_report r LEFT JOIN qy_report_check rc ON rc.report_code = r.report_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			and banquet_time=date_format(now(), '%Y-%m-%d')
+			and report_state>=3
+			order by r.addtime  DESC
+		]]>
+	</select>
+	
+	<select id="findReportCount" parameterType="TodayData" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findAddReport" parameterType="TodayData" resultType="Integer">
+		<![CDATA[
+			SELECT COUNT(1) FROM qy_report WHERE 
+				addtime >= CONCAT(
+				date_format(now(), '%Y-%m-%d'),
+				' 00:00:00'
+				)
+		]]>
+		<trim >
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	
+	<select id="findTodayDiffCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+		SELECT sum(case when   (report_state>=3 ) then 1 else 0 end) todaybanquetcount,
+			 sum(case when   (report_state=5) then 1 else 0 end)todaynopasscheckcount,
+		 	 sum(case when   (report_state=3) then 1 else 0 end) todaywaitcheckcount,
+		 	 sum(case when   (report_state=4)then 1 else 0 end) todaypasscheckcount
+		FROM qy_report
+			 WHERE banquet_time=date_format(now(), '%Y-%m-%d')
+
+		]]>
+		<trim>
+			  <include  refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findDeviceList" resultType="TodayData">
+		<![CDATA[
+			SELECT	d.device_code,d.device_number, d.device_name ,d.user_name device_user_name,d.device_state,
+			CASE WHEN(dl.mq2+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='mq2')+0
+			or dl.mq2+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='mq2')+0
+			OR dl.mq4+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='mq4')+0
+			or dl.mq4+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='mq4')+0
+			or  dl.mq5+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='mq5')+0
+			OR dl.mq5+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='mq5')+0
+			or dl.mq9+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='mq9')+0
+			or dl.mq9+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='mq9')+0
+			OR dl.tds+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='tds')+0
+			or dl.tds+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='tds')+0
+			or dl.ph+0 < (SELECT min_value from qy_device_setting WHERE sensor_name ='ph')+0
+			or dl.ph+0 > (SELECT max_value from qy_device_setting WHERE sensor_name ='ph')+0
+			)THEN '异常' ELSE '正常'  END		device_out_state
+			from qy_device d  LEFT JOIN qy_device_log  dl
+			on  d.device_number =dl.device_number
+		]]>
+	</select>
+	
+	<select id="findMissCardChefCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+		select sum(case when ( user_registcard_logo_count=0 or user_health_logo_count=0 or user_idcard_logo_front_count=0	or user_idcard_logo_back_count=0	or user_train_logo_count=0) then 1 else 0 end ) missCardChefCount,
+			count(1)	allChefCount
+		 from (
+				select 
+				sum(case when (user_registcard_logo is null or user_registcard_logo ='' ) then 0 else 1 end) as user_registcard_logo_count,
+				sum(case when (user_health_logo is null or user_health_logo ='' ) then 0 else 1 end) as user_health_logo_count,
+				sum(case when (user_idcard_logo_front is null or user_idcard_logo_front ='' ) then 0 else 1 end) as user_idcard_logo_front_count,
+				sum(case when (user_idcard_logo_back is null or user_idcard_logo_back ='' ) then 0 else 1 end) as user_idcard_logo_back_count,
+				sum(case when (user_train_logo is null or user_train_logo ='' ) then 0 else 1 end) as user_train_logo_count
+				from qy_user u
+				where user_type='乡厨'
+				and user_state=1
+		]]>
+		<trim>
+			  <include  refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+				group by user_code 
+		 ) a
+		]]>
+	</select>
+	
+	
+	<select id="findMissHealthChefCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+			select
+				sum(case when user_health_datedue <=date_format(date_add(now(), interval 1 month),'%Y-%m-%d') and user_health_datedue >date_format(now(),'%Y-%m-%d') then 1 else 0 end )datewilloutchefcount,
+				sum(case when user_health_datedue <=date_format(now(),'%Y-%m-%d') then 1 else 0 end )dateoutchefcount,
+				count(user_health_logo) datechefcount
+			from
+				qy_user u
+			where
+				u.user_type = '乡厨'
+			and u.user_state = 1
+		]]>
+		<trim>
+			  <include  refid="userwhereColumns"/>
+		</trim>
+	</select>
+	
+
+
+
+	<select id="findTrainUserList" parameterType="TodayData" resultType="TodayData">
+			select user_name_chef,hg_state,
+				<if test="user_level==1">
+					concat(user_city, user_area,user_town) address_conduct
+				</if>
+				<if test="user_level==2">
+					concat(user_area,user_town,user_vill) address_conduct
+				</if>
+				<if test="user_level==3">
+					concat(user_town,user_vill,user_address) address_conduct
+				</if>
+				<if test="user_level==4">
+					concat(user_vill, user_address) address_conduct
+				</if>
+				<if test="user_level==5">
+					 address_conduct
+				</if>
+		<![CDATA[
+			from (
+			select 
+			 case when (first_quarter=2 and second_quarter=2 and third_quarter=2 and fourth_quarter=2) then 1 else 2 end  as hg_state,
+			a.*
+			from (
+				select 
+				max(case train_quarter when '第一季度' then train_exam_standard else 0 end)first_quarter,
+				max(case train_quarter when '第二季度' then train_exam_standard else 0 end)second_quarter,
+				max(case train_quarter when '第三季度' then train_exam_standard else 0 end)third_quarter,
+				max(case train_quarter when '第四季度' then train_exam_standard else 0 end)fourth_quarter,
+				b.*
+				 from (
+						SELECT	user_code_chef, user_name_chef,train_exam_standard , train_quarter ,user_province,user_city,user_area,user_town,user_vill,user_address,log.addtime
+						from	qy_train_exam_log log  LEFT JOIN  qy_user  u
+						on log.user_code_chef = u.user_code   LEFT JOIN qy_train t
+						on log.train_code=t.train_code
+						WHERE u.user_type='乡厨'
+						and  u.user_state=1
+						and  train_year=#{pxYear}
+			]]>
+					<trim>
+		  			<include  refid="userwhereColumns"/>
+					</trim>
+		<![CDATA[
+						group by log.user_code_chef,log.train_code,train_exam_standard
+				) b   
+						group by user_code_chef) a )c
+			where hg_state=1  order by addtime desc limit  ${pager_offset},${pager_openset}
+
+		]]>
+	</select>
+	
+	
+		<select id="findTrainOutUserList" parameterType="TodayData" resultType="TodayData">
+			select user_name_chef,hg_state,
+				<if test="user_level==1">
+					concat(user_city, user_area,user_town) address_conduct
+				</if>
+				<if test="user_level==2">
+					concat(user_area,user_town,user_vill) address_conduct
+				</if>
+				<if test="user_level==3">
+					concat(user_town,user_vill,user_address) address_conduct
+				</if>
+				<if test="user_level==4">
+					concat(user_vill, user_address) address_conduct
+				</if>
+				<if test="user_level==5">
+					 address_conduct
+				</if>
+		<![CDATA[
+							from (
+			select 
+			 case when (first_quarter=2 and second_quarter=2 and third_quarter=2 and fourth_quarter=2) then 1 else 2 end  as hg_state,
+			a.*
+			from (
+				select 
+				max(case train_quarter when '第一季度' then train_exam_standard else 0 end)first_quarter,
+				max(case train_quarter when '第二季度' then train_exam_standard else 0 end)second_quarter,
+				max(case train_quarter when '第三季度' then train_exam_standard else 0 end)third_quarter,
+				max(case train_quarter when '第四季度' then train_exam_standard else 0 end)fourth_quarter,
+				b.*
+				 from (
+						select	user_code_chef, user_name_chef,train_exam_standard , train_quarter ,user_province,user_city,user_area,user_town,user_vill,user_address,log.addtime
+						from	qy_train_exam_log log  LEFT JOIN  qy_user  u
+						on log.user_code_chef = u.user_code   LEFT JOIN qy_train t
+						on log.train_code=t.train_code
+						where u.user_type='乡厨'
+						and  u.user_state=1
+						and  train_year=#{pxYear}
+			]]>
+					<trim>
+		  			<include  refid="userwhereColumns"/>
+					</trim>
+		<![CDATA[
+						group by log.user_code_chef,log.train_code,train_exam_standard
+				) b   
+						group by user_code_chef) a )c
+			where hg_state=2  order by addtime desc limit  ${pager_offset},${pager_openset}
+
+		]]>
+	</select>
+	
+	
+	<select id="findTrainUserCount" parameterType="TodayData" resultType="Integer">
+			
+		<![CDATA[
+					select count(1)	from (
+			select 
+			 case when (first_quarter=2 and second_quarter=2 and third_quarter=2 and fourth_quarter=2) then 1 else 2 end  as hg_state,
+			a.*
+			from (
+				select 
+				max(case train_quarter when '第一季度' then train_exam_standard else 0 end)first_quarter,
+				max(case train_quarter when '第二季度' then train_exam_standard else 0 end)second_quarter,
+				max(case train_quarter when '第三季度' then train_exam_standard else 0 end)third_quarter,
+				max(case train_quarter when '第四季度' then train_exam_standard else 0 end)fourth_quarter,
+				b.*
+				 from (
+						select	user_code_chef, user_name_chef,train_exam_standard , train_quarter ,user_province,user_city,user_area,user_town,user_vill,user_address,log.addtime
+						from	qy_train_exam_log log  LEFT JOIN  qy_user  u
+						on log.user_code_chef = u.user_code   LEFT JOIN qy_train t
+						on log.train_code=t.train_code
+						where u.user_type='乡厨'
+						and  u.user_state=1
+						and  train_year=date_format(now(),'%Y')
+			]]>
+					<trim>
+		  			<include  refid="userwhereColumns"/>
+					</trim>
+		<![CDATA[
+						group by log.user_code_chef,log.train_code,train_exam_standard
+				) b   
+						group by user_code_chef) a )c
+			where hg_state=#{hg_state} 
+
+		]]>
+	</select>
+	
+	
+	<select id="findWeekDayReoprtData" parameterType="TodayData" resultType="TodayData">
+			select user_name_conduct,banquet_people,banquet_type,addtime,
+				<if test="user_level==1">
+					city_conduct as address_conduct
+				</if>
+				<if test="user_level==2">
+					area_conduct as address_conduct
+				</if>
+				<if test="user_level==3">
+					town_conduct as  address_conduct
+				</if>
+				<if test="user_level==4">
+					vill_conduct as address_conduct
+				</if>
+				<if test="user_level==5">
+					address_conduct
+				</if>
+		<![CDATA[
+				from qy_report
+				where date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') 
+		]]>
+		<trim>
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc	
+			limit  ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findWeekDayReoprtDataCount" parameterType="TodayData" resultType="Integer">
+		<![CDATA[
+				select count(1) from qy_report
+				where date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') 
+		]]>
+		<trim>
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	
+	
+	
+		<select id="findWeekDayCountGroupByConduct" parameterType="TodayData" resultType="TodayData">
+			select count(1) addReportCount,
+				<if test="user_level==1">
+					city_conduct as address_conduct
+				</if>
+				<if test="user_level==2">
+					area_conduct as address_conduct
+				</if>
+				<if test="user_level==3">
+					town_conduct as  address_conduct
+				</if>
+				<if test="user_level==4">
+					vill_conduct as address_conduct
+				</if>
+				<if test="user_level==5">
+					address_conduct
+				</if>
+		<![CDATA[
+				from qy_report
+				where date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') 
+		]]>
+		<trim>
+			  <include refid="whereColumns"/>
+		</trim>
+		group by
+		<if test="user_level==1">
+			city_conduct
+		</if>
+		<if test="user_level==2">
+			area_conduct
+		</if>
+		<if test="user_level==3">
+			town_conduct
+		</if>
+		<if test="user_level==4">
+			vill_conduct
+		</if>
+		<if test="user_level==5">
+			address_conduct
+		</if>
+	</select>
+	
+	
+	<select id="findWeekDayCountGroupByType" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+			select banquet_type,count(1) addReportCount from qy_report
+			where date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') 
+		]]>
+		<trim>
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+				group by banquet_type
+		]]>
+	</select>
+	
+	
+	
+	<select id="findUserListAjax" parameterType="TodayData" resultType="User">
+			select u.*,
+				<if test="user_level==1">
+					concat(u.user_city, u.user_area,u.user_town) user_address_show
+				</if>
+				<if test="user_level==2">
+					concat(u.user_area,u.user_town,u.user_vill) user_address_show
+				</if>
+				<if test="user_level==3">
+					concat(u.user_town,u.user_vill,u.user_address) user_address_show
+				</if>
+				<if test="user_level==4">
+					concat(u.user_vill, u.user_address) user_address_show
+				</if>
+				<if test="user_level==5">
+					concat(u.user_address) user_address_show
+				</if>
+		<![CDATA[
+			from
+			qy_user u 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+			and (user_registcard_logo is null or user_registcard_logo =''
+				or user_health_logo is null or user_health_logo ='' 
+				or  user_idcard_logo_front is null or user_idcard_logo_front ='' 
+				or  user_idcard_logo_back is null or user_idcard_logo_back ='' 
+				or  user_train_logo is null or user_train_logo ='' )
+			and u.user_type='乡厨'
+			and user_state=1
+			order by addtime  desc
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	
+		<select id="findWillOutUserListAjax" parameterType="TodayData" resultType="User">
+			select u.*,datediff(user_health_datedue,date_format(now(),'%Y-%m-%d'))url_willout_day,
+				<if test="user_level==1">
+					concat(u.user_city, u.user_area,u.user_town) user_address_show
+				</if>
+				<if test="user_level==2">
+					concat(u.user_area,u.user_town,u.user_vill) user_address_show
+				</if>
+				<if test="user_level==3">
+					concat(u.user_town,u.user_vill,u.user_address) user_address_show
+				</if>
+				<if test="user_level==4">
+					concat(u.user_vill, u.user_address) user_address_show
+				</if>
+				<if test="user_level==5">
+					concat(u.user_address) user_address_show
+				</if>
+		<![CDATA[
+			FROM
+			qy_user u 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+			and user_health_datedue <=date_format(date_add(now(), interval 1 month),'%Y-%m-%d') 
+			and user_health_datedue >date_format(now(),'%Y-%m-%d') 
+			and user_type = '乡厨'
+			AND user_state = 1
+			order by url_willout_day  
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	
+		
+		<select id="findOutUserListAjax" parameterType="TodayData" resultType="User">
+			select u.*,datediff(date_format(now(), '%Y-%m-%d'),user_health_datedue) url_out_day,
+				<if test="user_level==1">
+					concat(u.user_city, u.user_area,u.user_town) user_address_show
+				</if>
+				<if test="user_level==2">
+					concat(u.user_area,u.user_town,u.user_vill) user_address_show
+				</if>
+				<if test="user_level==3">
+					concat(u.user_town,u.user_vill,u.user_address) user_address_show
+				</if>
+				<if test="user_level==4">
+					concat(u.user_vill, u.user_address) user_address_show
+				</if>
+				<if test="user_level==5">
+					concat(u.user_address) user_address_show
+				</if>
+		<![CDATA[
+			FROM
+			qy_user u 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+			and user_health_datedue <=date_format(now(),'%Y-%m-%d')
+			and user_type = '乡厨'
+			AND user_state = 1
+			order by url_out_day  
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	
+	
+	<select id="findAllAndWeekAddReportCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+			select count(1) all_report_count,
+			count( case when date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') then report_code else null end  )
+			week_add_report_count
+			from qy_report  
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			and report_full =2
+		]]>
+	</select>
+	
+	
+	<select id="findAllAndWeekAddChefCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+			select  count(1)  all_chef_count,
+			count( case when date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') then user_code else null end  )
+			week_add_chef_count
+			from qy_user u
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+			and  user_state=1
+			and user_type='乡厨'
+		]]>
+	</select>
+	
+	
+		
+	<select id="findAllAndWeekAddGlCount" parameterType="TodayData" resultType="TodayData">
+		<![CDATA[
+			select  count(1)  all_gl_count,
+			count( case when date_format(addtime ,'%Y-%m-%d')>=date_format(date_add(now(), interval -6 day),'%Y-%m-%d') then user_code else null end  )
+			week_add_gl_count
+			from qy_user u
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="userwhereColumns"/>
+		</trim>
+		<![CDATA[
+			and  user_state=1
+			and user_level is not null 
+			and user_level <>''
+		]]>
+	</select>
+	
+	<select id="findAllDeviceCount"  resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_device 
+		]]>
+	</select>
+	
+</mapper>

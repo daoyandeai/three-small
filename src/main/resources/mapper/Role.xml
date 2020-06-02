@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IRoleDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			role_code=#{role_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Role">
+		<![CDATA[
+   			insert into ts_role (role_code,role_name) values(#{role_code},#{role_name})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="Role">
+		<![CDATA[
+			update ts_role
+		]]>
+		<set>
+			<if test="role_name != null and role_name != ''">
+				<![CDATA[
+					role_name=#{role_name},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="Role">
+		<![CDATA[
+			delete from ts_role
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<delete id="deleteUserRole" parameterType="Role">
+		<![CDATA[
+			delete from qy_userrole
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<delete id="deleteRoleMenu" parameterType="Role">
+		<![CDATA[
+			delete from ts_rolemenu
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<delete id="deleteByUser" parameterType="User">
+		<![CDATA[
+			delete from qy_userrole where user_code = #{user_code}
+		]]>
+	</delete>
+		
+	<sql id="whereColumns">			
+		<if test="role_name != null and role_name != ''">
+			<![CDATA[
+				and role_name like concat('%',#{role_name},'%')
+			]]>
+		</if>	
+	</sql>
+	
+	<select id="findByList" parameterType="Role" resultType="Role">
+		<![CDATA[
+			select * from ts_role
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Role" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_role
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Role" resultType="Role">
+		<![CDATA[
+		 	select * from ts_role
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="Role" resultType="Role">
+		<![CDATA[
+		 	select * from ts_role
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="Role" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_role
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="role_name != null and role_name != ''">
+				<![CDATA[
+					and role_name=#{role_name}
+				]]>
+				<if test="role_code!=null and role_code!=''">
+					<![CDATA[
+					 and role_code<>#{role_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<!-- ============================================================其它方法开始============================================================ -->
+	
+	<!-- 编辑用户角色 -->
+	<select id="findByRoleUserList" parameterType="Role"  resultType="User">
+		<![CDATA[
+		 	select u.* from ts_userrole ur 
+		 	inner join qy_user u on ur.user_code=u.user_code 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="role_code!=null and role_code!=''">
+				<![CDATA[
+					and ur.role_code=#{role_code}
+				]]>
+			</if>
+			<if test="user_name!=null and user_name!=''">
+				<![CDATA[
+					and (
+				    	u.user_loginname like concat('%',#{user_name},'%') or 
+					    u.user_name like concat('%',#{user_name},'%') or 
+					    u.user_mobilephone like concat('%',#{user_name},'%')
+			    	)
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			order by u.addtime desc limit ${pager_offset},${pager_openset}
+		]]>		
+	</select>
+	
+	<select id="findByRoleUserCount" parameterType="Role"  resultType="Integer">
+		<![CDATA[
+		 	select count(1) from (select u.* from ts_userrole ur 
+		 	inner join qy_user u on ur.user_code=u.user_code 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="role_code!=null and role_code!=''">
+				<![CDATA[
+					and ur.role_code=#{role_code}
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			) t
+		]]>		
+	</select>
+	
+	<insert id="saveRoleUser" parameterType="map">
+		<![CDATA[
+			insert into qy_userrole (role_code,user_code) values (#{role_code},#{user_code})
+		]]>
+	</insert>
+	
+	<delete id="deleteRoleUser" parameterType="map">
+		<![CDATA[
+			delete from qy_userrole where role_code=#{role_code} and user_code=#{user_code}
+		]]>		
+	</delete>
+	
+	
+	<!-- 编辑角色菜单 -->	
+	<select id="findByMenu" resultType="Menu">
+		<![CDATA[
+		 	select * from ts_menu order by menu_order asc
+		]]>		
+	</select>	
+	
+	<select id="findByRoleMenu" parameterType="String" resultType="RoleMenu">
+		<![CDATA[
+			select * from ts_rolemenu where role_code=#{role_code}
+		]]>
+	</select>
+	
+	<insert id="saveRoleMenu" parameterType="map">
+		<![CDATA[
+			insert into ts_rolemenu(role_code,menu_code) values(#{role_code},#{menu_code})
+		]]>
+	</insert>
+	
+</mapper>

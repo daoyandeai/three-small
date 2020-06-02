@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ITrainExamTopicDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			train_exam_code=#{train_exam_code}
+   		]]>
+	</sql>
+	
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+   			insert into ts_train_exam_topic 
+   				(train_exam_topic_code,train_exam_topic_title,train_exam_topic_standard,train_exam_code,train_exam_topic_option_a,train_exam_topic_option_b,train_exam_topic_option_c,train_exam_topic_option_d) 
+   			values
+   		]]>
+   		 <foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.train_exam_topic_code},#{item.train_exam_topic_title},#{item.train_exam_topic_standard},#{item.train_exam_code},#{item.train_exam_topic_option_a},#{item.train_exam_topic_option_b},#{item.train_exam_topic_option_c},#{item.train_exam_topic_option_d}
+     		)
+    	</foreach>  
+	</insert>
+	
+	<delete id="delete" parameterType="TrainExamTopic">
+		<![CDATA[
+			delete from ts_train_exam_topic
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<select id="findByAll" parameterType="TrainExamTopic" resultType="TrainExamTopic">
+		<![CDATA[
+		 	select * from ts_train_exam_topic
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<!-- ============================================================其它方法开始============================================================ -->
+	
+</mapper>

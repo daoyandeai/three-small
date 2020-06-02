@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IFoodSourceDetailDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			foodsourcedetail_code=#{foodsourcedetail_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="FoodSourceDetail">
+      <![CDATA[
+	      insert into ts_foodsource_detail
+	      (	
+	      	foodsourcedetail_code, sell_count, userset_name, category_code, category_name, product_code, product_logo,
+	       	product_name, product_brand, product_spec, product_unit, company_code, produce_name, foodsource_code
+	      ) values
+	      (
+	      	#{foodsourcedetail_code}, #{sell_count}, #{userset_name}, #{category_code}, #{category_name}, #{product_code},
+	      	#{product_logo}, #{product_name}, #{product_brand}, #{product_spec}, #{product_unit}, #{company_code}, #{produce_name}, #{foodsource_code}
+	      )
+		]]>
+	</insert>
+
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+			insert into ts_foodsource_detail (foodsourcedetail_code,sell_count,userset_name,category_code,category_name,
+			product_code,product_logo,product_name,product_brand,product_spec,product_unit,company_code,produce_name,
+			foodsource_code,supplier_name,supplier_address,supplier_phone,order_number,order_create_time,order_send_time,
+			order_send_address,order_send_person,purchase_time,purchase_phone,sort_user_name,sort_user_phone)
+   			values
+   		]]>
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.foodsourcedetail_code},#{item.sell_count},#{item.userset_name},#{item.category_code},#{item.category_name},
+			#{item.product_code},#{item.product_logo},#{item.product_name},#{item.product_brand},#{item.product_spec},#{item.product_unit},#{item.company_code},#{item.produce_name},
+			#{item.foodsource_code},#{item.supplier_name},#{item.supplier_address},#{item.supplier_phone},#{item.order_number},#{item.order_create_time},#{item.order_send_time},
+			#{item.order_send_address},#{item.order_send_person},#{item.purchase_time},#{item.purchase_phone},#{item.sort_user_name},#{item.sort_user_phone}
+			)
+		</foreach>
+	</insert>
+	
+	<sql id="whereColumns">				
+		<if test="foodsource_code != null and foodsource_code != ''">
+			<![CDATA[
+				and foodsource_code = #{foodsource_code}
+			]]>
+		</if>
+		<if test="foodsourcedetail_code != null and foodsourcedetail_code != ''">
+			<![CDATA[
+				and foodsourcedetail_code = #{foodsourcedetail_code}
+			]]>
+		</if>
+		<if test="category_code != null and category_code != ''">
+			<![CDATA[
+				and category_code = #{category_code}
+			]]>
+		</if>
+		<if test="category_name != null and category_name != ''">
+			<![CDATA[
+				and category_name like concat('%',#{category_name},'%')
+			]]>
+		</if>
+		<if test="product_name != null and product_name != ''">
+			<![CDATA[
+				and product_name like concat('%',#{product_name},'%')
+			]]>
+		</if>
+		<if test="produce_name != null and produce_name != ''">
+			<![CDATA[
+				and produce_name like concat('%',#{produce_name},'%')
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+	</sql>
+	
+	<delete id="delete" parameterType="FoodSourceDetail">
+		<![CDATA[
+			delete from ts_foodsource_detail
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<delete id="deleteByFoodSource" parameterType="String">
+		<![CDATA[
+			delete from ts_foodsource_detail foodsource_code=#{foodsource_code}
+		]]>		
+	</delete>
+	
+	<select id="findByCode" parameterType="FoodSourceDetail" resultType="FoodSourceDetail">
+		<![CDATA[
+		 	select * from ts_foodsource_detail
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByCount" parameterType="FoodSourceDetail" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_foodsource_detail
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+	
+	<select id="findByAll_app" parameterType="String" resultType="FoodSourceDetailReturn">
+      <![CDATA[
+			select * from ts_foodsource_detail where foodsource_code = #{foodsource_code}
+		]]>
+	</select>
+	
+	<select id="findByAll" parameterType="FoodSourceDetail" resultType="FoodSourceDetail">
+		<![CDATA[
+		 	select * from ts_foodsource_detail
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+</mapper>

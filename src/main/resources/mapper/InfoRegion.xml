@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IInfoRegionDao">
+
+	<insert id="save" parameterType="InfoRegion">
+		<![CDATA[
+			insert into ts_info_region(user_code, region_code) values (#{user_code}, #{region_code})
+		]]>
+	</insert>
+  
+   <insert id="saveBatch" parameterType="List">
+		<![CDATA[
+			insert into ts_info_region (region_code,user_code)
+   			values
+   		]]>
+   		 <foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.region_code},#{item.user_code}
+     		)
+    	</foreach>  
+	</insert>
+	
+	<sql id="whereColumns">			
+		<if test="region_code != null and region_code != ''">
+			<![CDATA[
+				and region_code = #{region_code}
+			]]>
+		</if>	
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code = #{user_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByCount" parameterType="InfoRegion" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_info_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+	
+	<delete id="delete" parameterType="InfoRegion">
+		<![CDATA[
+			delete from ts_info_region
+		]]>		
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</delete>
+	
+	<update id="update" parameterType="InfoRegion">
+		<![CDATA[
+			update ts_info_region
+		]]>
+		<set>
+			<if test="state != null and state != ''">
+				<![CDATA[
+					state=#{state},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</update>
+	
+	<select id="findByUserCode" parameterType="String" resultType="String">
+		<![CDATA[
+		 	select group_concat(d.department_name,'') department_code from ts_info_region ir 
+		 	left join ts_department_region dr on ir.region_code=dr.region_code
+			left join ts_department d on dr.department_code=d.department_code
+			where ir.user_code=#{user_code}
+		]]>
+	</select>
+	
+	
+	<sql id="whereColumnsJoin">				
+		<if test="region_code != null and region_code != ''">
+			<![CDATA[
+				and i_r.region_code = #{region_code}
+			]]>
+		</if>
+		<if test="region_codes != null and region_codes != ''">
+			<![CDATA[
+				and i_r.region_code in (${region_codes})
+			]]>
+		</if>
+		<if test="user_name != null and user_name != ''">
+			<![CDATA[
+				and (u.user_name like concat('%',#{user_name},'%') or  u.user_mobilephone like concat('%',#{user_name},'%') )
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findAllByRegionAndUser" parameterType="InfoRegion" resultType="UserReturn">
+		<![CDATA[
+		 	select
+				u.user_code,
+				u.user_name,
+				u.user_mobilephone,
+				u.user_town,
+				u.user_vill,
+				i_r.state user_state
+			from
+				ts_info_region i_r
+			inner join qy_user u on u.user_code = i_r.user_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+		<![CDATA[
+			order by u.addtime desc
+		]]>
+	</select>
+	
+	<select id="findListByRegionAndUser" parameterType="InfoRegion" resultType="UserReturn">
+		<![CDATA[
+		 	select
+				u.user_code,
+				u.user_name,
+				u.user_mobilephone,
+				u.user_province,
+				u.user_city,
+				u.user_area,
+				u.user_town,
+				u.user_vill,
+				i_r.state user_state
+			from
+				ts_info_region i_r
+			inner join qy_user u on u.user_code = i_r.user_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+		<![CDATA[
+			order by u.addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+			
+	<select id="findCountByRegionAndUser" parameterType="InfoRegion" resultType="Integer">
+		<![CDATA[
+		 	select
+				count(1)
+			from
+				ts_info_region i_r
+			inner join qy_user u on u.user_code = i_r.user_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+	</select>
+	
+</mapper>

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.INewsDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			news_code=#{news_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="News">
+		<![CDATA[
+   			insert into ts_news (news_code,news_title,news_imgurl,news_content,user_code,user_name,
+   			news_category_code,news_category_name,news_province,news_city,news_area,news_town,news_vill,
+   			news_summary, companytype_codes) 
+   			values(#{news_code},#{news_title},#{news_imgurl},#{news_content},#{user_code},#{user_name},
+   			#{news_category_code},#{news_category_name},#{news_province},#{news_city},#{news_area},#{news_town},#{news_vill},
+   			#{news_summary},#{companytype_codes})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="News">
+		<![CDATA[
+			update ts_news
+		]]>
+		<set>
+			<if test="news_title != null and news_title != ''">
+				<![CDATA[
+					news_title=#{news_title},
+				]]>
+			</if>
+			<if test="news_imgurl != null and news_imgurl != ''">
+				<![CDATA[
+					news_imgurl=#{news_imgurl},
+				]]>
+			</if>
+			<if test="news_content != null and news_content != ''">
+				<![CDATA[
+					news_content=#{news_content},
+				]]>
+			</if>
+			<if test="news_summary != null and news_summary != ''">
+				<![CDATA[
+					news_summary=#{news_summary},
+				]]>
+			</if>
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+					user_code=#{user_code},
+				]]>
+			</if>
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					user_name=#{user_name},
+				]]>
+			</if>
+			<if test="news_state != null and news_state != ''">
+				<![CDATA[
+					news_state=#{news_state},
+				]]>
+			</if>
+			<if test="news_category_code != null and news_category_code != ''">
+				<![CDATA[
+					news_category_code=#{news_category_code},
+				]]>
+			</if>
+			<if test="news_category_name != null and news_category_name != ''">
+				<![CDATA[
+					news_category_name=#{news_category_name},
+				]]>
+			</if>
+			<if test="news_province != null and news_province != ''">
+				<![CDATA[
+					news_province=#{news_province},
+				]]>
+			</if>
+			<if test="companytype_codes != null and companytype_codes != ''">
+				<![CDATA[
+					companytype_codes=#{companytype_codes},
+				]]>
+			</if>
+			<if test="news_update_state != null and news_update_state != ''">
+				<![CDATA[
+					news_city=#{news_city},
+				]]>
+				<![CDATA[
+					news_area=#{news_area},
+				]]>
+				<![CDATA[
+					news_town=#{news_town},
+				]]>
+				<![CDATA[
+					news_vill=#{news_vill},
+				]]>
+			</if>
+
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="News">
+		<![CDATA[
+			delete from ts_news
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">			
+		<if test="news_category_code != null and news_category_code != ''">
+			<![CDATA[
+				and news_category_code = #{news_category_code}
+			]]>
+		</if>	
+		<if test="news_state != null and news_state != ''">
+			<![CDATA[
+				and news_state = #{news_state}
+			]]>
+		</if>
+		<if test="news_province != null and news_province != ''">
+			<![CDATA[
+				and news_province = #{news_province}
+			]]>
+		</if>
+		<if test="news_city != null and news_city != ''">
+			<![CDATA[
+				and news_city = #{news_city}
+			]]>
+		</if>
+		<if test="news_area != null and news_area != ''">
+			<![CDATA[
+				and news_area = #{news_area}
+			]]>
+		</if>
+		<if test="news_town != null and news_town != ''">
+			<![CDATA[
+				and news_town = #{news_town}
+			]]>
+		</if>
+		<if test="news_vill != null and news_vill != ''">
+			<![CDATA[
+				and news_vill = #{news_vill}
+			]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code=#{user_code}
+			]]>
+		</if>
+		<if test="news_title != null and news_title != ''">
+			<![CDATA[
+				and news_title like concat ('%',#{news_title},'%')
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="News" resultType="News">
+		<![CDATA[
+			select * from ts_news
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findBySearch" parameterType="News" resultType="News">
+		<![CDATA[
+			select * from ts_news
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	<select id="findBySearchCount" parameterType="News" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_news
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+
+	<select id="findByCount" parameterType="News" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_news
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="News" resultType="News">
+		<![CDATA[
+		 	select * from ts_news
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="News" resultType="News">
+		<![CDATA[
+		 	select * from ts_news
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="News" resultType="News">
+		<![CDATA[
+			select * from ts_news
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="news_title != null and news_title != ''">
+				<![CDATA[
+					and news_title=#{news_title}
+				]]>
+				<if test="news_code!=null and news_code!=''">
+					<![CDATA[
+					 and news_code<>#{news_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<sql id="whereAuthColumns">
+		<if test="news_category_code != null and news_category_code != ''">
+			<![CDATA[
+				and news_category_code=#{news_category_code}
+			]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+				and user_code=#{user_code}
+			]]>
+		</if>
+		<if test="news_state != null and news_state != ''">
+			<![CDATA[
+				and news_state=#{news_state}
+			]]>
+		</if>
+		<if test="news_province != null and news_province != ''">
+			<![CDATA[
+				and (
+					news_province=#{news_province}
+			]]>
+		</if>
+		<if test="news_city != null and news_city != ''">
+			<![CDATA[
+					and news_city=#{news_city}
+			]]>
+		</if>
+		<if test="news_area != null and news_area != ''">
+			<![CDATA[
+					and news_area=#{news_area}
+			]]>
+		</if>
+		<if test="news_town != null and news_town != ''">
+			<![CDATA[
+					and news_town=#{news_town}
+			]]>
+		</if>
+		<if test="news_vill != null and news_vill != ''">
+			<![CDATA[
+					and news_vill=#{news_vill} 
+			]]>
+		</if>
+		<![CDATA[
+				OR LOCATE( CONCAT(ifnull(news_province,""), ifnull(news_city,""), ifnull(news_area,""), ifnull(news_town,""), ifnull(news_vill,"")) ,#{addr_info})
+			)
+		]]>
+	</sql>
+	
+	<select id="findListByAuth" parameterType="News" resultType="News">
+		<![CDATA[
+			select * from ts_news 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereAuthColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findCountByAuth" parameterType="News" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_news 
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereAuthColumns"/>
+		</trim>
+	</select>
+	<!-- ============================================================其它方法开始============================================================ -->	
+</mapper>

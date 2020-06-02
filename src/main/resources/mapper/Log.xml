@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ILogDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			log_code=#{log_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Log">
+		<![CDATA[
+   			insert into ts_log (log_code,log_type,log_result,log_remark,log_user_code,log_user_name,company_code) 
+   			values(#{log_code},#{log_type},#{log_result},#{log_remark},#{log_user_code},#{log_user_name},#{company_code})
+   		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="Log">
+		<![CDATA[
+			delete from ts_log
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">			
+		<if test="log_type != null and log_type != ''">
+			<![CDATA[
+				and log_type = #{log_type}
+			]]>
+		</if>	
+		<if test="log_result != null and log_result != ''">
+			<![CDATA[
+				and log_result = #{log_result}
+			]]>
+		</if>
+		<if test="log_user_code != null and log_user_code != ''">
+			<![CDATA[
+				and log_user_code = #{log_user_code}
+			]]>
+		</if>
+		<if test="log_user_name != null and log_user_name != ''">
+			<![CDATA[
+				and log_user_name = like concat ('%',#{log_user_name},'%')
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Log" resultType="Log">
+		<![CDATA[
+			select * from ts_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findBySearch" parameterType="Log" resultType="Log">
+		<![CDATA[
+			select * from ts_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	<select id="findBySearchCount" parameterType="Log" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+
+	<select id="findByCount" parameterType="Log" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Log" resultType="Log">
+		<![CDATA[
+		 	select * from ts_log
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="Log" resultType="Log">
+		<![CDATA[
+		 	select * from ts_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+	
+	<select id="findLastByCompanyCode" parameterType="String" resultType="Log">
+		<![CDATA[
+		 	select * from ts_log where company_code=#{company_code} order by add_time desc limit 1
+		]]>
+	</select>
+</mapper>

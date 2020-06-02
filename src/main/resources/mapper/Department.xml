@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IDepartmentDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			department_code=#{department_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Department">
+		<![CDATA[
+   			insert into ts_department 
+   				(department_code,department_name,province,city,area,town,vill,user_code_add,user_name_add,user_code_update,user_name_update,longitude,latitude) 
+   			values
+   				(#{department_code},#{department_name},#{province},#{city},#{area},#{town},#{vill},#{user_code_add},#{user_name_add},#{user_code_update},#{user_name_update},#{longitude},#{latitude})
+   		]]>
+	</insert>
+
+	<update id="update" parameterType="Department">
+		<![CDATA[
+			update ts_department
+		]]>
+		<set>
+			<if test="department_name != null and department_name != ''">
+				<![CDATA[
+					department_name=#{department_name},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+			<if test="province != null and province != ''">
+				<![CDATA[
+					province=#{province},
+				]]>
+			</if>
+			<if test="city != null and city != ''">
+				<![CDATA[
+					city=#{city},
+				]]>
+			</if>
+			<if test="area != null and area != ''">
+				<![CDATA[
+					area=#{area},
+				]]>
+			</if>
+			<if test="town != null and town != ''">
+				<![CDATA[
+					town=#{town},
+				]]>
+			</if>
+			<if test="vill != null and vill != ''">
+				<![CDATA[
+					vill=#{vill},
+				]]>
+			</if>
+			<if test="state != null and state != ''">
+				<![CDATA[
+					state=#{state},
+				]]>
+			</if>
+			<if test="longitude != null and longitude != ''">
+				<![CDATA[
+					longitude=#{longitude},
+				]]>
+			</if>
+			<if test="latitude != null and latitude != ''">
+				<![CDATA[
+					latitude=#{latitude},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+	
+	<select id="findBySearch" parameterType="Department" resultType="Department">
+    	<![CDATA[
+		    select d.*,r.region_name,r.region_code  from ts_department d left join ts_department_region dr on d.department_code = dr.department_code
+		    left join qy_region r on dr.region_code = r.region_code  where d.state = 1
+        ]]>
+    	<if test="department_name != null and department_name != ''">
+	      <![CDATA[
+	      	and d.department_name like concat('%',#{department_name},'%')
+        	]]>
+    	</if>
+    	<![CDATA[
+			order by d.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+  	</select>
+  	
+	<select id="findBySearchCount" parameterType="Department" resultType="Integer">
+	    <![CDATA[
+		    select count(1)  from ts_department d left join ts_department_region dr on d.department_code = dr.department_code
+		    left join qy_region r on dr.region_code = r.region_code  where d.state = 1
+        ]]>
+		<if test="department_name != null and department_name != ''">
+			<![CDATA[
+	      		and  d.department_name like concat('%',#{department_name},'%')
+			]]>
+		</if>
+	</select>
+	<delete id="delete" parameterType="Department">
+		<![CDATA[
+			delete from ts_department
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</delete>
+
+	<sql id="whereColumns">
+		<if test="department_name != null and department_name != ''">
+			<![CDATA[
+				and department_name like concat('%',#{department_name},'%')
+			]]>
+		</if>
+		<if test="state != null and state != ''">
+			<![CDATA[
+				and state = #{state}
+			]]>
+		</if>
+		<if test="province != null and province != ''">
+			<![CDATA[
+				and (
+					province=#{province}
+			]]>
+		</if>
+		<if test="city != null and city != ''">
+			<![CDATA[
+				and city=#{city}
+			]]>
+		</if>
+		<if test="area != null and area != ''">
+			<![CDATA[
+				and area=#{area}
+			]]>
+		</if>
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and town=#{town}
+			]]>
+		</if>
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and vill=#{vill}
+			]]>
+		</if>
+		<![CDATA[
+		 	 	 or locate( concat(ifnull(province,""), ifnull(city,""), ifnull(area,""), ifnull(town,""), ifnull(vill,"")) ,#{addr_info})
+		 	  )
+		]]>
+		<if test="query_param == 'lngLat is null'">
+        	<![CDATA[
+			    and (longitude is null or latitude is null or length(longitude)=0 or length(latitude)=0)
+			]]>
+        </if>
+	</sql>	
+	
+	<select id="fingByUserList" parameterType="Region" resultType="User">
+		<![CDATA[
+	        select user_code,user_name,user_mobilephone from qy_user where user_state = 1 and
+	        user_level = 4 and user_town like concat('%',#{region_name},'%') and  user_type='平台管理员'
+		]]>
+  	</select>
+	
+	<select id="fingByInfoList" parameterType="User" resultType="User">
+	 	<![CDATA[
+		    select user_code,user_name,user_mobilephone from qy_user
+	  	]]>
+	  	<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+  	</select>
+
+  	<select id="findByRegion" parameterType="Department" resultType="Region">
+  		<![CDATA[
+    		select * from qy_region where region_code in (select region_code from ts_department_region 
+    		where department_code = #{department_code})
+        ]]>
+  	</select>
+  
+	<!-- ============================================================其它方法开始============================================================ -->
+	<select id="findByList" parameterType="Department" resultType="Department">
+		<![CDATA[
+			select * from ts_department
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="Department" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_department
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode" parameterType="Department" resultType="Department">
+		<![CDATA[
+		 	select * from ts_department
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+
+	<select id="findByExist" parameterType="Department" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_department
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="department_code != null and department_code != ''">
+				<![CDATA[
+					and department_code<>#{department_code}
+				]]>
+			</if>
+			<if test="department_name != null and department_name != ''">
+				<![CDATA[
+					and department_name=#{department_name}
+				]]>
+			</if>
+			<if test="province != null and province != ''">
+				<![CDATA[
+					and province=#{province}
+				]]>
+			</if>
+			<if test="city != null and city != ''">
+				<![CDATA[
+					and city=#{city}
+				]]>
+			</if>
+			<if test="area != null and area != ''">
+				<![CDATA[
+					and area=#{area}
+				]]>
+			</if>
+			<if test="town != null and town != ''">
+				<![CDATA[
+					and town=#{town}
+				]]>
+			</if>
+			<if test="vill != null and vill != ''">
+				<![CDATA[
+					and vill=#{vill}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	
+	<sql id="whereColumnsJoin">
+		<if test="department_code != null and department_code != ''">
+			<![CDATA[
+				and d.department_code=#{department_code}
+			]]>
+		</if>
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and d.town=#{town}
+			]]>
+		</if>
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and d.vill=#{vill}
+			]]>
+		</if>
+		<![CDATA[
+		 	 	or locate( concat(ifnull(d.province,""), ifnull(d.city,""), ifnull(d.area,""), ifnull(d.town,""), ifnull(d.vill,"")) ,#{addr_info})
+		]]>
+		<if test="user_code_add != null and user_code_add != ''">
+			<![CDATA[
+			    and d.user_code_add = #{user_code_add}
+			]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+			<![CDATA[
+			    and d_u.user_code = #{user_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findJoin" parameterType="Department" resultType="Department">
+		<![CDATA[
+		   	select
+				d.*, dr.region_code
+			from
+				ts_department d
+			left join ts_department_region dr on dr.department_code = d.department_code
+        ]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumnsJoin"/>
+		</trim>
+	</select>
+	
+	
+	<select id="findByUserCode" parameterType="Department" resultType="DepartmentReturn">
+		<![CDATA[
+		   	select
+				d.*
+			from
+				ts_department_user d_u
+			inner join ts_department d on d.department_code = d_u.department_code
+        ]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+				    and d_u.user_code = #{user_code}
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+		 	limit 1
+		]]>
+	</select>
+	
+	<select id="findByAll" parameterType="Department" resultType="Department">
+		<![CDATA[
+			select * from ts_department
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			 <if test="query_param == 'lngLat is null'">
+	        	<![CDATA[
+				    and (longitude is null or latitude is null or length(longitude)=0 or length(latitude)=0)
+				]]>
+	        </if>
+		</trim>
+	</select>
+	
+	<update id="updateBatch"  parameterType="java.util.List">
+	      <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update ts_department 
+				<set>
+					<if test="item.longitude != null and item.longitude != ''">
+						<![CDATA[
+							longitude=#{item.longitude},
+						]]>
+					</if>
+					<if test="item.latitude != null and item.latitude != ''">
+						<![CDATA[
+							latitude=#{item.latitude},
+						]]>
+					</if>
+				</set>
+				where department_code = #{item.department_code} 
+		 </foreach>
+    </update>
+    
+    <select id="findAllByUserCode" parameterType="Department" resultType="DepartmentReturn">
+		<![CDATA[
+		   	select
+				d.*
+			from
+				ts_department_user d_u
+			inner join ts_department d on d.department_code = d_u.department_code
+        ]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+				    and d_u.user_code = #{user_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findAll_app" parameterType="Department" resultType="DepartmentReturn">
+		<![CDATA[
+			select * from ts_department
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+</mapper>

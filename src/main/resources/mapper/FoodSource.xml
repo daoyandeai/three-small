@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IFoodSourceDao">
+	
+	<sql id="codeColumns">
+   		<![CDATA[
+   			foodsource_code=#{foodsource_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="FoodSource">
+		<![CDATA[
+			insert into ts_foodsource(foodsource_code, sell_time, sell_person, supplier_name, supplier_address, company_code) 
+			values(#{foodsource_code}, #{sell_time}, #{sell_person}, #{supplier_name}, #{supplier_address}, #{company_code})
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="FoodSource">
+		<![CDATA[
+			delete from ts_foodsource
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+
+    <select id="findByCode" parameterType="FoodSource" resultType="FoodSource">
+        <![CDATA[
+            select * from ts_foodsource
+        ]]>
+        <where>
+			<include refid="codeColumns"/>
+		</where>
+    </select>
+
+    <select id="findByFoodSourceSample" parameterType="FoodSource" resultType="FoodSourceSampleReturn">
+        <![CDATA[
+            select * from ts_foodsource_sample where company_code = #{company_code}
+		    limit ${pager_offset},${pager_openset}
+		]]>
+    </select>
+
+    <select id="findByFoodSourceSampleCount" parameterType="FoodSource" resultType="int">
+        <![CDATA[
+            select count(1) from ts_foodsource_sample where foodsource_code = #{foodsource_code}
+        ]]>
+    </select>
+
+	<sql id="whereColumns">
+		<if test="sell_time != null and sell_time != ''">
+			<![CDATA[
+				and fs.sell_time = #{sell_time}
+			]]>
+		</if>
+		<if test="sell_person != null and sell_person != ''">
+			<![CDATA[
+				and fs.sell_person like concat('%',#{sell_person},'%') 
+			]]>
+		</if>
+		<if test="supplier_name != null and supplier_name != ''">
+			<![CDATA[
+				and fs.supplier_name like concat('%',#{supplier_name},'%') 
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and fs.company_code = #{company_code}
+			]]>
+		</if>
+		<if test="province != null and province != ''">
+			<![CDATA[
+				and c.province = #{province}
+			]]>
+		</if>
+		<if test="city != null and city != ''">
+			<![CDATA[
+				and c.city = #{city}
+			]]>
+		</if>
+		<if test="area != null and area != ''">
+			<![CDATA[
+				and c.area = #{area}
+			]]>
+		</if>
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and c.town = #{town}
+			]]>
+		</if>
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and c.vill = #{vill}
+			]]>
+		</if>
+		<if test="year_month != null and year_month != ''">
+			<![CDATA[
+				and date_format(fs.sell_time,'%Y-%m') = date_format(#{year_month},'%Y-%m')
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList_app" parameterType="FoodSource" resultType="FoodSourceReturn">
+      <![CDATA[
+			select * from ts_foodsource fs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by fs.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByList" parameterType="FoodSource" resultType="FoodSource">
+        <![CDATA[
+            select * from ts_foodsource fs
+        ]]>
+        <trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+        <![CDATA[
+			order by fs.sell_time desc limit ${pager_offset},${pager_openset}
+		]]>
+    </select>
+
+	<select id="findByCount" parameterType="FoodSource" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_foodsource fs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+	
+	<select id="findByAll" parameterType="FoodSource" resultType="FoodSource">
+		<![CDATA[
+		 	select * from ts_foodsource fs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by fs.add_time desc
+		]]>
+	</select>
+	
+	<select id="findByAddTime" parameterType="FoodSource" resultType="FoodSource">
+		<![CDATA[
+		 	select date_format(fs.sell_time,'%Y-%m-%e') add_time from ts_foodsource fs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			group by to_days(fs.sell_time) order by sell_time
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,373 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ISensorDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			sensor_code=#{sensor_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Sensor">
+		<![CDATA[
+   			insert into ts_sensor (sensor_code,company_code,company_name,company_area_code,company_area_name,sensor_name,sensor_number,sensor_desc,user_code_add,user_name_add,sensor_logo_url) 
+   			values(#{sensor_code},#{company_code},#{company_name},#{company_area_code},#{company_area_name},#{sensor_name},#{sensor_number},#{sensor_desc},#{user_code_add},#{user_name_add},#{sensor_logo_url})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="Sensor">
+		<![CDATA[
+			update ts_sensor
+		]]>
+		<set>
+			<if test="sensor_name != null and sensor_name != ''">
+				<![CDATA[
+					sensor_name=#{sensor_name},
+				]]>
+			</if>
+			<if test="sensor_number != null and sensor_number != ''">
+				<![CDATA[
+					sensor_number=#{sensor_number},
+				]]>
+			</if>
+			<if test="company_code != null and company_code != ''">
+				<![CDATA[
+					company_code=#{company_code},
+				]]>
+			</if>
+			<if test="company_name != null and company_name != ''">
+				<![CDATA[
+					company_name=#{company_name},
+				]]>
+			</if>
+			<if test="company_area_code != null and company_area_code != ''">
+				<![CDATA[
+					company_area_code=#{company_area_code},
+				]]>
+			</if>
+			<if test="company_area_name != null and company_area_name != ''">
+				<![CDATA[
+					company_area_name=#{company_area_name},
+				]]>
+			</if>
+			<if test="sensor_state != null and sensor_state != ''">
+				<![CDATA[
+					sensor_state=#{sensor_state},
+				]]>
+			</if>
+			<if test="sensor_desc != null and sensor_desc != ''">
+				<![CDATA[
+					sensor_desc=#{sensor_desc},
+				]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+			<if test="sensor_logo_url != null and sensor_logo_url != ''">
+				<![CDATA[
+					sensor_logo_url=#{sensor_logo_url},
+				]]>
+			</if>
+			<if test="threshold_content != null and threshold_content != ''">
+				<![CDATA[
+					threshold_content=#{threshold_content},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="Sensor">
+		<![CDATA[
+			delete from ts_sensor
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="sensor_state != null and sensor_state != ''">
+			<![CDATA[
+				and sensor_state = #{sensor_state}
+			]]>
+		</if>
+		<if test="warn_state != null and warn_state != ''">
+			<![CDATA[
+				and warn_state = #{warn_state}
+			]]>
+		</if>
+		<if test="online_state != null and online_state != ''">
+			<![CDATA[
+				and online_state = #{online_state}
+			]]>
+		</if>
+		<if test="sensor_name != null and sensor_name != ''">
+			<![CDATA[
+				and sensor_name like concat('%',#{sensor_name},'%')
+			]]>
+		</if>
+		<if test="sensor_number != null and sensor_number != ''">
+			<![CDATA[
+				and sensor_number like concat('%',#{sensor_number},'%')
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and company_name like concat('%',#{company_name},'%')
+			]]>
+		</if>	
+		<if test="company_area_name != null and company_area_name != ''">
+			<![CDATA[
+				and company_area_name like concat('%',#{company_area_name},'%')
+			]]>
+		</if>			
+		<if test="sensor_state != null and sensor_state != ''">
+			<![CDATA[
+				and sensor_state = #{sensor_state}
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_area_code != null and company_area_code != ''">
+			<![CDATA[
+				and company_area_code = #{company_area_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Sensor" resultType="Sensor">
+		<![CDATA[
+			select * from ts_sensor
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Sensor" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_sensor
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="Sensor" resultType="Sensor">
+		<![CDATA[
+		 	select * from ts_sensor
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="Sensor" resultType="Sensor">
+		<![CDATA[
+		 	select * from ts_sensor
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="Sensor" resultType="int">
+		<![CDATA[
+			select count(1) from ts_sensor
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="sensor_number != null and sensor_number != ''">
+				<![CDATA[
+					and sensor_number=#{sensor_number}
+				]]>
+			</if>
+			<if test="company_area_code != null and company_area_code != ''">
+				<![CDATA[
+					or company_area_code=#{company_area_code}
+				]]>
+			</if>
+			<if test="sensor_code!=null and sensor_code!=''">
+				<![CDATA[
+				 and sensor_code<>#{sensor_code}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<update id="updateStatus" parameterType="Sensor">
+		<![CDATA[
+			update ts_sensor set sensor_state = #{sensor_state} where sensor_code = #{sensor_code}
+		]]>
+	</update>
+	
+	
+	
+	<sql id="whereColumns_join">				
+		<if test="sensor_state != null and sensor_state != ''">
+			<![CDATA[
+				and s.sensor_state= #{sensor_state}
+			]]>
+		</if>
+		<if test="online_state != null and online_state != ''">
+			<![CDATA[
+				and s.online_state= #{online_state}
+			]]>
+		</if>
+		<if test="warn_state != null and warn_state != ''">
+			<![CDATA[
+				and s.warn_state= #{warn_state}
+			]]>
+		</if>
+		<if test="filing_state != null and filing_state != ''">
+			<![CDATA[
+				and c.filing_state = #{filing_state}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and c.company_name like concat('%',#{company_name},'%')
+			]]>
+		</if>	
+		<if test="province != null and province != ''">
+			<![CDATA[
+				and c.province = #{province}
+			]]>
+		</if>	
+		<if test="city != null and city != ''">
+			<![CDATA[
+				and c.city = #{city}
+			]]>
+		</if>	
+		<if test="area != null and area != ''">
+			<![CDATA[
+				and c.area = #{area}
+			]]>
+		</if>	
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and c.town = #{town}
+			]]>
+		</if>	
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and c.vill = #{vill}
+			]]>
+		</if>
+		<if test="companytype_code != null and companytype_code != ''">
+			<![CDATA[
+				and c_ty.companytype_code = #{companytype_code}
+			]]> 
+		</if>
+		<if test="companytag_code != null and companytag_code != ''">
+			<![CDATA[
+				and c_ta.companytag_code = #{companytag_code}
+			]]> 
+		</if>
+		<if test="company_area_code != null and company_area_code != ''">
+			<![CDATA[
+				and s.company_area_code = #{company_area_code}
+			]]> 
+		</if>
+	</sql>
+	
+	<select id="findByList_join" parameterType="Sensor" resultType="SensorReturn">
+		<![CDATA[
+	 		select
+				s.*, c_ty.companytype_name,
+				c_ta.companytag_name,
+				c.province,
+				c.city,
+				c.area,
+				c.town,
+				c.vill,
+			    c.address
+			from
+				ts_sensor s
+			inner join ts_company c on s.company_code = c.company_code
+			inner join ts_company_type c_ty on c_ty.companytype_code = c.companytype_code
+			inner join ts_company_tag c_ta on c_ta.companytag_code = c.companytag_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns_join"/>
+		</trim>
+	</select>
+	
+	<select id="findByCount_join" parameterType="Sensor" resultType="Integer">
+		<![CDATA[
+			select
+				count(1)
+			from
+				ts_sensor s
+			inner join ts_company c on s.company_code = c.company_code
+			inner join ts_company_type c_ty on c_ty.companytype_code = c.companytype_code
+			inner join ts_company_tag c_ta on c_ta.companytag_code = c.companytag_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns_join"/>
+		</trim>
+	</select>
+	
+	<select id="findByArea" parameterType="String" resultType="SensorReturn">
+		<![CDATA[
+		 	select * from ts_sensor where company_area_code =#{company_area_code}
+		]]>
+	</select>
+	
+	<select id="findOnLineCount" parameterType="Sensor" resultType="Integer">
+		<![CDATA[
+		 		select
+					count(1)
+				from
+					ts_sensor s
+				inner join ts_company c on s.company_code = c.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns_join"/>
+		</trim>
+	</select>
+	
+	<select id="findWarnCount" parameterType="Sensor" resultType="Integer">
+		<![CDATA[
+		 		select
+					count(1)
+				from
+					ts_sensor s
+				inner join ts_company c on s.company_code = c.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns_join"/>
+		</trim>
+	</select>
+	
+	<select id="findWarnSensorNumber" parameterType="Sensor" resultType="String">
+		<![CDATA[
+		 		select
+					GROUP_CONCAT('\'',sensor_number,'\'')
+				from
+					ts_sensor s
+				inner join ts_company c on s.company_code = c.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns_join"/>
+		</trim>
+	</select>
+	
+</mapper>

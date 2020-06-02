@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ILonlatDao">
+	<insert id="save" parameterType="Lonlat">
+		<![CDATA[
+   			insert into ts_lonlat (table_code,table_type,longitude,latitude) 
+   			values(#{table_code},#{table_type},#{longitude},#{latitude})
+   		]]>
+	</insert>
+	
+	<sql id="whereColumns">				
+		<if test="table_code != null and table_code != ''">
+			<![CDATA[
+				and table_code = #{table_code}
+			]]>
+		</if>
+		<if test="table_type != null and table_type != ''">
+			<![CDATA[
+				and table_type = #{table_type}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="Lonlat" resultType="Lonlat">
+		<![CDATA[
+		 	select * from ts_lonlat
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+		 	order by add_time limit ${pager_offset},${pager_openset}
+		]]>
+	</select>	
+</mapper>

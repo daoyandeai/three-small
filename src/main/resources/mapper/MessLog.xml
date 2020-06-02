@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IMessLogDao">
+
+	<sql id="idColumns">
+    <![CDATA[
+   			messlog_id=#{messlog_id}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="MessLog">
+    <![CDATA[
+      		insert into ts_mess_log 
+      			(mess_event,mess_receive_person,mess_receive_person_name,companytype_codes,companytype_names,companytag_codes,companytag_names,mess_type,mess_sms_code,mess_sms_content,mess_wx_code,mess_wx_content,user_name_add,user_code_add,user_code,user_mobilephone,openid,is_manager,other_code,send_time)
+      		values 
+      			(#{mess_event},#{mess_receive_person},#{mess_receive_person_name},#{companytype_codes},#{companytype_names},#{companytag_codes},#{companytag_names},#{mess_type},#{mess_sms_code},#{mess_sms_content},#{mess_wx_code},#{mess_wx_content},#{user_name_add},#{user_code_add},#{user_code},#{user_mobilephone},#{openid},#{is_manager},#{other_code},#{send_time})
+      ]]>
+	</insert>
+	
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+			insert into ts_mess_log (mess_event,mess_receive_person,mess_receive_person_name,companytype_codes,companytype_names,companytag_codes,companytag_names,mess_type,mess_sms_code,mess_sms_content,mess_wx_code,mess_wx_content,user_name_add,user_code_add,user_code,user_mobilephone,openid,is_manager,other_code,send_time)
+   			values
+   		]]>
+   		 <foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.mess_event},#{item.mess_receive_person},#{item.mess_receive_person_name},#{item.companytype_codes},#{item.companytype_names},#{item.companytag_codes},#{item.companytag_names},#{item.mess_type},#{item.mess_sms_code},#{item.mess_sms_content},#{item.mess_wx_code},#{item.mess_wx_content},#{item.user_name_add},#{item.user_code_add},#{item.user_code},#{item.user_mobilephone},#{item.openid},#{item.is_manager},#{item.other_code}
+     			,#{item.send_time}
+     		)
+    	</foreach>  
+	</insert>
+
+	<update id="update" parameterType="MessLog">
+	    <![CDATA[
+	   			update ts_mess_log
+	    ]]>
+		<set>
+			<if test="messlog_ms_state != null and messlog_ms_state != ''">
+	             <![CDATA[
+	                 messlog_ms_state=#{messlog_ms_state},
+	             ]]>
+			</if>
+			<if test="messlog_ms_errnote != null and messlog_ms_errnote != ''">
+	             <![CDATA[
+	                 messlog_ms_errnote=#{messlog_ms_errnote},
+	             ]]>
+			</if>
+			<if test="messlog_ms_sendtime != null and messlog_ms_sendtime != ''">
+	             <![CDATA[
+	                 messlog_ms_sendtime=#{messlog_ms_sendtime},
+	             ]]>
+			</if>
+			<if test="messlog_wx_state != null and messlog_wx_state != ''">
+	             <![CDATA[
+	                 messlog_wx_state=#{messlog_wx_state},
+	             ]]>
+			</if>
+			<if test="messlog_wx_errnote != null and messlog_wx_errnote != ''">
+	             <![CDATA[
+	                 messlog_wx_errnote=#{messlog_wx_errnote},
+	             ]]>
+			</if>
+			<if test="messlog_wx_sendtime != null and messlog_wx_sendtime != ''">
+	             <![CDATA[
+	                 messlog_wx_sendtime=#{messlog_wx_sendtime},
+	             ]]>
+			</if>
+		</set>
+		<where>
+			<include refid="idColumns" />
+		</where>
+	</update>
+	
+	<sql id="whereColumns">
+		<if test="messlog_ms_state != null and messlog_ms_state != ''">
+            <![CDATA[
+                and messlog_ms_state = #{messlog_ms_state}
+            ]]>
+		</if>
+		<if test="messlog_wx_state != null and messlog_wx_state != ''">
+            <![CDATA[
+                and messlog_wx_state = #{messlog_wx_state}
+            ]]>
+		</if>
+		<if test="mess_type != null and mess_type != ''">
+            <![CDATA[
+                and mess_type = #{mess_type}
+            ]]>
+		</if>
+		<if test="user_code != null and user_code != ''">
+            <![CDATA[
+                and user_code = #{user_code}
+            ]]>
+		</if>
+		<if test="mess_event != null and mess_event != ''">
+            <![CDATA[
+                and mess_event = #{mess_event}
+            ]]>
+		</if>
+		<if test="mess_receive_person != null and mess_receive_person != ''">
+            <![CDATA[
+                    and mess_receive_person regexp #{mess_receive_person}
+            ]]>
+		</if>
+		<if test="companytype_codes != null and companytype_codes != ''">
+            <![CDATA[
+                    and companytype_codes  regexp #{companytype_codes}
+            ]]>
+		</if>
+		<if test="companytag_codes != null and companytag_codes != ''">
+            <![CDATA[
+                    and companytag_codes  regexp #{companytag_codes}
+            ]]>
+		</if>
+		<if test="mess_sms_code != null and mess_sms_code != ''">
+            <![CDATA[
+                and mess_sms_code = #{mess_sms_code}
+            ]]>
+		</if>
+		<if test="user_mobilephone != null and user_mobilephone != ''">
+            <![CDATA[
+                and user_mobilephone like concat('%',#{user_mobilephone},'%')
+            ]]>
+		</if>
+		<if test="messlog_wx_state != null and messlog_wx_state != ''">
+            <![CDATA[
+                and messlog_wx_state = #{messlog_wx_state}
+            ]]>
+		</if>
+		<if test="is_manager != null and is_manager != ''">
+            <![CDATA[
+                and is_manager = #{is_manager}
+            ]]>
+		</if>
+		<if test="add_time != null and add_time != ''">
+            <![CDATA[
+                   and add_time >= #{add_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and add_time <= #{end_time}
+            ]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="MessLog" resultType="MessLog">
+		<![CDATA[
+			select * from ts_mess_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="MessLog" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_mess_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByList_app" parameterType="MessLog" resultType="MessLogReturn">
+		<![CDATA[
+			select * from ts_mess_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+</mapper>

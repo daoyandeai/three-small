@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IComplaintReportDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			complaintreport_code=#{complaintreport_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="ComplaintReport">
+		<![CDATA[
+   			insert into ts_complaint_report (
+   				complaintreport_code,company_code,company_name,complaintreport_title,complaintreport_content,complaintreport_img,complaintreport_telephone,complaintreport_user_code,result_user_code,result_user_name,result_content,result_img,complaintreport_openid
+   			) 
+   			values(
+   				#{complaintreport_code},#{company_code},#{company_name},#{complaintreport_title},#{complaintreport_content},#{complaintreport_img},#{complaintreport_telephone},#{complaintreport_user_code},#{result_user_code},#{result_user_name},#{result_content},#{result_img},#{complaintreport_openid}
+   			)
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="ComplaintReport">
+		<![CDATA[
+			update ts_complaint_report
+		]]>
+		<set>
+			<if test="complaintreport_state != null and complaintreport_state != ''">
+				<![CDATA[
+					complaintreport_state=#{complaintreport_state},
+				]]>
+			</if>
+			<if test="result_user_code != null and result_user_code != ''">
+				<![CDATA[
+					result_user_code=#{result_user_code},
+				]]>
+			</if>
+			<if test="result_user_name != null and result_user_name != ''">
+				<![CDATA[
+					result_user_name=#{result_user_name},
+				]]>
+			</if>
+			<if test="result_content != null and result_content != ''">
+				<![CDATA[
+					result_content=#{result_content},
+				]]>
+			</if>
+			<if test="result_img != null and result_img != ''">
+				<![CDATA[
+					result_img=#{result_img},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="ComplaintReport">
+		<![CDATA[
+			delete from ts_complaint_report
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="complaintreport_state != null and complaintreport_state != ''">
+			<![CDATA[
+				and complaintreport_state = #{complaintreport_state}
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (company_name like concat('%',#{company_name},'%') or complaintreport_title like concat('%',#{company_name},'%') or complaintreport_content like concat('%',#{company_name},'%'))
+			]]>
+		</if>
+		<if test="complaintreport_telephone != null and complaintreport_telephone != ''">
+			<![CDATA[
+				and complaintreport_telephone = #{complaintreport_telephone}
+			]]>
+		</if>
+		<if test="complaintreport_user_code != null and complaintreport_user_code != ''">
+			<![CDATA[
+				and complaintreport_user_code = #{complaintreport_user_code}
+			]]>
+		</if>
+		<if test="result_user_name != null and result_user_name != ''">
+			<![CDATA[
+				and result_user_name like concat('%',#{result_user_name},'%')
+			]]>
+		</if>
+		<if test="add_time != null and add_time != ''">
+            <![CDATA[
+                   and add_time >= #{add_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and add_time <= #{end_time}
+            ]]>
+		</if>		
+	</sql>
+	
+	<select id="findByList" parameterType="ComplaintReport" resultType="ComplaintReport">
+		<![CDATA[
+			select * from ts_complaint_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="ComplaintReport" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_complaint_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="ComplaintReport" resultType="ComplaintReport">
+		<![CDATA[
+		 	select * from ts_complaint_report
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="ComplaintReport" resultType="ComplaintReport">
+		<![CDATA[
+		 	select * from ts_complaint_report
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+</mapper>

@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IRegionDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			region_code=#{region_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Region">
+		<![CDATA[
+   			insert into qy_region (region_code,region_name,region_type,region_high_code,note) 
+   			values(#{region_code},#{region_name},#{region_type},#{region_high_code},#{note})
+   		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="Region">
+		<![CDATA[
+			delete from qy_region
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+
+	<sql id="whereColumns">
+		<if test="region_name != null and region_name != ''">
+			<![CDATA[
+				and region_name like concat('%',#{region_name},'%')
+			]]>
+		</if>
+		<if test="region_type != null and region_type != ''">
+			<![CDATA[
+				and region_type =  #{region_type}
+			]]>
+		</if>
+		<if test="region_high_code != null and region_high_code != ''">
+			<![CDATA[
+				and region_high_code =  #{region_high_code}
+			]]>
+		</if>
+	</sql>
+
+	<select id="findByList" parameterType="Region" resultType="Region">
+		<![CDATA[
+			select * from qy_region  
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="Region" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode" parameterType="String" resultType="Region">
+		<![CDATA[
+		 	select * from qy_region where region_code=#{region_code}
+		]]>
+	</select>
+
+	<select id="findByAll" parameterType="Region" resultType="Region">
+		<![CDATA[
+		 	select * from qy_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+		<![CDATA[
+			order by region_code	
+		]]>
+	</select>
+
+	<select id="findByName" parameterType="String" resultType="Region">
+		<![CDATA[
+		 	select * from qy_region where region_name = #{name}
+		]]>
+	</select>
+	
+	<select id="findLastByHcode" parameterType="String" resultType="String">
+		<![CDATA[
+		 	select region_code from qy_region where region_high_code = #{region_high_code} order by region_code desc limit 1
+		]]>
+	</select>
+
+	<!-- ============================================================其它方法开始============================================================ -->
+	<select useCache="true" id="findByName_ReportStatistics"
+		parameterType="Region" resultType="Region">
+			<![CDATA[
+				select * from qy_region 
+			]]>
+		<if test="region_vill == '' or region_vill == null">
+			<![CDATA[
+			where region_high_code =
+			]]>
+		</if>
+		<if test="region_vill != null and region_vill !='' ">
+			<![CDATA[
+			 where region_code =	(select region_code from qy_region where region_high_code =
+			]]>
+		</if>
+		<if test="region_town != null and region_town !='' ">
+			<![CDATA[
+			 	(select region_code from qy_region where region_high_code =
+			]]>
+		</if>
+		<if test="region_area != null and region_area !='' ">
+			<![CDATA[
+			 	(select region_code from qy_region where region_high_code =
+			]]>
+		</if>
+		<if test="region_city != null and region_city !='' ">
+			<![CDATA[
+			 	(select region_code from qy_region where region_high_code =
+			]]>
+		</if>
+		<if test="region_province != null and region_province !='' ">
+			<![CDATA[
+			 	(select region_code from qy_region where region_name = #{region_province} and region_type =1)
+			]]>
+		</if>
+		<if test="region_city != null and region_city !='' ">
+			<![CDATA[
+			 	and region_name = #{region_city} and region_type =2)
+			]]>
+		</if>
+		<if test="region_area != null and region_area !='' ">
+			<![CDATA[
+			 	and region_name = #{region_area} and region_type =3)
+			]]>
+		</if>
+		<if test="region_town != null and region_town !='' ">
+			<![CDATA[
+			 	 and region_name = #{region_town} and region_type =4)
+			]]>
+		</if>
+		<if test="region_vill != null and region_vill !='' ">
+			<![CDATA[
+			 	and region_name = #{region_vill} and region_type =5)
+			]]>
+		</if>
+	</select>
+
+
+	<select id="findOneByRegion" useCache="true" parameterType="Region" resultType="Region">
+		<![CDATA[
+			select * from qy_region where region_high_code = (
+				select region_code from qy_region where region_high_code = (
+					select region_code from qy_region where region_high_code = (
+						select region_code from qy_region where region_high_code =(
+			 select region_code from qy_region
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province !='' ">
+				<![CDATA[
+				 	and region_name = #{region_province}
+				]]>
+			</if>
+		<![CDATA[
+			)
+		]]>
+			<if test="region_city != null and region_city !='' ">
+				<![CDATA[
+				 	and region_name = #{region_city}
+				]]>
+			</if>
+		<![CDATA[
+			)
+		]]>
+			<if test="region_area != null and region_area !='' ">
+				<![CDATA[
+				 	and region_name = #{region_area}
+				]]>
+			</if>
+		<![CDATA[
+			)
+		]]>
+			<if test="region_town != null and region_town !='' ">
+				<![CDATA[
+				 	and region_name = #{region_town}
+				]]>
+			</if>
+		<![CDATA[
+			)
+		]]>
+			<if test="region_vill != null and region_vill !='' ">
+				<![CDATA[
+				 	and region_name = #{region_vill}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<update id="update" parameterType="Region">
+		<![CDATA[
+			update qy_region
+		]]>
+		<set>
+			<if test="region_name != null and region_name != ''">
+				<![CDATA[
+					region_name=#{region_name},
+				]]>
+			</if>
+			<if test="region_high_code != null and region_high_code != ''">
+				<![CDATA[
+					region_high_code=#{region_high_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+	   			region_code in (${region_code})
+	   		]]>
+		</where>
+	</update>
+	
+	<update id="updateByHighCode" parameterType="Region">
+		<![CDATA[
+			update qy_region
+		]]>
+		<set>
+			<if test="region_high_code != null and region_high_code != ''">
+				<![CDATA[
+					region_high_code=#{region_high_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<![CDATA[
+	   			region_high_code in (${region_code})
+	   		]]>
+		</where>
+	</update>
+	
+	<!-- ==================================================update 其他表区域======================================================================== -->
+	<update id="updateUserRegion" parameterType="Region">
+		<![CDATA[
+			update qy_user
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						user_city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						user_area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						user_town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						user_vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					user_province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					user_city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					user_area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					user_town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and user_province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and user_city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and user_area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and user_town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and user_vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateReportRegion" parameterType="Region">
+		<![CDATA[
+			update qy_report
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						city_conduct=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						area_conduct=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						town_conduct=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						vill_conduct=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					province_conduct=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					city_conduct=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					area_conduct=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					town_conduct=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and province_conduct=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and city_conduct=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and area_conduct=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and town_conduct=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and vill_conduct in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateQYTrainRegion" parameterType="Region">
+		<![CDATA[
+			update qy_train
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						train_city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						train_area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						train_town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						train_vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					train_province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					train_city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					train_area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					train_town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and train_province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and train_city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and train_area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and train_town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and train_vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateQYNewsRegion" parameterType="Region">
+		<![CDATA[
+			update qy_news
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						news_city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						news_area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						news_town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						news_vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					news_province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					news_city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					news_area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					news_town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and news_province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and news_city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and news_area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and news_town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and news_vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateCompanyRegion" parameterType="Region">
+		<![CDATA[
+			update ts_company
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateDepartmentRegion" parameterType="Region">
+		<![CDATA[
+			update ts_department
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateSXNewsRegion" parameterType="Region">
+		<![CDATA[
+			update ts_news
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						news_city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						news_area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						news_town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						news_vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					news_province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					news_city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					news_area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					news_town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and news_province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and news_city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and news_area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and news_town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and news_vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	
+	<update id="updateSXTrainRegion" parameterType="Region">
+		<![CDATA[
+			update ts_train
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						train_city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						train_area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						train_town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						train_vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					train_province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					train_city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					train_area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					train_town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and train_province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and train_city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and train_area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and train_town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and train_vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+	
+	<update id="updateSXCaseCenterRegion" parameterType="Region">
+		<![CDATA[
+			update ts_case_center
+		]]>
+		<set>
+			<if test="region_name != null and region_name != '' and region_type != null">
+				<if test="region_type == 2">
+					<![CDATA[
+						city=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 3">
+					<![CDATA[
+						area=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 4">
+					<![CDATA[
+						town=#{region_name},
+					]]>
+				</if>
+				<if test="region_type == 5">
+					<![CDATA[
+						vill=#{region_name},
+					]]>
+				</if>
+			</if>
+			<if test="region_province_new != null and region_province_new != ''">
+				<![CDATA[
+					province=#{region_province_new},
+				]]>
+			</if>
+			<if test="region_city_new != null and region_city_new != ''">
+				<![CDATA[
+					city=#{region_city_new},
+				]]>
+			</if>
+			<if test="region_area_new != null and region_area_new != ''">
+				<![CDATA[
+					area=#{region_area_new},
+				]]>
+			</if>
+			<if test="region_town_new != null and region_town_new != ''">
+				<![CDATA[
+					town=#{region_town_new},
+				]]>
+			</if>
+		</set>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="region_province != null and region_province != ''">
+				<![CDATA[
+					and province=#{region_province}
+				]]>
+			</if>
+			<if test="region_city != null and region_city != ''">
+				<![CDATA[
+					and city=#{region_city}
+				]]>
+			</if>
+			<if test="region_area != null and region_area != ''">
+				<![CDATA[
+					and area=#{region_area}
+				]]>
+			</if>
+			<if test="region_town != null and region_town != ''">
+				<![CDATA[
+					and town=#{region_town}
+				]]>
+			</if>
+			<if test="region_vill != null and region_vill != ''">
+				<![CDATA[
+					and vill in (${region_vill})
+				]]>
+			</if>
+		</trim>
+	</update>
+</mapper>

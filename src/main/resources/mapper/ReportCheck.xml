@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IReportCheckDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			check_code=#{check_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="ReportCheck">
+		<![CDATA[
+   			insert into qy_report_check 
+   				(check_code,check_mainchef_health,check_subchef_health,check_place_standard,check_process_standard,check_store,check_disinfection,check_water,check_reserved_sample,check_forbidden_food,check_invoice,user_sign_logo,check_poison,check_risk,check_risk_suggestion,check_imgurls,user_code,user_name,user_mobilephone,report_code,check_location) 
+   			values
+   				(#{check_code},#{check_mainchef_health},#{check_subchef_health},#{check_place_standard},#{check_process_standard},#{check_store},#{check_disinfection},#{check_water},#{check_reserved_sample},#{check_forbidden_food},#{check_invoice},#{user_sign_logo},#{check_poison},#{check_risk},#{check_risk_suggestion},#{check_imgurls},#{user_code},#{user_name},#{user_mobilephone},#{report_code},#{check_location})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="ReportCheck">
+		<![CDATA[
+			update qy_report_check
+		]]>
+		<set>
+			<if test="check_mainchef_health !=null and check_mainchef_health !=''">
+				<![CDATA[
+					check_mainchef_health=#{check_mainchef_health},
+				]]>
+			</if>
+			<if test="check_subchef_health !=null and check_subchef_health !=''">
+				<![CDATA[
+					check_subchef_health=#{check_subchef_health},
+				]]>
+			</if>
+			<if test="check_place_standard !=null and check_place_standard !=''">
+				<![CDATA[
+					check_place_standard=#{check_place_standard},
+				]]>
+			</if>
+			<if test="check_process_standard !=null and check_process_standard !=''">
+				<![CDATA[
+					check_process_standard=#{check_process_standard},
+				]]>
+			</if>
+			<if test="user_sign_logo !=null and user_sign_logo !=''">
+				<![CDATA[
+					user_sign_logo=#{user_sign_logo},
+				]]>
+			</if>
+			<if test="check_store !=null and check_store !=''">
+				<![CDATA[
+					check_store=#{check_store},
+				]]>
+			</if>
+			<if test="check_disinfection !=null and check_disinfection !=''">
+				<![CDATA[
+					check_disinfection=#{check_disinfection},
+				]]>
+			</if>
+			<if test="check_water !=null and check_water !=''">
+				<![CDATA[
+					check_water=#{check_water},
+				]]>
+			</if>
+			<if test="check_reserved_sample !=null and check_reserved_sample !=''">
+				<![CDATA[
+					check_reserved_sample=#{check_reserved_sample},
+				]]>
+			</if>
+			<if test="check_forbidden_food !=null and check_forbidden_food !=''">
+				<![CDATA[
+					check_forbidden_food=#{check_forbidden_food},
+				]]>
+			</if>
+			<if test="check_invoice !=null and check_invoice !=''">
+				<![CDATA[
+					check_invoice=#{check_invoice},
+				]]>
+			</if>
+			<if test="check_poison !=null and check_poison !=''">
+				<![CDATA[
+					check_poison=#{check_poison},
+				]]>
+			</if>
+			<if test="check_risk !=null and check_risk !=''">
+				<![CDATA[
+					check_risk=#{check_risk},
+				]]>
+			</if>
+			<if test="check_risk_suggestion !=null and check_risk_suggestion !=''">
+				<![CDATA[
+					check_risk_suggestion=#{check_risk_suggestion},
+				]]>
+			</if>
+			<if test="check_imgurls !=null and check_imgurls !=''">
+				<![CDATA[
+					check_imgurls=#{check_imgurls},
+				]]>
+			</if>
+			<if test="user_code !=null and user_code !=''">
+				<![CDATA[
+					user_code=#{user_code},
+				]]>
+			</if>
+			<if test="user_name !=null and user_name !=''">
+				<![CDATA[
+					user_name=#{user_name},
+				]]>
+			</if>
+			<if test="user_mobilephone !=null and user_mobilephone !=''">
+				<![CDATA[
+					user_mobilephone=#{user_mobilephone},
+				]]>
+			</if>
+			<if test="report_code !=null and report_code !=''">
+				<![CDATA[
+					report_code=#{report_code},
+				]]>
+			</if>
+				<if test="check_location !=null and check_location !=''">
+				<![CDATA[
+					check_location=#{check_location},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="ReportCheck">
+		<![CDATA[
+			delete from qy_report_check
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="report_code != null and report_code != ''">
+			<![CDATA[
+				and report_code = #{report_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="ReportCheck" resultType="ReportCheck">
+		<![CDATA[
+			select * from qy_report_check
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="ReportCheck" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_check
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="ReportCheck" resultType="ReportCheck">
+		<![CDATA[
+		 	select * from qy_report_check
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="ReportCheck" resultType="ReportCheck">
+		<![CDATA[
+		 	select * from qy_report_check
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="ReportCheck" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_check
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					and user_name=#{user_name}
+				]]>
+				<if test="check_code!=null and check_code!=''">
+					<![CDATA[
+					 and check_code<>#{check_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findByReportCode" parameterType="String" resultType="ReportCheckReturn">
+		<![CDATA[
+		 	select * from qy_report_check where report_code=#{report_code} limit 1
+		]]>
+	</select>
+	
+</mapper>

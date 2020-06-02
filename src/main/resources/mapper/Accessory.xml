@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IAccessoryDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			accessory_code=#{accessory_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="Accessory">
+	    <![CDATA[
+	      insert into ts_accessory (accessory_code,accessory_url, accessory_type,company_code,other_code)
+	      values (#{accessory_code}, #{accessory_url}, #{accessory_type},#{company_code},#{other_code})
+	    ]]>
+	</insert>
+
+	<update id="update" parameterType="Accessory">
+	    <![CDATA[
+	      update ts_accessory
+	    ]]>
+		<set>
+			<if test="accessory_url != null">
+		        <![CDATA[
+		        	accessory_url = #{accessory_url},
+		         ]]>
+			</if>
+			<if test="accessory_type != null">
+		        <![CDATA[
+		        	accessory_type = #{accessory_type},
+		         ]]>
+			</if>
+			<if test="company_code != null">
+		        <![CDATA[
+		        	company_code = #{company_code},
+		        ]]>
+			</if>
+		</set>
+	    <where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+
+	<sql id="whereColumns">			
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code = #{company_code}
+			]]>
+		</if>	
+		<if test="accessory_type != null and accessory_type != ''">
+			<![CDATA[
+				and accessory_type = #{accessory_type}
+			]]>
+		</if>
+		<if test="other_code != null and other_code != ''">
+			<![CDATA[
+				and other_code = #{other_code}
+			]]>
+		</if>
+	</sql>
+
+	<select id="findByAll" parameterType="Accessory" resultType="Accessory">
+	    <![CDATA[
+	     	select * from ts_accessory
+	    ]]>
+    	<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+	     	order by add_time
+	    ]]>
+	</select>
+
+	<select id="findByList" parameterType="Accessory">
+	    <![CDATA[
+	      	select * from ts_accessory
+	    ]]>
+	    <trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+	     	order by add_time limit ${pager_offset},${pager_openset}
+	    ]]>
+	</select>
+
+	<delete id="delete" parameterType="Accessory">
+	    <![CDATA[
+	      delete from ts_accessory
+	    ]]>
+	    <where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	<delete id="deleteByCompany" parameterType="String">
+	    <![CDATA[
+	      delete from ts_accessory where company_code = #{company_code}
+	    ]]>
+	</delete>
+	
+	<select id="findByOne" parameterType="Accessory" resultType="Accessory">
+	    <![CDATA[
+	     	select * from ts_accessory
+	    ]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+		<![CDATA[
+	     	limit 1
+	    ]]>
+	</select>
+	
+	<select id="findByAll_app" parameterType="Accessory" resultType="AccessoryReturn">
+	    <![CDATA[
+	     	select accessory_type name,accessory_url url from ts_accessory
+	    ]]>
+    	<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+	     	order by add_time
+	    ]]>
+	</select>
+	
+</mapper>

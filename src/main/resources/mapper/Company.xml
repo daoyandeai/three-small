@@ -1,0 +1,801 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			company_code=#{company_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="Company">
+		<![CDATA[
+			insert into ts_company (
+				company_code, companytype_code, companytag_code,company_name, credit_code, record_time, 
+		      	record_code, useful_life, unuseful_time,operator, mobilephone, idcard,residence_address, contact_address, business_form, 
+		      	employ_num, business_state, main_subject,sub_subject, subjectdetail_codes, produce_form,producetype_codes, category_names, foodsell_names, 
+		      	foodmake_names, owner_type, owner_name,owner_phone, places, place_area,place_business, place_operate, stall_type, 
+		      	process_place, operate_location, operate_begin,operate_end, department_code, region_code,user_code_manage, user_code_info, filing_state, 
+		      	state,business_type,province,city,area,town,vill,unpass_cause,
+		      	business_range,issue_time,business_code,filing_state_time,longitude,latitude,address,date_source
+	      	)
+	    	values (
+		    	#{company_code}, #{companytype_code}, #{companytag_code},#{company_name}, #{credit_code}, #{record_time},
+		      	#{record_code}, #{useful_life}, #{unuseful_time},#{operator}, #{mobilephone}, #{idcard},#{residence_address}, #{contact_address}, #{business_form},
+		      	#{employ_num}, #{business_state}, #{main_subject},#{sub_subject}, #{subjectdetail_codes}, #{produce_form},#{producetype_codes}, #{category_names}, #{foodsell_names},
+		      	#{foodmake_names}, #{owner_type}, #{owner_name},#{owner_phone}, #{places}, #{place_area},#{place_business}, #{place_operate}, #{stall_type},
+		      	#{process_place}, #{operate_location}, #{operate_begin},#{operate_end}, #{department_code}, #{region_code},#{user_code_manage}, #{user_code_info}, #{filing_state},
+		      	#{state},#{business_type},#{province},#{city},#{area},#{town},#{vill},#{unpass_cause},
+		      	#{business_range}, #{issue_time}, #{business_code}, #{filing_state_time}, #{longitude}, #{latitude}, #{address}, #{date_source}
+	      	)
+		]]>
+	</insert>
+	
+	<update id="update" parameterType="Company">
+    	<![CDATA[
+    		update ts_company
+    	]]>
+    <set>
+		<if test="companytype_code != null and companytype_code != '' ">
+	      	<![CDATA[
+	        	companytype_code = #{companytype_code},
+	        ]]>
+		</if>
+		<if test="companytag_code != null and companytag_code != '' ">
+	      	<![CDATA[
+	        	companytag_code = #{companytag_code},
+	        ]]>
+		</if>
+		<if test="company_name != null and company_name != '' ">
+	      	<![CDATA[
+	        	company_name = #{company_name},
+	        ]]>
+		</if>
+		<if test="credit_code != null and credit_code != '' ">
+	      	<![CDATA[
+	        	credit_code = #{credit_code},
+	        ]]>
+		</if>
+		<if test="record_time != null and record_time != '' ">
+	      	<![CDATA[
+	        	record_time = #{record_time},
+	        ]]>
+		</if>
+		<if test="record_code != null and record_code != '' ">
+	      	<![CDATA[
+	        	record_code = #{record_code},
+	        ]]>
+		</if>
+		<if test="useful_life != null and useful_life != '' ">
+	      	<![CDATA[
+	        	useful_life = #{useful_life},
+	        ]]>
+		</if>
+		<if test="unuseful_time != null and unuseful_time != '' ">
+	      	<![CDATA[
+	        	unuseful_time = #{unuseful_time},
+	        ]]>
+		</if>
+		<if test="operator != null and operator != '' ">
+	      	<![CDATA[
+	        	operator = #{operator},
+	        ]]>
+		</if>
+		<if test="mobilephone != null and mobilephone != '' ">
+	      	<![CDATA[
+	        	mobilephone = #{mobilephone},
+	        ]]>
+		</if>
+		<if test="examine != null and examine != '' ">
+	      	<![CDATA[
+	        	examine = #{examine},
+	        ]]>
+		</if>
+		<if test="idcard != null and idcard != '' ">
+	      	<![CDATA[
+	        	idcard = #{idcard},
+	        ]]>
+		</if>
+		<if test="residence_address != null and residence_address != '' ">
+	      	<![CDATA[
+	        	residence_address = #{residence_address},
+	        ]]>
+		</if>
+		<if test="contact_address != null and contact_address != '' ">
+	      	<![CDATA[
+	        	contact_address = #{contact_address},
+	        ]]>
+		</if>
+		<if test="business_form != null">
+	      	<![CDATA[
+	        	business_form = #{business_form},
+	        ]]>
+		</if>
+		<if test="employ_num != null and employ_num != '' ">
+	      	<![CDATA[
+	        	employ_num = #{employ_num},
+	        ]]>
+		</if>
+		<if test="business_state != null and business_state != '' ">
+	      	<![CDATA[
+	        	business_state = #{business_state},
+	        ]]>
+		</if>
+		<if test="main_subject != null and main_subject != '' ">
+	      	<![CDATA[
+	        	main_subject = #{main_subject},
+	        ]]>
+		</if>
+		<if test="sub_subject != null and sub_subject != '' ">
+	      	<![CDATA[
+	        	sub_subject = #{sub_subject},
+	        ]]>
+		</if>
+		<if test="subjectdetail_codes != null and subjectdetail_codes != '' ">
+	      	<![CDATA[
+	        	subjectdetail_codes = #{subjectdetail_codes},
+	        ]]>
+		</if>
+		<if test="produce_form != null and produce_form != '' ">
+	      	<![CDATA[
+	        	produce_form = #{produce_form},
+	        ]]>
+		</if>
+		<if test="producetype_codes != null and producetype_codes != '' ">
+	      	<![CDATA[
+	        	producetype_codes = #{producetype_codes},
+	        ]]>
+		</if>
+		<if test="category_names != null and category_names != '' ">
+	      	<![CDATA[
+	        	category_names = #{category_names},
+	        ]]>
+		</if>
+		<if test="foodsell_names != null and foodsell_names != '' ">
+	      	<![CDATA[
+	        	foodsell_names = #{foodsell_names},
+	        ]]>
+		</if>
+		<if test="foodmake_names != null and foodmake_names != '' ">
+	      	<![CDATA[
+	        	foodmake_names = #{foodmake_names},
+	        ]]>
+		</if>
+		<if test="owner_type != null and owner_type != '' ">
+	      	<![CDATA[
+	        	owner_type = #{owner_type},
+	        ]]>
+		</if>
+		<if test="owner_name != null and owner_name != '' ">
+	      	<![CDATA[
+	        	owner_name = #{owner_name},
+	        ]]>
+		</if>
+		<if test="owner_phone != null and owner_phone != '' ">
+	      	<![CDATA[
+	        	owner_phone = #{owner_phone},
+	        ]]>
+		</if>
+		<if test="places != null and places != '' ">
+	      	<![CDATA[
+	        	places = #{places},
+	        ]]>
+		</if>
+		<if test="place_area != null and place_area != '' ">
+	      	<![CDATA[
+	        	place_area = #{place_area},
+	        ]]>
+		</if>
+		<if test="place_business != null and place_business != '' ">
+	      	<![CDATA[
+	        	place_business = #{place_business},
+	        ]]>
+		</if>
+		<if test="place_operate != null and place_operate != '' ">
+	      	<![CDATA[
+	        	place_operate = #{place_operate},
+	        ]]>
+		</if>
+		<if test="stall_type != null and stall_type != '' ">
+	      	<![CDATA[
+	        	stall_type = #{stall_type},
+	        ]]>
+		</if>
+		<if test="process_place != null and process_place != '' ">
+	      	<![CDATA[
+	        	process_place = #{process_place},
+	        ]]>
+		</if>
+		<if test="operate_location != null and operate_location != '' ">
+	      	<![CDATA[
+	        	operate_location = #{operate_location},
+	        ]]>
+		</if>
+		<if test="operate_begin != null and operate_begin != '' ">
+	      	<![CDATA[
+	        	operate_begin = #{operate_begin},
+	        ]]>
+		</if>
+		<if test="operate_end != null and operate_end != '' ">
+	      	<![CDATA[
+	        	operate_end = #{operate_end},
+	        ]]>
+		</if>
+		<if test="department_code != null and department_code != '' ">
+	      	<![CDATA[
+	        	department_code = #{department_code},
+	        ]]>
+		</if>
+		<if test="region_code != null and region_code != '' ">
+	      	<![CDATA[
+	        	region_code = #{region_code},
+	        ]]>
+		</if>
+		<if test="user_code_manage != null and user_code_manage != '' ">
+	      	<![CDATA[
+	        	user_code_manage = #{user_code_manage},
+	        ]]>
+		</if>
+		<if test="user_code_info != null and user_code_info != '' ">
+	      	<![CDATA[
+	        	user_code_info = #{user_code_info},
+	        ]]>
+		</if>
+		<if test="filing_state != null and filing_state != '' ">
+	      	<![CDATA[
+	        	filing_state = #{filing_state},
+	        ]]>
+		</if>
+		<if test="state != null and state != '' ">
+	      	<![CDATA[
+	        	state = #{state},
+	        ]]>
+		</if>
+		<if test="filing_state_time != null and filing_state_time != '' ">
+	      	<![CDATA[
+	        	filing_state_time = #{filing_state_time},
+	        ]]>
+		</if>
+		<if test="business_type != null and business_type != '' ">
+	      	<![CDATA[
+	        	business_type = #{business_type},
+	        ]]>
+		</if>
+		<if test="business_range != null and business_range != '' ">
+	      	<![CDATA[
+	        	business_range = #{business_range},
+	        ]]>
+		</if>
+		<if test="unpass_cause != null and unpass_cause != '' ">
+	      	<![CDATA[
+	        	unpass_cause = #{unpass_cause},
+	        ]]>
+		</if>
+		<if test="province != null and province != '' ">
+	      	<![CDATA[
+	        	province = #{province},
+	        ]]>
+		</if>
+		<if test="city != null and city != '' ">
+	      	<![CDATA[
+	        	city = #{city},
+	        ]]>
+		</if>
+		<if test="area != null and area != '' ">
+	      	<![CDATA[
+	        	area = #{area},
+	        ]]>
+		</if>
+		<if test="town != null and town != '' ">
+	      	<![CDATA[
+	        	town = #{town},
+	        ]]>
+		</if>
+		<if test="vill != null and vill != '' ">
+	      	<![CDATA[
+	        	vill = #{vill},
+	        ]]>
+		</if>
+		<if test="longitude != null and longitude != '' ">
+	      	<![CDATA[
+	        	longitude = #{longitude},
+	        ]]>
+		</if>
+		<if test="latitude != null and latitude != '' ">
+	      	<![CDATA[
+	        	latitude = #{latitude},
+	        ]]>
+		</if>
+		<if test="integrity_lvl_last != null and integrity_lvl_last != '' ">
+	      	<![CDATA[
+	        	integrity_lvl_last = #{integrity_lvl_last},
+	        ]]>
+		</if>
+		<if test="mete_time_last != null and mete_time_last != '' ">
+	      	<![CDATA[
+	        	mete_time_last = #{mete_time_last},
+	        ]]>
+		</if>
+		<if test="integrity_lvl_new != null and integrity_lvl_new != '' ">
+	      	<![CDATA[
+	        	integrity_lvl_new = #{integrity_lvl_new},
+	        ]]>
+		</if>
+		<if test="mete_time_new != null and mete_time_new != '' ">
+	      	<![CDATA[
+	        	mete_time_new = #{mete_time_new},
+	        ]]>
+		</if>
+		<if test="integrity_lvl_change_trend != null and integrity_lvl_change_trend != '' ">
+	      	<![CDATA[
+	        	integrity_lvl_change_trend = #{integrity_lvl_change_trend},
+	        ]]>
+		</if>
+		<if test="address != null ">
+	      	<![CDATA[
+	        	address = #{address},
+	        ]]>
+		</if>
+		<if test="isblacklist != null ">
+	      	<![CDATA[
+	        	isblacklist = #{isblacklist},
+	        ]]>
+		</if>
+		<if test="cclj_time_last != null ">
+	      	<![CDATA[
+	        	cclj_time_last = #{cclj_time_last},
+	        ]]>
+		</if>
+		<if test="cclj_count != null ">
+	      	<![CDATA[
+	        	cclj_count = #{cclj_count},
+	        ]]>
+		</if>
+	</set>
+	<where>
+		<include refid="codeColumns"/>
+	</where>
+	</update>
+	
+
+	<select id="findByCode" parameterType="Company" resultType="Company">
+        <![CDATA[
+          select * from ts_company
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+
+	<select id="findByLast" resultType="String">
+        <![CDATA[
+          select substr(record_code,length(record_code)-7,length(record_code)) record_code from ts_company order by add_time desc limit 1
+		]]>
+	</select>
+
+	<select id="findRegionLevel" parameterType="String" resultType="Level">
+        <![CDATA[
+			select if(user_level=3,user_area,'') area,if(user_level=2,user_city,'')city,user_level
+			from qy_user where user_code = #{user_code}
+        ]]>
+	</select>
+	
+	<select id="findAreaCount" parameterType="String" resultType="Level">
+        <![CDATA[
+          select town area ,count(town) count_num from ts_company where area like concat ('%',#{area},'%') GROUP BY town
+        ]]>
+	</select>
+
+	<select id="findCityCount" parameterType="String" resultType="Level">
+        <![CDATA[
+			select area area ,count(area) count_num from ts_company where city like concat ('%',#{city},'%') GROUP BY area
+        ]]>
+	</select>
+
+	<select id="findMap" parameterType="Level" resultType="String">
+	    <if test="user_level == 3">
+			<![CDATA[
+				select vill from ts_company where area like concat ('%',#{area},'%')
+			]]>
+	    </if>
+	    <if test="user_level == 2">
+			<![CDATA[
+				select vill from ts_company where city like concat ('%',#{city},'%')
+			]]>
+	    </if>
+	</select>
+
+	<delete id="delete" parameterType="Company">
+	  	<![CDATA[
+	    	delete from ts_company where company_code = #{company_code}
+	    ]]>
+	</delete>
+
+	<sql id="whereColumns">
+		<if test="user_code_manage != null and user_code_manage != ''">
+			<![CDATA[
+				and c.user_code_manage like concat('%',#{user_code_manage},'%')
+			]]>
+		</if>	
+		<if test="companytype_code != null and companytype_code != ''">
+			<![CDATA[
+				and c.companytype_code = #{companytype_code}
+			]]>
+		</if>	
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and c.company_code = #{company_code}
+			]]>
+		</if>	
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (
+				    c.company_name like concat('%',#{company_name},'%') or
+				    c.mobilephone like concat('%',#{company_name},'%') or
+				    c.credit_code like concat('%',#{company_name},'%') or
+				    c.record_code like concat('%',#{company_name},'%') or
+				    c.operator like concat('%',#{company_name},'%')
+			    )
+			]]>
+		</if>	
+		<if test="mobilephone != null and mobilephone != ''">
+			<![CDATA[
+				and c.mobilephone like concat('%',#{mobilephone},'%')
+			]]>
+		</if>		
+		<if test="companytag_code != null and companytag_code != ''">
+			<![CDATA[
+				and c.companytag_code = #{companytag_code}
+			]]>
+		</if>	
+		<if test="province != null and province != ''">
+			<![CDATA[
+				and c.province = #{province}
+			]]>
+		</if>	
+		<if test="city != null and city != ''">
+			<![CDATA[
+				and c.city = #{city}
+			]]>
+		</if>	
+		<if test="area != null and area != ''">
+			<![CDATA[
+				and c.area = #{area}
+			]]>
+		</if>	
+		<if test="town != null and town != ''">
+			<![CDATA[
+				and c.town = #{town}
+			]]>
+		</if>	
+		<if test="vill != null and vill != ''">
+			<![CDATA[
+				and c.vill = #{vill}
+			]]>
+		</if>
+		
+		<if test="state != null and state != ''">
+	        <if test="state == 3">
+	          <![CDATA[
+				    and c.state =#{state}
+				]]>
+	        </if>
+	        <if test="state == 1 ">
+	          <![CDATA[
+				   and (c.state=1 and c.company_code in (select company_code from ts_company where datediff(unuseful_time, now()) >= 1) )
+				]]>
+	        </if>
+	        <if test="state == 2 ">
+	          <![CDATA[
+				    and (c.state<>3 and c.company_code in (SELECT company_code from ts_company where datediff(unuseful_time, now()) < 0) )
+				]]>
+	        </if>
+	        <if test="state == 4 ">
+	          <![CDATA[
+				   and (c.state not in(2,3) and c.company_code in (select company_code from ts_company where datediff(unuseful_time, now()) > 0 and datediff(unuseful_time, now()) < 30) )
+				]]>
+	        </if>
+      </if>		
+      <if test="filing_state != null and filing_state != ''">
+        <![CDATA[
+			    and c.filing_state =#{filing_state}
+			]]>
+      </if>
+      <if test="filing_state_str != null and filing_state_str != ''">
+        <![CDATA[
+			    and c.filing_state in (${filing_state_str})
+			]]>
+      </if>
+      <if test="business_type != null and business_type != ''">
+        <![CDATA[
+			    and c.business_type =#{business_type}
+			]]>
+      </if>
+      <if test="business_state != null and business_state != ''">
+        <![CDATA[
+			    and c.business_state =#{business_state}
+			]]>
+      </if>
+      <if test="department_code != null and department_code != ''">
+        <![CDATA[
+			    and c.department_code =#{department_code}
+			]]>
+      </if>
+      <if test="search_time_bigen != null and search_time_bigen != ''">
+        <![CDATA[
+			    and c.add_time >= #{search_time_bigen}
+			]]>
+      </if>
+      <if test="search_time_end != null and search_time_end != ''">
+        <![CDATA[
+			    and c.add_time <= #{search_time_end}
+			]]>
+      </if>
+      
+      <if test="is_manage_or_info != null">
+        <if test="is_manage_or_info == 1">
+          <![CDATA[
+			    and c.region_code in(select ir.region_code from ts_info_region ir where ir.user_code = #{other_code})
+			]]>
+        </if>
+        <if test="is_manage_or_info == 2 ">
+          <![CDATA[
+			    and c.region_code in(
+				    select dr.region_code from ts_department_user du
+					left join ts_department_region dr on du.department_code=dr.department_code 
+					where du.user_code=#{other_code}
+				)
+			]]>
+        </if>
+      </if>	 
+      
+      <if test="business_forms != null and business_forms != ''">
+        <![CDATA[
+			    and c.business_form in (${business_forms})
+			]]>
+      </if>
+      <if test="business_form != null and business_form != ''">
+        <![CDATA[
+			    and c.business_form = #{business_form}
+			]]>
+      </if>
+      <if test="companytype_codes != null and companytype_codes != ''">
+        <![CDATA[
+			    and c.companytype_code in (${companytype_codes})
+			]]>
+      </if>
+      <if test="companytag_codes != null and companytag_codes != ''">
+        <![CDATA[
+			    and c.companytag_code in (${companytag_codes})
+			]]>
+      </if>
+      <if test="returncode != null and returncode == '1'">
+        <![CDATA[
+			    and c.filing_state>2
+			]]>
+      </if>
+      <if test="returncode != null and returncode == '2'">
+        <![CDATA[
+			    and c.filing_state<3
+			]]>
+      </if>
+      <if test="examine != null and examine != ''">
+        	<![CDATA[
+			    and c.examine = #{examine}
+			]]>
+      </if>
+      <if test="isblacklist != null and isblacklist != ''">
+        	<![CDATA[
+			    and c.isblacklist = #{isblacklist}
+			]]>
+      </if>
+       <if test="integrity_lvl_new != null and integrity_lvl_new != ''">
+        	<![CDATA[
+			    and c.integrity_lvl_new = #{integrity_lvl_new}
+			]]>
+      </if>
+      <if test="integrity_lvl_change_trend != null and integrity_lvl_change_trend != ''">
+        	<![CDATA[
+			    and c.integrity_lvl_change_trend = #{integrity_lvl_change_trend}
+			]]>
+      </if>
+      
+       <if test="cclj_time_last != null and cclj_time_last != ''">
+        <![CDATA[
+			    and c.cclj_time_last >= #{cclj_time_last}
+			]]>
+      </if>
+      <if test="cclj_time_last_end != null and cclj_time_last_end != ''">
+        <![CDATA[
+			    and c.cclj_time_last <= #{cclj_time_last_end}
+			]]>
+      </if>
+      <if test="filing_state_time != null and filing_state_time != ''">
+        <![CDATA[
+			    and to_days(c.filing_state_time) = to_days(#{filing_state_time})
+			]]>
+      </if>
+      <if test="food_source_time_last != null and food_source_time_last != ''">
+        <![CDATA[
+			    and to_days(c.food_source_time_last) = to_days(#{food_source_time_last})
+			]]>
+      </if>
+      <if test="query_param == 'lngLat is null'">
+        <![CDATA[
+			    and (longitude is null or latitude is null or length(longitude)=0 or length(latitude)=0)
+			]]>
+      </if>
+      <if test="employ_state != null and employ_state != ''">
+	        <if test="employ_state == 2 ">
+	          <![CDATA[
+				    and datediff(ce.user_health_datedue, now()) < 0
+				]]>
+	        </if>
+	        <if test="employ_state == 4 ">
+	          <![CDATA[
+				   and datediff(ce.user_health_datedue, now()) > 0 and datediff(ce.user_health_datedue, now()) < 30
+				]]>
+	        </if>
+      </if>
+      <if test="monthstr !=null and monthstr != ''">
+		<![CDATA[
+			and DATE_FORMAT(c.add_time,'%Y-%m')=#{monthstr}
+		]]>
+	  </if>		
+	  <if test="query_param == 'state not equal 3'">
+			<![CDATA[
+				and state != 3
+			]]>
+	  </if>	
+	</sql>
+	
+	<select id="findByFsSearch" parameterType="Company" resultType="CompanyReturn">
+        <![CDATA[
+			select c.*,count(1) sample_count from ts_foodsource_sample fss 
+			inner join ts_company c on c.company_code = fss.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			group by company_code order by c.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findBySearchCount" parameterType="Company" resultType="int">
+		<![CDATA[
+			select count(1) from (select c.* from ts_foodsource_sample fss 
+			inner join ts_company c on c.company_code = fss.company_code 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			group by company_code) t
+		]]>
+	</select>
+	
+	<select id="findByList" parameterType="Company" resultType="Company">
+		<![CDATA[
+			select * from ts_company c
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by ${sort_file} desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="Company" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_company c
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findStateByCode" parameterType="String" resultType="Integer">
+		<![CDATA[
+			select case when datediff(unuseful_time, now())<0 then 2 
+			when datediff(unuseful_time, now())>0 and datediff(unuseful_time, now())<30 then 4
+			else 1 end as state from ts_company where company_code=#{company_code}
+		]]>
+	</select>
+	
+	<select id="findEmployByCompanyCount" parameterType="Company" resultType="Integer">
+		<![CDATA[
+			select sum(c.employ_num) from ts_company c
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	
+	<select id="findByJoinFsList" parameterType="Company" resultType="Company">
+		<![CDATA[
+			select distinct c.* from ts_foodsource fs 
+			left join ts_company c on c.company_code=fs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by food_source_time_last desc,c.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByJoinFsCount" parameterType="Company" resultType="Integer">
+		<![CDATA[
+			select count(1) from (select distinct c.* from ts_foodsource fs 
+			left join ts_company c on c.company_code=fs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			) t
+		]]>
+	</select>
+	
+	
+	<select id="findCompanyByCityStatistics" parameterType="Company" resultType="BigData">
+		<![CDATA[
+			select c.area sname,count(1) svalue from ts_company c
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			group by c.area having length(c.area)>1 order by svalue desc 
+		]]>
+		<if test="pager_openset != null and pager_openset > 0">
+			<![CDATA[
+				 limit ${pager_offset},${pager_openset}
+			]]>
+		</if>	
+	</select>
+	
+	<select id="findByAll" parameterType="Company" resultType="Company">
+		<![CDATA[
+			select * from ts_company c
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<update id="updateBatch"  parameterType="java.util.List">
+	      <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+				update ts_company 
+				<set>
+					<if test="item.longitude != null and item.longitude != ''">
+						<![CDATA[
+							longitude=#{item.longitude},
+						]]>
+					</if>
+					<if test="item.latitude != null and item.latitude != ''">
+						<![CDATA[
+							latitude=#{item.latitude},
+						]]>
+					</if>
+				</set>
+				where company_code = #{item.company_code} 
+		 </foreach>
+    </update>
+	
+	
+	<select id="findByCompanyEmployCount" parameterType="Company" resultType="Integer">
+		<![CDATA[
+			select count(1) from (select ce.* from ts_company c 
+			inner join ts_company_employ ce on c.company_code=ce.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			) t
+		]]>
+	</select>
+</mapper>

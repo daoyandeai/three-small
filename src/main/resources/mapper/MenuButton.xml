@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IMenuButtonDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			menubtn_code=#{menubtn_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="MenuButton">
+		<![CDATA[
+   			insert into ts_menubutton (menubtn_code,menubtn_id,menubtn_title,menubtn_img,menu_code) 
+   			values(#{menubtn_code},#{menubtn_id},#{menubtn_title},#{menubtn_img},#{menu_code})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="MenuButton">
+		<![CDATA[
+			update ts_menubutton
+		]]>
+		<set>
+			<if test="menubtn_id != null and menubtn_id != ''">
+				<![CDATA[
+					menubtn_id=#{menubtn_id},
+				]]>
+			</if>
+			<if test="menubtn_title != null and menubtn_title != ''">
+				<![CDATA[
+					menubtn_title=#{menubtn_title},
+				]]>
+			</if>
+			<if test="menubtn_img != null and menubtn_img != ''">
+				<![CDATA[
+					menubtn_img=#{menubtn_img},
+				]]>
+			</if>
+			<if test="menu_code != null and menu_code != ''">
+				<![CDATA[
+					menu_code=#{menu_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="MenuButton">
+		<![CDATA[
+			delete from ts_menubutton
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="menubtn_id != null and menubtn_id != ''">
+			<![CDATA[
+				and menubtn_id = #{menubtn_id}
+			]]>
+		</if>
+		<if test="menubtn_title != null and menubtn_title != ''">
+			<![CDATA[
+				and menubtn_title like concat('%',#{menubtn_title},'%')
+			]]>
+		</if>
+		<if test="menu_code != null and menu_code != ''">
+			<![CDATA[
+				and menu_code = #{menu_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="MenuButton" resultType="MenuButton">
+		<![CDATA[
+			select * from ts_menubutton
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="MenuButton" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_menubutton
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="MenuButton" resultType="MenuButton">
+		<![CDATA[
+		 	select * from ts_menubutton
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="MenuButton" resultType="MenuButton">
+		<![CDATA[
+		 	select * from ts_menubutton
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="MenuButton" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_menubutton
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="menubtn_title != null and menubtn_title != ''">
+				<![CDATA[
+					and menubtn_title=#{menubtn_title}
+				]]>
+				<if test="menubtn_code!=null and menubtn_code!=''">
+					<![CDATA[
+					 and menubtn_code<>#{menubtn_code}
+					]]>
+				</if>
+			</if>
+			<if test="menubtn_id != null and menubtn_id != ''">
+				<![CDATA[
+					and menubtn_id=#{menubtn_id}
+				]]>
+				<if test="menubtn_code!=null and menubtn_code!=''">
+					<![CDATA[
+					 and menubtn_code<>#{menubtn_code}
+					]]>
+				</if>
+			</if>
+			<if test="menu_code != null and menu_code != ''">
+				<![CDATA[
+					and menu_code=#{menu_code}
+				]]>
+				<if test="menubtn_code!=null and menubtn_code!=''">
+					<![CDATA[
+					 and menubtn_code<>#{menubtn_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

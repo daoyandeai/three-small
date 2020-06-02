@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyIntegrityLogDao">
+
+	<insert id="save" parameterType="CompanyIntegrityLog">
+    	<![CDATA[
+      		insert into ts_company_integrity_log 
+      			(company_integrity_log_code,company_integrity_code,company_code,integrity_lvl,mete_type,remark,user_code_add,user_name_add)
+      		values 
+      			(#{company_integrity_log_code},#{company_integrity_code},#{company_code},#{integrity_lvl},#{mete_type},#{remark},#{user_code_add},#{user_name_add})
+        ]]>
+	</insert>
+
+	<sql id="whereColumns">
+		<if test="company_integrity_code != null and company_integrity_code != ''">
+            <![CDATA[
+                    and company_integrity_code=#{company_integrity_code}
+            ]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+            <![CDATA[
+                    and company_code=#{company_code}
+            ]]>
+		</if>
+		<if test="mete_type != null and mete_type != ''">
+            <![CDATA[
+                    and mete_type=#{mete_type}
+            ]]>
+		</if>
+		<if test="add_time != null and add_time != ''">
+            <![CDATA[
+                    and add_time >= #{add_time}
+            ]]>
+		</if>
+		<if test="end_time != null and end_time != ''">
+            <![CDATA[
+                   and add_time <= #{end_time}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList_app" parameterType="CompanyIntegrityLog" resultType="CompanyIntegrityLogReturn">
+      <![CDATA[
+			select * from ts_company_integrity_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="CompanyIntegrityLog" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_company_integrity_log
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+
+	
+</mapper>

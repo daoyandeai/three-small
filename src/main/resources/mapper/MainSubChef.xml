@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IMainSubChefDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			user_code_subchef=#{user_code_subchef}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="MainSubChef">
+		<![CDATA[
+   			insert into qy_main_sub_chef (user_code_mainchef,user_code_subchef,user_name_subchef,user_health_logo_subchef,user_idcard_subchef) 
+   			values(#{user_code_mainchef},#{user_code_subchef},#{user_name_subchef},#{user_health_logo_subchef},#{user_idcard_subchef})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="MainSubChef">
+		<![CDATA[
+			update qy_main_sub_chef
+		]]>
+		<set>
+			<if test="user_code_subchef !=null and user_code_subchef !=''">
+				<![CDATA[
+					user_code_subchef=#{user_code_subchef},
+				]]>
+			</if>
+			<if test="user_name_subchef !=null and user_name_subchef !=''">
+				<![CDATA[
+					user_name_subchef=#{user_name_subchef},
+				]]>
+			</if>
+			<if test="user_health_logo_subchef !=null and user_health_logo_subchef !=''">
+				<![CDATA[
+					user_health_logo_subchef=#{user_health_logo_subchef},
+				]]>
+			</if>
+			<if test="user_idcard_subchef !=null and user_idcard_subchef !=''">
+				<![CDATA[
+					user_idcard_subchef=#{user_idcard_subchef},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="MainSubChef">
+		<![CDATA[
+			delete from qy_main_sub_chef
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="user_code_mainchef !=null and user_code_mainchef !=''">
+			<![CDATA[
+				 and user_code_mainchef=#{user_code_mainchef}
+			]]>
+		</if>
+		<if test="user_code_subchef !=null and user_code_subchef !=''">
+			<![CDATA[
+				 and user_code_subchef=#{user_code_subchef}
+			]]>
+		</if>
+		<if test="user_name_subchef !=null and user_name_subchef !=''">
+			<![CDATA[
+				 and user_name_subchef like concat('%',#{user_name_subchef},'%')
+			]]>
+		</if>
+		<if test="user_health_logo_subchef !=null and user_health_logo_subchef !=''">
+			<![CDATA[
+				 and user_health_logo_subchef=#{user_health_logo_subchef}
+			]]>
+		</if>
+		<if test="user_idcard_subchef !=null and user_idcard_subchef !=''">
+			<![CDATA[
+				 and user_idcard_subchef=#{user_idcard_subchef}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="MainSubChef" resultType="MainSubChef">
+		<![CDATA[
+			select * from qy_main_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="MainSubChef" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_main_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="MainSubChef" resultType="MainSubChef">
+		<![CDATA[
+		 	select * from qy_main_sub_chef
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="MainSubChef" resultType="MainSubChef">
+		<![CDATA[
+		 	select * from qy_main_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByList_app" parameterType="MainSubChef" resultType="MainSubChefReturn">
+		<![CDATA[
+			select * from qy_main_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCode_app" parameterType="MainSubChef" resultType="MainSubChefReturn">
+		<![CDATA[
+		 	select * from qy_main_sub_chef
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+</mapper>

@@ -1,0 +1,1394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IUserDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			user_code=#{user_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="User">
+		<![CDATA[
+   			insert into qy_user 
+   				(user_code,user_loginname,user_loginpass,user_type,user_level,user_name,user_enname_short,user_idcard,user_idcard_logo_front,user_idcard_logo_back,user_health_logo,user_registcard_logo,user_business_logo_url,user_food_logo_url,user_sex,user_nation,user_birthday,user_mobilephone,user_province,user_city,user_area,user_town,user_vill,user_address,user_logo_url,user_train_logo,user_registersource,company_name,user_audit_state,vip_state,manage_type,
+   				business_forms,companytype_codes,companytag_codes,dictionary_codes,company_code,company_codes_manage) 
+   			values
+   				(#{user_code},#{user_loginname},#{user_loginpass},#{user_type},#{user_level},#{user_name},#{user_enname_short},#{user_idcard},#{user_idcard_logo_front},#{user_idcard_logo_back},#{user_health_logo},#{user_registcard_logo},#{user_business_logo_url},#{user_food_logo_url},#{user_sex},#{user_nation},#{user_birthday},#{user_mobilephone},#{user_province},#{user_city},#{user_area},#{user_town},#{user_vill},#{user_address},#{user_logo_url},#{user_train_logo},#{user_registersource},#{company_name},#{user_audit_state},#{vip_state},#{manage_type},
+   				#{business_forms},#{companytype_codes},#{companytag_codes},#{dictionary_codes},#{company_code},#{company_codes_manage})
+   		]]>
+	</insert>
+   
+	<update id="update" parameterType="User">
+		<![CDATA[
+			update qy_user
+		]]>
+		<set>
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+					user_loginname=#{user_loginname},
+				]]>
+			</if>
+			<if test="user_loginpass != null and user_loginpass != ''">
+				<![CDATA[
+					user_loginpass=#{user_loginpass},
+				]]>
+			</if>
+			<if test="user_type != null and user_type != ''">
+				<![CDATA[
+					user_type=#{user_type},
+				]]>
+			</if>
+			<if test="user_level != null and user_level != ''">
+				<![CDATA[
+					user_level=#{user_level},
+				]]>
+			</if>
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					user_name=#{user_name},
+				]]>
+			</if>
+			<if test="user_enname_short != null and user_enname_short != ''">
+				<![CDATA[
+					user_enname_short=#{user_enname_short},
+				]]>
+			</if>
+			<if test="user_idcard != null">
+				<![CDATA[
+					user_idcard=#{user_idcard},
+				]]>
+			</if>
+			<if test="user_idcard_logo_front != null">
+				<![CDATA[
+					user_idcard_logo_front=#{user_idcard_logo_front},
+				]]>
+			</if>
+			<if test="user_idcard_logo_back != null">
+				<![CDATA[
+					user_idcard_logo_back=#{user_idcard_logo_back},
+				]]>
+			</if>
+			<if test="user_health_logo != null and user_health_logo != ''">
+				<![CDATA[
+					user_health_logo=#{user_health_logo},
+				]]>
+			</if>
+			<if test="user_health_datedue != null and user_health_datedue != ''">
+				<![CDATA[
+					user_health_datedue=#{user_health_datedue},
+				]]>
+			</if>
+			<if test="user_registcard_logo != null and user_registcard_logo != ''">
+				<![CDATA[
+					user_registcard_logo=#{user_registcard_logo},
+				]]>
+			</if>
+			<if test="user_business_logo_url != null and user_business_logo_url != ''">
+				<![CDATA[
+					user_business_logo_url=#{user_business_logo_url},
+				]]>
+			</if>
+			<if test="user_food_logo_url != null and user_food_logo_url != ''">
+				<![CDATA[
+					user_food_logo_url=#{user_food_logo_url},
+				]]>
+			</if>
+			<if test="user_train_logo != null and user_train_logo != ''">
+				<![CDATA[
+					user_train_logo=#{user_train_logo},
+				]]>
+			</if>
+			<if test="user_sex != null and user_sex != ''">
+				<![CDATA[
+					user_sex=#{user_sex},
+				]]>
+			</if>
+			<if test="user_nation != null and user_nation != ''">
+				<![CDATA[
+					user_nation=#{user_nation},
+				]]>
+			</if>
+			<if test="user_birthday != null and user_birthday != ''">
+				<![CDATA[
+					user_birthday=#{user_birthday},
+				]]>
+			</if>
+			<if test="user_mobilephone != null and user_mobilephone != ''">
+				<![CDATA[
+					user_mobilephone=#{user_mobilephone},
+				]]>
+			</if>
+			<if test="user_province != null and user_province != ''">
+				<![CDATA[
+					user_province=#{user_province},
+				]]>
+			</if>
+			<if test="user_city != null">
+				<![CDATA[
+					user_city=#{user_city},
+				]]>
+			</if>
+			<if test="user_area != null">
+				<![CDATA[
+					user_area=#{user_area},
+				]]>
+			</if>
+			<if test="user_town != null">
+				<![CDATA[
+					user_town=#{user_town},
+				]]>
+			</if>
+			<if test="user_vill != null">
+				<![CDATA[
+					user_vill=#{user_vill},
+				]]>
+			</if>
+			<if test="user_address != null">
+				<![CDATA[
+					user_address=#{user_address},
+				]]>
+			</if>
+			<if test="user_logo_url != null">
+				<![CDATA[
+					user_logo_url=#{user_logo_url},
+				]]>
+			</if>
+			<if test="user_state != null and user_state != ''">
+				<![CDATA[
+					user_state=#{user_state},
+				]]>
+			</if>
+			<if test="user_audit_state != null and user_audit_state != ''">
+				<![CDATA[
+					user_audit_state=#{user_audit_state},
+				]]>
+			</if>
+			<if test="company_code != null and company_code != ''">
+				<![CDATA[
+					company_code=#{company_code},
+				]]>
+			</if>
+			<if test="company_name != null and company_name != ''">
+				<![CDATA[
+					company_name=#{company_name},
+				]]>
+			</if>
+			<if test="user_registersource != null and user_registersource != ''">
+				<![CDATA[
+					user_registersource=#{user_registersource},
+				]]>
+			</if>
+			<if test="user_idcard_expirationtime != null and user_idcard_expirationtime != ''">
+				<![CDATA[
+					user_idcard_expirationtime=#{user_idcard_expirationtime},
+				]]>
+			</if>
+			<if test="user_idcard_government != null and user_idcard_government != ''">
+				<![CDATA[
+					user_idcard_government=#{user_idcard_government},
+				]]>
+			</if>
+			<if test="report_count != null and report_count != ''">
+				<![CDATA[
+					report_count=#{report_count},
+				]]>
+			</if>
+			<if test="banquet_count != null and banquet_count != ''">
+				<![CDATA[
+					banquet_count=#{banquet_count},
+				]]>
+			</if>
+			<if test="vip_state != null and vip_state != ''">
+				<![CDATA[
+					vip_state=#{vip_state},
+				]]>
+			</if>
+			<if test="manage_type != null and manage_type != ''">
+				<![CDATA[
+					manage_type=#{manage_type},
+				]]>
+			</if>
+			<if test="business_forms != null and business_forms != ''">
+				<![CDATA[
+					business_forms=#{business_forms},
+				]]>
+			</if>
+			<if test="companytype_codes != null and companytype_codes != ''">
+				<![CDATA[
+					companytype_codes=#{companytype_codes},
+				]]>
+			</if>
+			<if test="companytag_codes != null and companytag_codes != ''">
+				<![CDATA[
+					companytag_codes=#{companytag_codes},
+				]]>
+			</if>
+			<if test="dictionary_codes != null and dictionary_codes != ''">
+				<![CDATA[
+					dictionary_codes=#{dictionary_codes},
+				]]>
+			</if>
+			<if test="company_codes_manage != null and company_codes_manage != ''">
+				<![CDATA[
+					company_codes_manage=#{company_codes_manage},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<update id="updateState" parameterType="User">
+		<![CDATA[
+			update qy_user
+		]]>
+		<set>
+			<if test="user_state != null and user_state != ''">
+				<![CDATA[
+					user_state=#{user_state},
+				]]>
+			</if>
+			<if test="user_audit_state != null and user_audit_state != ''">
+				<![CDATA[
+					user_audit_state=#{user_audit_state},
+				]]>
+			</if>
+			<if test="manage_type != null and manage_type != ''">
+				<![CDATA[
+					manage_type=#{manage_type},
+				]]>
+			</if>
+			<if test="business_forms != null and business_forms != ''">
+				<![CDATA[
+					business_forms=#{business_forms},
+				]]>
+			</if>
+			<if test="companytype_codes != null and companytype_codes != ''">
+				<![CDATA[
+					companytype_codes=#{companytype_codes},
+				]]>
+			</if>
+			<if test="companytag_codes != null and companytag_codes != ''">
+				<![CDATA[
+					companytag_codes=#{companytag_codes},
+				]]>
+			</if>
+			<if test="company_codes_manage != null and company_codes_manage != ''">
+				<![CDATA[
+					company_codes_manage=#{company_codes_manage},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<update id="updateByLoginName" parameterType="User">
+		<![CDATA[
+			update qy_user set user_loginpass=#{user_loginpass} where user_loginname=#{user_loginname}
+		]]>
+	</update>
+	
+	<sql id="whereColumns">				
+		<if test="user_name != null and user_name != ''">
+			<![CDATA[
+			    and (
+			    	user_loginname like concat('%',#{user_name},'%') or 
+				    user_name like concat('%',#{user_name},'%') 
+				    or user_mobilephone like concat('%',#{user_name},'%')
+			    )
+			    
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+			    and( company_name like concat('%',#{company_name},'%') 
+			  	or	user_mobilephone like concat('%',#{company_name},'%') )
+			]]>
+		</if>
+		<if test="user_type != null and user_type != ''">
+			<![CDATA[
+				and user_type=#{user_type}
+			]]>
+		</if>
+		<if test="manage_type != null and manage_type != ''">
+			<![CDATA[
+				and manage_type=#{manage_type}
+			]]>
+		</if>
+		<if test="user_level != null and user_level != ''">
+			<![CDATA[
+				and user_level>#{user_level}
+			]]>
+		</if>
+		<if test="vip_state != null and vip_state != ''">
+			<![CDATA[
+				and vip_state=#{vip_state}
+			]]>
+		</if>
+		<if test="operate_type != null and operate_type != ''">
+			<![CDATA[
+				and user_level>=#{operate_type}
+			]]>
+		</if>
+		<if test="user_level_eq != null and user_level_eq != ''">
+			<![CDATA[
+				and user_level=#{user_level_eq}
+			]]>
+		</if>
+		<if test="user_levels != null and user_levels != ''">
+			<![CDATA[
+				and user_level in(${user_levels})
+			]]>
+		</if>
+		<if test="user_province != null and user_province != ''">
+			<![CDATA[
+				and user_province=#{user_province}
+			]]>
+		</if>
+		<if test="user_city != null and user_city != ''">
+			<![CDATA[
+				and user_city=#{user_city}
+			]]>
+		</if>
+		<if test="user_area != null and user_area != ''">
+			<![CDATA[
+				and user_area=#{user_area}
+			]]>
+		</if>
+		<if test="user_town != null and user_town != ''">
+			<![CDATA[
+				and user_town=#{user_town}
+			]]>
+		</if>
+		<if test="user_towns != null and user_towns != ''">
+			<![CDATA[
+				and user_town in (${user_towns})
+			]]>
+		</if>
+		<if test="user_vill != null and user_vill != ''">
+			<![CDATA[
+				and user_vill=#{user_vill}
+			]]>
+		</if>
+		<if test="user_vills != null and user_vills != ''">
+			<![CDATA[
+				and user_vill in (${user_vills})
+			]]>
+		</if>
+		<if test="user_address != null and user_address != ''">
+			<![CDATA[
+				and user_address=#{user_address}
+			]]>
+		</if>
+		<if test="user_logo_url != null and user_logo_url != ''">
+			<![CDATA[
+				and user_logo_url=#{user_logo_url}
+			]]>
+		</if>
+		<if test="user_state != null and user_state != ''">
+			<![CDATA[
+				and user_state=#{user_state}
+			]]>
+		</if>
+		<if test="user_audit_state != null and user_audit_state != ''">
+			<![CDATA[
+				and user_audit_state=#{user_audit_state}
+			]]>
+		</if>
+		<if test="returninfo == null || returninfo == ''">
+		
+				<if test="user_health_state == 1">
+					<![CDATA[
+						and TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(user_health_datedue, '%Y-%m-%d'))>=0
+					]]>
+				</if>
+				
+				<if test="user_health_state == 2">
+					<![CDATA[
+						and TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(IFNULL(user_health_datedue,date_sub(now(), interval 1 day)), '%Y-%m-%d'))<0
+					]]>
+				</if>
+		</if>
+		
+		<if test="role_code != null and role_code != ''"><!-- 权限编辑用户组时，查询不在该组用户 -->
+			<![CDATA[
+				and user_code not in (select u.user_code from ts_userrole ur inner join qy_user u on ur.user_code=u.user_code where ur.role_code=#{role_code})
+			]]>
+		</if>
+		<if test="addtime != null and addtime != ''">
+			<![CDATA[
+			    and to_days(addtime) >= to_days(#{addtime})
+			]]>
+		</if>
+		<if test="endtime != null and endtime != ''">
+			<![CDATA[
+			    and to_days(addtime) <= to_days(#{endtime})
+			]]>
+		</if>
+		<if test="search_time_bigen != null and search_time_bigen != ''">
+			<![CDATA[
+			    and addtime >=#{search_time_bigen}
+			]]>
+		</if>
+		<if test="search_time_end != null and search_time_end != ''">
+			<![CDATA[
+			    and addtime <=#{search_time_end}
+			]]>
+		</if>
+		<if test="user_codes != null and user_codes != ''">
+			<![CDATA[
+			    and user_code in (${user_codes})
+			]]>
+		</if>
+		<if test="returncode == 1 ">
+			<![CDATA[
+				and user_type in (${user_types})
+			]]>
+		</if>
+		<if test="returncode == 2 ">
+			<![CDATA[
+				and manage_type in (2,3)
+			]]>
+		</if>
+		<if test="returninfo != null and returninfo != ''">
+			<![CDATA[
+				and ( user_name like concat('%',#{returninfo},'%') or user_mobilephone like concat('%',#{returninfo},'%') )
+			]]>
+		</if>
+		<if test="user_screens == 'not in dept_user'">
+			<![CDATA[
+				and user_code not in (select user_code from ts_department_user)
+			]]>
+		</if>
+		<if test="user_screens == 'not in info_user'">
+			<![CDATA[
+				and user_code not in (select user_code from ts_info_region)
+			]]>
+		</if>
+		<if test="business_forms != null and business_forms != ''">
+			<![CDATA[
+				and business_forms=#{business_forms}
+			]]>
+		</if>
+		<if test="companytype_codes != null and companytype_codes != ''">
+			<![CDATA[
+				and companytype_codes=#{companytype_codes}
+			]]>
+		</if>
+		<if test="companytag_codes != null and companytag_codes != ''">
+			<![CDATA[
+				and companytag_codes=#{companytag_codes}
+			]]>
+		</if>
+		<if test="company_codes_manage != null and company_codes_manage != ''">
+			<![CDATA[
+				and company_codes_manage like concat('%',#{company_codes_manage},'%')
+			]]>
+		</if>
+	</sql>
+	
+	<sql id="otherWhere">			
+		<if test="returninfo == null || returninfo == ''">
+				 <if test="user_health_state == null || user_health_state == ''">
+					<![CDATA[
+						and TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(IFNULL(user_health_datedue,date_sub(now(),interval 1 day)), '%Y-%m-%d'))<0
+					]]>
+				</if> 
+				<if test="user_health_state == 1">
+					<![CDATA[
+						and TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(user_health_datedue, '%Y-%m-%d'))>=0
+					]]>
+				</if>
+				
+				<if test="user_health_state == 2">
+					<![CDATA[
+						and TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(IFNULL(user_health_datedue,date_sub(now(),interval 1 day)), '%Y-%m-%d'))<0
+					]]>
+				</if>
+		</if>	
+		<if test="user_name != null and user_name != ''">
+			<![CDATA[
+			    and (
+			    	user_loginname like concat('%',#{user_name},'%') or 
+				    user_name like concat('%',#{user_name},'%') 
+				    or	 user_mobilephone like concat('%',#{user_name},'%')
+			    )
+			    
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+			    and( company_name like concat('%',#{company_name},'%') 
+			  	or	user_mobilephone like concat('%',#{company_name},'%') )
+			]]>
+		</if>
+		<if test="user_type != null and user_type != ''">
+			<![CDATA[
+				and user_type=#{user_type}
+			]]>
+		</if>
+		<if test="user_level != null and user_level != ''">
+			<![CDATA[
+				and user_level>#{user_level}
+			]]>
+		</if>
+		<if test="operate_type != null and operate_type != ''">
+			<![CDATA[
+				and user_level>=#{operate_type}
+			]]>
+		</if>
+		<if test="user_level_eq != null and user_level_eq != ''">
+			<![CDATA[
+				and user_level=#{user_level_eq}
+			]]>
+		</if>
+		<if test="vip_state != null and vip_state != ''">
+			<![CDATA[
+				and vip_state=#{vip_state}
+			]]>
+		</if>
+		<if test="user_province != null and user_province != ''">
+			<![CDATA[
+				and user_province=#{user_province}
+			]]>
+		</if>
+		<if test="user_city != null and user_city != ''">
+			<![CDATA[
+				and user_city=#{user_city}
+			]]>
+		</if>
+		<if test="user_area != null and user_area != ''">
+			<![CDATA[
+				and user_area=#{user_area}
+			]]>
+		</if>
+		<if test="user_town != null and user_town != ''">
+			<![CDATA[
+				and user_town=#{user_town}
+			]]>
+		</if>
+		<if test="user_vill != null and user_vill != ''">
+			<![CDATA[
+				and user_vill=#{user_vill}
+			]]>
+		</if>
+		<if test="user_address != null and user_address != ''">
+			<![CDATA[
+				and user_address=#{user_address}
+			]]>
+		</if>
+		<if test="user_logo_url != null and user_logo_url != ''">
+			<![CDATA[
+				and user_logo_url=#{user_logo_url}
+			]]>
+		</if>
+		<if test="user_state != null and user_state != ''">
+			<![CDATA[
+				and user_state=#{user_state}
+			]]>
+		</if>
+		<if test="user_audit_state != null and user_audit_state != ''">
+			<![CDATA[
+				and user_audit_state=#{user_audit_state}
+			]]>
+		</if>
+		
+		<if test="role_code != null and role_code != ''"><!-- 权限编辑用户组时，查询不在该组用户 -->
+			<![CDATA[
+				and user_code not in (select u.user_code from ts_userrole ur inner join qy_user u on ur.user_code=u.user_code where ur.role_code=#{role_code})
+			]]>
+		</if>
+		<if test="addtime != null and addtime != ''">
+			<![CDATA[
+			    and addtime >=#{addtime}
+			]]>
+		</if>
+		<if test="endtime != null and endtime != ''">
+			<![CDATA[
+			    and addtime <=#{endtime}
+			]]>
+		</if>
+		<if test="returncode == 1 ">
+			<![CDATA[
+				and user_type in (${user_types})
+			]]>
+		</if>
+		<if test="returninfo != null and returninfo != ''">
+			<![CDATA[
+				and ( user_name like concat('%',#{returninfo},'%') or user_mobilephone like concat('%',#{returninfo},'%') )
+			]]>
+		</if>
+		<if test="business_forms != null and business_forms != ''">
+			<![CDATA[
+				and business_forms=#{business_forms}
+			]]>
+		</if>
+		<if test="companytype_codes != null and companytype_codes != ''">
+			<![CDATA[
+				and companytype_codes=#{companytype_codes}
+			]]>
+		</if>
+		<if test="companytag_codes != null and companytag_codes != ''">
+			<![CDATA[
+				and companytag_codes=#{companytag_codes}
+			]]>
+		</if>
+		<if test="company_codes_manage != null and company_codes_manage != ''">
+			<![CDATA[
+				and company_codes_manage like concat('%',#{company_codes_manage},'%')
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByLoginNameAndPass" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+				    and user_loginname =#{user_loginname}
+				]]>
+			</if>
+			<if test="user_loginpass != null and user_loginpass != ''">
+				<![CDATA[
+				    and user_loginpass =#{user_loginpass}
+				]]>
+			</if>
+		</trim>
+	</select>
+
+	<select id="findByList" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findBySearch" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user where manage_type in(2,3)
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			 order by addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	<select id="findBySearchCount" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_user where manage_type in(2,3)
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+	</select>
+
+	<select id="findBySortList" parameterType="User" resultType="User">
+		<![CDATA[
+			select *,if(TIMESTAMPDIFF(day,date_format(now(), '%Y-%m-%d'),date_format(user_health_datedue, '%Y-%m-%d'))>=0,1,2) user_health_state from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by  ${sort_column} ${sort_type} limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	<select id="findByHealthCount" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) user_health_state from qy_user 
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="otherWhere"/>
+		</trim>
+	</select>
+	
+	<select id="findByPhoneList" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCount" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCountAjax" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_user where user_type = '乡厨 ' and user_state = 1 
+		]]>
+		<if test="addtime != null and addtime != ''">
+			<![CDATA[
+				and addtime >= #{addtime} 
+			]]>
+		</if>	
+	</select>	
+	
+	<select id="findAjax" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user where user_type = '乡厨 ' and user_state = 1
+		]]>
+		<if test="user_town != null and user_town != ''">
+			<![CDATA[
+				and user_town = #{user_town} 
+			]]>
+		</if>
+		<if test="user_town == null or user_town == ''">
+			<if test="user_area != null and user_area != ''">
+				<![CDATA[
+					and user_area = #{user_area} 
+				]]>
+			</if>
+		</if>
+		<if test="user_area == null or user_area == ''">
+			<if test="user_city != null and user_city != ''">
+				<![CDATA[
+					and user_city = #{user_city} 
+				]]>
+			</if>
+		</if>
+		<if test="user_city == null or user_city == ''">
+			<if test="user_province != null and user_province != ''">
+				<![CDATA[
+					and user_province = #{user_province} 
+				]]>
+			</if>
+		</if>
+		<if test="addtime != null and addtime != ''">
+			<![CDATA[
+				and addtime >= #{addtime} 
+			]]>
+		</if>
+		<![CDATA[
+			order by addtime desc limit #{pager_offset},50
+		]]>
+	</select>
+	
+	<select id="findByCode" parameterType="User" resultType="User">
+		<![CDATA[
+		 	select * from qy_user
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" resultType="User" parameterType="User">
+		<![CDATA[
+		 	select * from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByUserCol" resultType="String" parameterType="User">
+		<![CDATA[
+		 	select ${user_screens} from qy_user where user_code in (${user_codes})
+		]]>
+	</select>
+	
+	<select id="findByExist" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_user
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+					and user_loginname=#{user_loginname}
+				]]>
+			</if>
+			<if test="user_code != null and user_code != ''">
+				<![CDATA[
+					and user_code<>#{user_code}
+				]]>
+			</if>
+			<if test="user_state != null and user_state != ''">
+				<![CDATA[
+					and user_state=#{user_state}
+				]]>
+			</if>
+			<if test="user_mobilephone != null and user_mobilephone != ''">
+				<![CDATA[
+					and user_mobilephone=#{user_mobilephone}
+				]]>
+			</if>
+		</trim>		
+	</select>
+
+	<select id="login" parameterType="User" resultType="User">
+		<![CDATA[
+			select * from qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+					and user_loginname=#{user_loginname}
+				]]>
+			</if>
+			<if test="user_loginpass != null and user_loginpass != ''">
+				<![CDATA[
+					and user_loginpass=#{user_loginpass}
+				]]>
+			</if>
+			<if test="user_state != null and user_state != ''">
+				<![CDATA[
+					and user_state=#{user_state}
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+					and user_type in ('超级管理人员','平台管理员' ,'协管员','食品经营者')
+			]]>
+	</select>
+
+	<!-- ============================================================其它方法开始============================================================ -->
+	<select id="findByAll_inner" resultType="User" parameterType="User">
+		<![CDATA[
+		 	SELECT  DISTINCT u.* from qy_user u INNER join qy_report r on u.user_code = r.user_code_conduct  
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_code_mainchef != null and user_code_mainchef != ''">
+				<![CDATA[
+					and r.user_code_mainchef = #{user_code_mainchef}
+				]]>
+			</if>
+			<if test="returninfo != null and returninfo != ''">
+				<![CDATA[
+					and ( r.user_name_conduct like concat('%',#{returninfo},'%') or r.user_mobilephone_conduct like concat('%',#{returninfo},'%') )
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<update id="updateUserTmp">
+		<![CDATA[
+			update qy_user set user_state=3 where user_state=1
+		]]>
+	</update>
+	
+	<update id="updateTrainTmp">
+		<![CDATA[
+			update qy_train set train_state=3 where train_state=1
+		]]>
+	</update>
+	
+	<update id="updateReportTmp">
+		<![CDATA[
+			update qy_report set report_state=5 where report_state=1
+		]]>
+	</update>
+	
+	<delete id="delete" parameterType="User">
+		<![CDATA[
+			delete from qy_user
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+	
+	<!-- 菜单 -->
+	<select id="findLoginMenu" parameterType="User" resultType="Menu">
+		<![CDATA[
+			select distinct(rm.menu_code) menu_code,m.menu_parentcode,m.menu_title,m.menu_img,m.menu_url,m.menu_type,m.menu_order from qy_user u inner join ts_userrole ur on u.user_code=ur.user_code
+			inner join ts_role r on ur.role_code=r.role_code 
+			inner join ts_rolemenu rm on ur.role_code=rm.role_code 
+			inner join ts_menu m on rm.menu_code=m.menu_code 
+			where u.user_code=#{user_code} 
+		]]>
+		<if test="param_type != null and param_type == 1">
+			<![CDATA[
+				and m.menu_parentcode='0'
+			]]>
+		</if>
+		<if test="menu_parentcode != null and menu_parentcode != ''">
+			<![CDATA[
+				and m.menu_parentcode=#{menu_parentcode} 
+			]]>
+		</if>
+		<![CDATA[
+			order by m.menu_order asc
+		]]>
+	</select>
+	
+	<!-- 菜单按钮 -->
+	<select id="findLoginMenuButton" parameterType="User" resultType="String">
+		<![CDATA[
+			select group_concat(rm.menu_btns) menu_btns from qy_user u inner join ts_userrole ur on u.user_code=ur.user_code
+			inner join ts_role r on ur.role_code=r.role_code 
+			inner join ts_rolemenu rm on ur.role_code=rm.role_code  
+			where u.user_code=#{user_code} and length(rm.menu_btns)>0
+		]]>
+		<if test="menu_parentcode != null and menu_parentcode != ''">
+			<![CDATA[
+				and rm.menu_code=#{menu_parentcode} 
+			]]>
+		</if>
+	</select>
+	
+	
+	<select id="findByDept" parameterType="String" resultType="UserReturn">
+		<![CDATA[
+			select u.user_code,u.user_name,u.user_mobilephone,u.user_vill,t.state user_state from qy_user u inner join 
+			(
+					select * from ts_info_region i_r where i_r.region_code in 
+						(
+							select distinct
+								r.region_code
+							from
+								ts_department_region d_r
+							inner join qy_region r on r.region_code = d_r.region_code
+							where
+								d_r.department_code = #{department_code}
+						)
+			) t on u.user_code = t.user_code
+		]]>
+	</select>
+	
+	
+	<select id="findUserByCompanyList" parameterType="Company" resultType="User">
+		<![CDATA[
+			select u.* from qy_user u inner join ts_company c on u.company_code like concat('%',c.company_code,'%') 
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			<if test="companytag_codes != null and companytag_codes != ''">
+				<![CDATA[
+					and c.companytag_code in(${companytag_codes})
+				]]>
+			</if>
+			<if test="companytype_codes != null and companytype_codes != ''">
+				<![CDATA[
+					and c.companytype_code in(${companytype_codes})
+				]]>
+			</if>
+		</trim>
+		<![CDATA[
+			order by u.addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCompanyCode" parameterType="String" resultType="User">
+		<![CDATA[
+		 	select * from qy_user where company_code like concat('%',#{company_code},'%') limit 1
+		]]>
+	</select>
+	
+	<sql id="gisWhere">
+		<if test="user_name != null and user_name != ''">
+			<![CDATA[
+			    and (
+			    	user_loginname like concat('%',#{user_name},'%') or 
+				    user_name like concat('%',#{user_name},'%') 
+				    or	 user_mobilephone like concat('%',#{user_name},'%')
+			    )
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+			    and( company_name like concat('%',#{company_name},'%') 
+			  	or	user_mobilephone like concat('%',#{company_name},'%') )
+			]]>
+		</if>
+		<if test="user_state != null and user_state != ''">
+			<![CDATA[
+				and u.user_state=#{user_state}
+			]]>
+		</if>
+		<if test="returncode != null and returncode == 1 ">
+			<![CDATA[
+				and u.user_type in (${user_types})
+			]]>
+		</if>
+		<if test="returncode != null and returncode == 2 ">
+			<![CDATA[
+				and u.manage_type in (2,3)
+			]]>
+		</if>
+		<if test="user_province != null and user_province != ''">
+			<![CDATA[
+				and u.user_province=#{user_province}
+			]]>
+		</if>
+		<if test="user_city != null and user_city != ''">
+			<![CDATA[
+				and u.user_city=#{user_city}
+			]]>
+		</if>
+		<if test="user_area != null and user_area != ''">
+			<![CDATA[
+				and u.user_area=#{user_area}
+			]]>
+		</if>
+		<if test="user_town != null and user_town != ''">
+			<![CDATA[
+				and u.user_town=#{user_town}
+			]]>
+		</if>
+		<if test="user_towns != null and user_towns != ''">
+			<![CDATA[
+				and u.user_town in (${user_towns})
+			]]>
+		</if>
+		<if test="user_vill != null and user_vill != ''">
+			<![CDATA[
+				and u.user_vill=#{user_vill}
+			]]>
+		</if>
+		<if test="user_screens != null and user_screens == 'nopatroltoday'.toString()">
+			<![CDATA[
+				and u.user_code not in (select patrol_user_code from ts_patrol where to_days(patrol_time) = to_days(now()))
+			]]>
+		</if>
+		<if test="user_screens != null and user_screens == 'inpatrolandstateisonetoday'.toString()">
+			<![CDATA[
+				and u.user_code in (select patrol_user_code from ts_patrol where to_days(patrol_time) = to_days(now()) and patrol_state=1)
+			]]>
+		</if>
+		<if test="user_screens != null and user_screens == 'inpatrolandstateistwotoday'.toString()">
+			<![CDATA[
+				and u.user_code in (select patrol_user_code from ts_patrol where to_days(patrol_time) = to_days(now()) and patrol_state=2)
+			]]>
+		</if>
+	</sql>	
+	
+	<select id="findByGisUserList" parameterType="User" resultType="UserReturn">
+		<![CDATA[
+			select u.user_code,u.user_loginname,u.user_type,u.user_level,u.user_name,u.user_mobilephone,u.user_logo_url,u.user_province,u.user_city,u.user_area,u.user_town,u.user_vill from qy_user u 
+			inner join ts_info_region ir on u.user_code=ir.user_code
+			inner join ts_department_region dr on dr.region_code=ir.region_code
+			inner join ts_department d on dr.department_code=d.department_code
+			where d.state=1
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="gisWhere"/>
+		</trim>
+		<![CDATA[
+			group by u.user_code order by u.addtime desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByGisUserCount" parameterType="User" resultType="Integer">
+		<![CDATA[
+			select count(1) from (select u.user_code from qy_user u 
+			inner join ts_info_region ir on u.user_code=ir.user_code
+			inner join ts_department_region dr on dr.region_code=ir.region_code
+			inner join ts_department d on dr.department_code=d.department_code
+			where d.state=1
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="gisWhere"/>
+		</trim>
+		<![CDATA[
+			group by u.user_code ) tc
+		]]>
+	</select>
+	
+	<select id="findDepartmentByUserCode" parameterType="String" resultType="Department">
+		<![CDATA[
+		 	select d.* from qy_user u inner join ts_info_region ir on u.user_code=ir.user_code
+			inner join ts_department_region dr on dr.region_code=ir.region_code
+			inner join ts_department d on dr.department_code=d.department_code
+			where u.user_state=1 and d.state=1 and u.user_code=#{user_code} limit 1
+		]]>
+	</select>
+	
+	
+	
+	<sql id="whereColumnsStatistics">
+		<if test="zone_num ==1">
+			<![CDATA[
+				and user_province=#{user_province}
+			]]>
+		</if>
+		<if test="zone_num ==2">
+			<![CDATA[
+				and user_city=#{user_city}
+			]]>
+		</if>
+		<if test="zone_num ==3">
+			<![CDATA[
+				and user_area=#{user_area}
+			]]>
+		</if>
+		<if test="zone_num ==4">
+			<![CDATA[
+				and user_town=#{user_town}
+			]]>
+		</if>
+		<if test="zone_num ==5">
+			<![CDATA[
+				and user_vill=#{user_vill}
+			]]>
+		</if>
+		<if test="user_type !=null and user_type !='' ">
+			<![CDATA[
+				and user_type=#{user_type}
+			]]>
+		</if>
+		<if test="user_state !=null and user_state !='' ">
+			<![CDATA[
+				and user_state=#{user_state}
+			]]>
+		</if>
+		<if test="user_types !=null and user_types !='' ">
+			<![CDATA[
+				and user_type in (${user_types})
+			]]>
+		</if>
+	</sql>
+	
+	<select useCache="true" id="findTrainUserGroupAddress" parameterType="User" resultType="User">
+		<![CDATA[
+			select 
+			]]>
+		<if test="zone_num ==1">
+			<![CDATA[
+				 user_city
+			]]>
+		</if>
+		<if test="zone_num ==2">
+			<![CDATA[
+				 user_area
+			]]>
+		</if>
+		<if test="zone_num ==3">
+			<![CDATA[
+				 user_town
+			]]>
+		</if>
+		<if test="zone_num ==4">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<if test="zone_num ==5">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<![CDATA[
+			,count(user_code) user_number		
+			from qy_user where user_code in (select distinct user_code_chef from qy_train_exam_log 
+			
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="thisyear !=null and thisyear !=''">
+				<![CDATA[
+					and (date_format(addtime,'%Y')=#{thisyear} 
+					and train_code in (select  train_code from qy_train where train_year=#{thisyear}) )
+				]]>	
+			</if>
+			<if test="train_exam_standard !=null and train_exam_standard !=''">
+				<![CDATA[
+					and train_exam_standard=#{train_exam_standard} 
+				]]>	
+			</if>
+		</trim>
+		<![CDATA[
+			)
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="whereColumnsStatistics"/>
+		</trim>
+		<![CDATA[
+			group by 
+		]]>
+		<if test="zone_num ==1">
+			<![CDATA[
+				 user_city
+			]]>
+		</if>
+		<if test="zone_num ==2">
+			<![CDATA[
+				 user_area
+			]]>
+		</if>
+		<if test="zone_num ==3">
+			<![CDATA[
+				 user_town
+			]]>
+		</if>
+		<if test="zone_num ==4">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<if test="zone_num ==5">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+	</select>
+	
+	<select useCache="true" id="findTrainStateUserGroupAddress" parameterType="User" resultType="User">
+		<![CDATA[
+			select 
+			]]>
+		<if test="zone_num ==1">
+			<![CDATA[
+				 user_city
+			]]>
+		</if>
+		<if test="zone_num ==2">
+			<![CDATA[
+				 user_area
+			]]>
+		</if>
+		<if test="zone_num ==3">
+			<![CDATA[
+				 user_town
+			]]>
+		</if>
+		<if test="zone_num ==4">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<if test="zone_num ==5">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<![CDATA[
+			,count(user_code) user_number
+			from qy_user where user_code in (
+					select user_code_chef from (
+						select 
+						user_code_chef,	max(train_exam_standard) train_exam_standard
+					from
+						qy_train_exam_log
+					where
+						train_code in (select train_code from qy_train where train_year=#{thisyear})
+					  	and date_format(addtime, '%Y') = #{thisyear}
+						group by user_code_chef,train_code	) mm
+						group by user_code_chef	
+						having count(user_code_chef)=4
+		]]>		
+		<if test="train_exam_standard == 1">
+		<![CDATA[
+			and sum(train_exam_standard) < 8
+		]]>
+		</if>
+		<if test="train_exam_standard == 2 ">
+			<![CDATA[
+				and sum(train_exam_standard) = 8
+			]]>
+		</if>
+		<![CDATA[
+			)
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="whereColumnsStatistics"/>
+		</trim>
+		<![CDATA[
+			group by 
+		]]>
+		<if test="zone_num ==1">
+			<![CDATA[
+				 user_city
+			]]>
+		</if>
+		<if test="zone_num ==2">
+			<![CDATA[
+				 user_area
+			]]>
+		</if>
+		<if test="zone_num ==3">
+			<![CDATA[
+				 user_town
+			]]>
+		</if>
+		<if test="zone_num ==4">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+		<if test="zone_num ==5">
+			<![CDATA[
+				 user_vill
+			]]>
+		</if>
+	</select>
+	
+	<select id="findListInnerReport" resultType="User" parameterType="User">
+		<![CDATA[
+			select distinct
+				u.*
+			from
+				qy_user u
+			inner join qy_report r on u.user_code = r.user_code_conduct
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_code_mainchef != null and user_code_mainchef != ''">
+				<![CDATA[
+					and r.user_code_mainchef = #{user_code_mainchef}
+				]]>
+			</if>
+			<if test="returninfo != null and returninfo != ''">
+				<![CDATA[
+					and ( r.user_name_conduct like concat('%',#{returninfo},'%') or r.user_mobilephone_conduct like concat('%',#{returninfo},'%') )
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findCountInnerReport" resultType="Integer" parameterType="User">
+		<![CDATA[
+			select 
+				count(distinct u.user_code)
+			from
+				qy_user u
+			inner join qy_report r on u.user_code = r.user_code_conduct
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_code_mainchef != null and user_code_mainchef != ''">
+				<![CDATA[
+					and r.user_code_mainchef = #{user_code_mainchef}
+				]]>
+			</if>
+			<if test="returninfo != null and returninfo != ''">
+				<![CDATA[
+					and ( r.user_name_conduct like concat('%',#{returninfo},'%') or r.user_mobilephone_conduct like concat('%',#{returninfo},'%') )
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findByColumn" resultType="User" parameterType="User">
+		<![CDATA[
+			select 
+				*
+			from
+				qy_user
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_mobilephone != null and user_mobilephone != ''">
+				<![CDATA[
+					and user_mobilephone = #{user_mobilephone}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

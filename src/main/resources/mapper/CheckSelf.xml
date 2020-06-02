@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICheckSelfDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			checkself_code=#{checkself_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="CheckSelf">
+		<![CDATA[
+   			insert into ts_check_self (checkself_code,company_code,company_name,companytype_code,companytag_code,operator,checkself_content,user_code_add,user_name_add) 
+   			values(#{checkself_code},#{company_code},#{company_name},#{companytype_code},#{companytag_code},#{operator},#{checkself_content},#{user_code_add},#{user_name_add})
+   		]]>
+	</insert>
+	
+	<update id="update" parameterType="CheckSelf">
+		<![CDATA[
+			update ts_check_self
+		]]>
+		<set>
+			<if test="company_code != null and company_code != ''">
+				<![CDATA[
+					company_code=#{company_code},
+				]]>
+			</if>
+			<if test="checkself_content != null and checkself_content != ''">
+				<![CDATA[
+					checkself_content=#{checkself_content},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="CheckSelf">
+		<![CDATA[
+			delete from ts_check_self
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and cs.company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (cs.company_name like concat('%',#{company_name},'%') or cs.operator like concat('%',#{company_name},'%'))
+			]]>
+		</if>
+		<if test="companytype_code != null and companytype_code != ''">
+			<![CDATA[
+				and cs.companytype_code = #{companytype_code}
+			]]>
+		</if>
+		<if test="companytag_code != null and companytag_code != ''">
+			<![CDATA[
+				and cs.companytag_code = #{companytag_code}
+			]]>
+		</if>		
+		<if test="user_name_add != null and user_name_add != ''">
+			<![CDATA[
+				and cs.user_name_add like concat('%',#{user_name_add},'%')
+			]]>
+		</if>
+		<if test="user_code_add != null and user_code_add != ''">
+			<![CDATA[
+				and cs.user_code_add = #{user_code_add}
+			]]>
+		</if>
+		<if test="business_forms != null and business_forms != ''">
+        	<![CDATA[
+			    and c.business_form in (${business_forms})
+			]]>
+      	</if>
+      	<if test="companytype_codes != null and companytype_codes != ''">
+        	<![CDATA[
+			    and c.companytype_code in (${companytype_codes})
+			]]>
+      	</if>
+      	<if test="companytag_codes != null and companytag_codes != ''">
+        	<![CDATA[
+			    and c.companytag_code in (${companytag_codes})
+			]]>
+      	</if>
+      	<if test="ischeckself != null and ischeckself == 1">
+      		<![CDATA[
+        		and (
+        		(cs.companytype_code = '1001574645421581000000001' and timestampdiff(DAY, cs.add_time, now())<=#{spsc_days})
+        		or (cs.companytype_code = '1001574645421581000000002' and timestampdiff(DAY, cs.add_time, now())<=#{splt_days})
+        		or (cs.companytype_code = '1001574645421581000000003' and timestampdiff(DAY, cs.add_time, now())<=#{spcy_days})
+        		)
+			]]>
+    	</if>
+    	<if test="ischeckself != null and ischeckself == 2">
+      		<![CDATA[
+        		and (
+        		(cs.companytype_code = '1001574645421581000000001' and timestampdiff(DAY, cs.add_time, now())<=#{spsc_days})
+        		or (cs.companytype_code = '1001574645421581000000002' and timestampdiff(DAY, cs.add_time, now())<=#{splt_days})
+        		or (cs.companytype_code = '1001574645421581000000003' and timestampdiff(DAY, cs.add_time, now())<=#{spcy_days})
+        		)
+			]]>
+    	</if>
+	</sql>
+	
+	<select id="findByList" parameterType="CheckSelf" resultType="CheckSelf">
+		<![CDATA[
+			select * from ts_check_self cs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by cs.add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="CheckSelf" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_check_self cs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="CheckSelf" resultType="CheckSelf">
+		<![CDATA[
+		 	select * from ts_check_self 
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="CheckSelf" resultType="CheckSelf">
+		<![CDATA[
+		 	select * from ts_check_self cs
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by cs.add_time desc
+		]]>
+	</select>
+	
+	<select id="findListByCompany" parameterType="CheckSelf" resultType="CheckSelf">
+		<![CDATA[
+			select t.* from (select cs.* from ts_check_self cs 
+			left join ts_company c on c.company_code = cs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by cs.add_time desc limit 999999) t group by t.company_code order by t.add_time limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findCountByCompany" parameterType="CheckSelf" resultType="Integer">
+		<![CDATA[
+			select count(1) from (select * from (select cs.* from ts_check_self cs 
+			left join ts_company c on c.company_code = cs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by cs.add_time desc limit 999999)t group by t.company_code ) jg
+		]]>
+	</select>
+	
+	<sql id="NoCS_whereColumns">				
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and cy.company_code = #{company_code}
+			]]>
+		</if>
+		<if test="company_name != null and company_name != ''">
+			<![CDATA[
+				and (cy.company_name like concat('%',#{company_name},'%') or cy.operator like concat('%',#{company_name},'%'))
+			]]>
+		</if>
+		<if test="companytype_code != null and companytype_code != ''">
+			<![CDATA[
+				and cy.companytype_code = #{companytype_code}
+			]]>
+		</if>
+		<if test="companytag_code != null and companytag_code != ''">
+			<![CDATA[
+				and cy.companytag_code = #{companytag_code}
+			]]>
+		</if>		
+		<if test="business_forms != null and business_forms != ''">
+        	<![CDATA[
+			    and cy.business_form in (${business_forms})
+			]]>
+      	</if>
+      	<if test="companytype_codes != null and companytype_codes != ''">
+        	<![CDATA[
+			    and cy.companytype_code in (${companytype_codes})
+			]]>
+      	</if>
+      	<if test="companytag_codes != null and companytag_codes != ''">
+        	<![CDATA[
+			    and cy.companytag_code in (${companytag_codes})
+			]]>
+      	</if>
+	</sql>
+	
+	<select id="findListByNotCSCompany" parameterType="CheckSelf" resultType="CheckSelf">
+		<![CDATA[
+			select cy.company_code,cy.company_name,cy.companytype_code,cy.companytag_code,cy.operator from ts_company cy where cy.company_code not in(
+			select cs.company_code from ts_check_self cs 
+			left join ts_company c on c.company_code = cs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			) 
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="NoCS_whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by cy.add_time limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findCountByNotCSCompany" parameterType="CheckSelf" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_company cy where cy.company_code not in(
+			select cs.company_code from ts_check_self cs 
+			left join ts_company c on c.company_code = cs.company_code
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			) 
+		]]>
+		<trim prefix="and" prefixOverrides="and|or">
+			  <include refid="NoCS_whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByPageConfig" parameterType="User" resultType="PageConfigRegion">
+		<![CDATA[
+			SELECT * FROM ts_page_config_region AS t_p_c_r 
+			INNER JOIN 
+			(SELECT * FROM ts_page_config WHERE companytype_code = (SELECT companytype_code FROM ts_company WHERE company_code = (SELECT company_code FROM qy_user WHERE user_code = #{user_code})) AND page_module = 3 AND state = 1) AS s 
+			ON t_p_c_r.page_config_code = s.page_config_code 
+			WHERE province = #{user_province}
+		]]>
+	</select>
+	
+	<select id="findByCompanyLast" parameterType="String" resultType="CheckSelf">
+		<![CDATA[
+			select * from ts_check_self where company_code=#{company_code} order by add_time desc limit 1
+		]]>
+	</select>
+</mapper>

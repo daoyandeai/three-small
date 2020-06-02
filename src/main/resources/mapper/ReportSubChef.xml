@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IReportSubChefDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			report_report_subchef_code=#{report_report_subchef_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="ReportSubChef">
+		<![CDATA[
+   			insert into qy_report_sub_chef 
+   				(report_subchef_code,user_code_subchef,user_name_subchef,report_code) 
+   			values
+   				(#{report_subchef_code},#{user_code_subchef},#{user_name_subchef},#{report_code})
+   		]]>
+	</insert>
+	
+	<insert id="saveBatch" parameterType="List">
+		<![CDATA[
+   			insert into qy_report_sub_chef 
+   				(report_subchef_code,user_code_subchef,user_name_subchef,user_health_logo_subchef,report_code) 
+   			values
+   		]]>
+   		<foreach collection="list" item="item" index="index" separator=",">  
+     		(
+     			#{item.report_subchef_code},#{item.user_code_subchef},#{item.user_name_subchef},#{item.user_health_logo_subchef},#{item.report_code}
+     		)
+    	</foreach>  
+	</insert>
+	
+	<update id="update" parameterType="ReportSubChef">
+		<![CDATA[
+			update qy_report_sub_chef
+		]]>
+		<set>
+			<if test="user_code_subchef !=null and user_code_subchef !=''">
+				<![CDATA[
+					user_code_subchef=#{user_code_subchef},
+				]]>
+			</if>
+			<if test="user_name_subchef !=null and user_name_subchef !=''">
+				<![CDATA[
+					user_name_subchef=#{user_name_subchef},
+				]]>
+			</if>
+			<if test="report_code !=null and report_code !=''">
+				<![CDATA[
+					report_code=#{report_code},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<delete id="delete" parameterType="ReportSubChef">
+		<![CDATA[
+			delete from qy_report_sub_chef
+		]]>		
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</delete>
+	
+		
+	<sql id="whereColumns">				
+		<if test="report_subchef_code !=null and report_subchef_code !=''">
+			<![CDATA[
+				 and report_subchef_code=#{report_subchef_code}
+			]]>
+		</if>
+		<if test="user_code_subchef !=null and user_code_subchef !=''">
+			<![CDATA[
+				 and user_code_subchef=#{user_code_subchef}
+			]]>
+		</if>
+		<if test="user_name_subchef !=null and user_name_subchef !=''">
+			<![CDATA[
+				 and user_name_subchef=#{user_name_subchef}
+			]]>
+		</if>
+		<if test="report_code !=null and report_code !=''">
+			<![CDATA[
+				 and report_code=#{report_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByList" parameterType="ReportSubChef" resultType="ReportSubChef">
+		<![CDATA[
+			select * from qy_report_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+	
+	<select id="findByCount" parameterType="ReportSubChef" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="ReportSubChef" resultType="ReportSubChef">
+		<![CDATA[
+		 	select * from qy_report_sub_chef
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" parameterType="ReportSubChef" resultType="ReportSubChef">
+		<![CDATA[
+		 	select * from qy_report_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByExist" parameterType="ReportSubChef" resultType="Integer">
+		<![CDATA[
+			select count(1) from qy_report_sub_chef
+		]]>	
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_name != null and user_name != ''">
+				<![CDATA[
+					and user_name=#{user_name}
+				]]>
+				<if test="report_report_subchef_code!=null and report_report_subchef_code!=''">
+					<![CDATA[
+					 and report_report_subchef_code<>#{report_report_subchef_code}
+					]]>
+				</if>
+			</if>
+		</trim>
+	</select>
+	
+	<select id="findByAll_app" parameterType="ReportSubChef" resultType="ReportSubChefReturn">
+		<![CDATA[
+		 	select * from qy_report_sub_chef
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<delete id="deleteByReport" parameterType="String">
+		<![CDATA[
+			delete from qy_report_sub_chef where report_code=#{report_code}
+		]]>		
+	</delete>
+	
+</mapper>

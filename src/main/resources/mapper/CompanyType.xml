@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.ICompanyTypeDao">
+
+	<sql id="codeColumns">
+    <![CDATA[
+   			companytype_code=#{companytype_code}
+   		]]>
+	</sql>
+
+	<insert id="save" parameterType="CompanyType">
+    <![CDATA[
+      		insert into ts_company_type 
+      			(companytype_code, companytype_name,user_code_add,user_name_add)
+      		values 
+      			(#{companytype_code},#{companytype_name},#{user_code_add},#{user_name_add})
+      ]]>
+	</insert>
+
+	<update id="update" parameterType="CompanyType">
+	    <![CDATA[
+	   			update ts_company_type
+	    ]]>
+		<set>
+			<if test="companytype_name != null and companytype_name != ''">
+	             <![CDATA[
+	                 companytype_name=#{companytype_name},
+	             ]]>
+			</if>
+			<if test="state != null and state != ''">
+	          	 <![CDATA[
+	                     state=#{state},
+	             ]]>
+			</if>
+			<if test="user_code_update != null and user_code_update != ''">
+				<![CDATA[
+					user_code_update=#{user_code_update},
+				]]>
+			</if>
+			<if test="user_name_update != null and user_name_update != ''">
+				<![CDATA[
+					user_name_update=#{user_name_update},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</update>
+
+	<sql id="whereColumns">
+		<if test="companytype_name != null and companytype_name != ''">
+            <![CDATA[
+                    and companytype_name like concat ('%',#{companytype_name},'%')
+            ]]>
+		</if>
+		<if test="state != null and state != ''">
+            <![CDATA[
+                    and state=#{state}
+            ]]>
+		</if>
+	</sql>
+
+	<select id="findByList" parameterType="CompanyType" resultType="CompanyType">
+      <![CDATA[
+			select * from ts_company_type
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+      <![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="CompanyType" resultType="Integer">
+      <![CDATA[
+			select count(1) from ts_company_type
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByAll" parameterType="CompanyType" resultType="CompanyType">
+      <![CDATA[
+			select * from ts_company_type
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns" />
+		</trim>
+	</select>
+
+	<select id="findByCode" parameterType="CompanyType" resultType="CompanyType">
+        <![CDATA[
+		 	select * from ts_company_type
+		]]>
+		<where>
+			<include refid="codeColumns" />
+		</where>
+	</select>
+
+	<select id="findByExist" parameterType="CompanyType" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_company_type
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="companytype_code != null and companytype_code != ''">
+				<![CDATA[
+					and companytype_code<>#{companytype_code}
+				]]>
+			</if>
+			<if test="companytype_name != null and companytype_name != ''">
+				<![CDATA[
+					and companytype_name=#{companytype_name}
+				]]>
+			</if>
+		</trim>
+	</select>
+	
+</mapper>

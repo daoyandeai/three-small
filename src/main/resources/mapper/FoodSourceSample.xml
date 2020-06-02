@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IFoodSourceSampleDao">
+	<sql id="codeColumns">
+   		<![CDATA[
+   			sample_code=#{sample_code}
+   		]]>
+	</sql>
+	
+	<insert id="save" parameterType="FoodSourceSample">
+		<![CDATA[
+   			insert into ts_foodsource_sample 
+   				(sample_code,sample_name,sample_num,sample_person,sample_time,sample_img,company_code,foodsource_code) 
+   			values
+   				(#{sample_code},#{sample_name},#{sample_num},#{sample_person},#{sample_time},#{sample_img},#{company_code},#{foodsource_code})
+   		]]>
+	</insert>
+   
+	<update id="update" parameterType="FoodSourceSample">
+		<![CDATA[
+			update ts_foodsource_sample
+		]]>
+		<set>
+			<if test="sample_name != null and sample_name != ''">
+				<![CDATA[
+					sample_name=#{sample_name},
+				]]>
+			</if>
+			<if test="sample_num != null and sample_num != ''">
+				<![CDATA[
+					sample_num=#{sample_num},
+				]]>
+			</if>
+			<if test="sample_person != null and sample_person != ''">
+				<![CDATA[
+					sample_person=#{sample_person},
+				]]>
+			</if>
+			<if test="sample_time != null and sample_time != ''">
+				<![CDATA[
+					sample_time=#{sample_time},
+				]]>
+			</if>
+			<if test="sample_img != null and sample_img != ''">
+				<![CDATA[
+					sample_img=#{sample_img},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<sql id="whereColumns">				
+		<if test="sample_name != null and sample_name != ''">
+			<![CDATA[
+			    and sample_name like concat('%',#{sample_name},'%') 
+			]]>
+		</if>
+		<if test="company_code != null and company_code != ''">
+			<![CDATA[
+				and company_code=#{company_code}
+			]]>
+		</if>
+		<if test="foodsource_code != null and foodsource_code != ''">
+			<![CDATA[
+				and foodsource_code=#{foodsource_code}
+			]]>
+		</if>
+	</sql>
+	
+	<select id="findByLoginNameAndPass" parameterType="FoodSourceSample" resultType="FoodSourceSample">
+		<![CDATA[
+			select * from ts_foodsource_sample
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<if test="user_loginname != null and user_loginname != ''">
+				<![CDATA[
+				    and user_loginname =#{user_loginname}
+				]]>
+			</if>
+			<if test="user_loginpass != null and user_loginpass != ''">
+				<![CDATA[
+				    and user_loginpass =#{user_loginpass}
+				]]>
+			</if>
+		</trim>
+	</select>
+
+	<select id="findByList" parameterType="FoodSourceSample" resultType="FoodSourceSample">
+		<![CDATA[
+			select * from ts_foodsource_sample
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			<include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc limit ${pager_offset},${pager_openset}
+		]]>
+	</select>
+
+	<select id="findByCount" parameterType="FoodSourceSample" resultType="Integer">
+		<![CDATA[
+			select count(1) from ts_foodsource_sample
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+	</select>
+	
+	<select id="findByCode" parameterType="FoodSourceSample" resultType="FoodSourceSample">
+		<![CDATA[
+		 	select * from ts_foodsource_sample
+		]]>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</select>
+	
+	<select id="findByAll" resultType="FoodSourceSample" parameterType="FoodSourceSample">
+		<![CDATA[
+		 	select * from ts_foodsource_sample
+		]]>
+		<trim prefix="where" prefixOverrides="and|or">
+			  <include refid="whereColumns"/>
+		</trim>
+		<![CDATA[
+			order by add_time desc
+		]]>
+	</select>
+	
+</mapper>

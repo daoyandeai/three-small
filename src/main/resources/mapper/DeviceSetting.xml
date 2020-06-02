@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rs.dao.IDeviceSettingDao">
+
+	<sql id="codeColumns">
+   		<![CDATA[
+   			sensor_name=#{sensor_name}
+   		]]>
+	</sql>
+	
+	<update id="update" parameterType="DeviceSetting">
+		<![CDATA[
+			update qy_device_setting
+		]]>
+		<set>
+			<if test="min_value != null and min_value != ''">
+				<![CDATA[
+					min_value=#{min_value},
+				]]>
+			</if>
+			<if test="max_value != null and max_value != ''">
+				<![CDATA[
+					max_value=#{max_value},
+				]]>
+			</if>
+		</set>
+		<where>
+			<include refid="codeColumns"/>
+		</where>
+	</update>
+	
+	<select id="findByAll" parameterType="DeviceSetting" resultType="DeviceSetting">
+		<![CDATA[
+		 	select * from qy_device_setting order by sensor_name 
+		]]>
+	</select>
+	
+</mapper>
